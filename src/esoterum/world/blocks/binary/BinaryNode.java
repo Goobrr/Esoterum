@@ -15,7 +15,7 @@ import static mindustry.Vars.*;
 
 public class BinaryNode extends BinaryBlock{
     public int range;
-    public float curveWidth = 4f;
+    public float curveWidth = 1.5f;
 
     public BinaryNode(String name, int linkRange){
         super(name);
@@ -131,9 +131,9 @@ public class BinaryNode extends BinaryBlock{
         public boolean onConfigureTileTapped(Building other){
             if(linkValid(tile, other.tile)){
                 disconnect();
-                if(link == other.pos()){
+                if(other.pos() == link){
                     configure(-1);
-                }else{
+                }else if(other != self()){
                     ((BinaryNodeBuild)other).disconnect();
                     getLink(other.pos()).configure(pos());
                     configure(other.pos());
