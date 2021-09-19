@@ -57,7 +57,7 @@ public class BinaryNode extends BinaryBlock{
     }
 
     public BinaryNodeBuild getLink(int pos){
-        return (BinaryNodeBuild)world.build(pos);
+        return world.build(pos) instanceof BinaryNodeBuild b ? b : null;
     }
 
     public class BinaryNodeBuild extends BinaryBuild{
@@ -67,7 +67,7 @@ public class BinaryNode extends BinaryBlock{
         public void updateTile(){
             super.updateTile();
             BinaryNodeBuild connection = linkedNode();
-            lastSignal = signal() || connection != null && connection.signal();
+            lastSignal = connection != null && connection.signal();
         }
 
         @Override
@@ -95,7 +95,7 @@ public class BinaryNode extends BinaryBlock{
         @Override
         public boolean signal(){
             for(BinaryBuild b : nb){
-                if(getSignal(b, this))return true;
+                if(getSignal(b, this)) return true;
             }
             return false;
         }
