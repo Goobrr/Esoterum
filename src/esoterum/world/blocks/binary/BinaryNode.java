@@ -66,8 +66,22 @@ public class BinaryNode extends BinaryBlock{
         @Override
         public void updateTile(){
             super.updateTile();
-            BinaryNodeBuild connection = linkedNode();
-            lastSignal = connection != null && connection.signal();
+            BinaryNodeBuild c = linkedNode();
+            lastSignal = c != null && c.signal();
+            if(c != null && c.link != pos()){
+                configure(-1);
+            }
+        }
+
+        @Override
+        public void placed(){
+            super.placed();
+
+            BinaryNodeBuild c = linkedNode();
+            if(c != null && c.link != pos()){
+                c.disconnect();
+                c.configure(pos());
+            }
         }
 
         @Override
