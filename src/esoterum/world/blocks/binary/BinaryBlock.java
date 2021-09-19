@@ -53,7 +53,7 @@ public class BinaryBlock extends Block {
         public boolean lastSignal;
 
         @Override
-        public void draw() {
+        public void draw(){
             super.draw();
 
             Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
@@ -67,9 +67,9 @@ public class BinaryBlock extends Block {
         // Usually this doesn't cause any problems, but with the current implementation
         // it is necessary for non-rotatable binary blocks to have a rotation of 0.
         @Override
-        public void created() {
+        public void created(){
             super.created();
-            if(!rotate)rotation(0);
+            if(!rotate) rotation(0);
         }
 
         // connections

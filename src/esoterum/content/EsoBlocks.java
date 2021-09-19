@@ -6,13 +6,15 @@ import mindustry.world.*;
 
 public class EsoBlocks implements ContentList {
     public Block
-        esoWire, esoJunction, esoSwitch, esoButton, esoAND;
+        esoWire, esoJunction, esoNode, esoSwitch, esoButton, esoAND;
 
     @Override
     public void load() {
         esoWire = new BinaryWire("wire");
 
         esoJunction = new BinaryJunction("junction");
+
+        esoNode = new BinaryNode("node");
 
         esoSwitch = new BinaryButton("switch", true);
 
