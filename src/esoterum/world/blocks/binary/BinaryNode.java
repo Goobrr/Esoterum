@@ -66,7 +66,7 @@ public class BinaryNode extends BinaryBlock{
         @Override
         public void updateTile(){
             super.updateTile();
-            BinaryNodeBuild connection = getLink(link);
+            BinaryNodeBuild connection = linkedNode();
             lastSignal = signal() || connection != null && connection.signal();
         }
 
@@ -107,7 +107,7 @@ public class BinaryNode extends BinaryBlock{
             Drawf.circles(x, y, size * tilesize / 2f + 1f + Mathf.absin(Time.time, 4f, 1f), Tmp.c1);
             Drawf.circles(x, y, range * tilesize, Tmp.c1);
 
-            BinaryNodeBuild connection = getLink(link);
+            BinaryNodeBuild connection = linkedNode();
             if(link != -1 && connection != null){
                 Drawf.square(connection.x, connection.y, connection.block.size * tilesize / 2f + 1f, Tmp.c1);
             }
