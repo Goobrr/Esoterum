@@ -11,6 +11,8 @@ public class Esoterum extends Mod{
     @Override
     public void loadContent(){
         new EsoBlocks().load();
+        new EsoMusicLoader().load();
+        new EsoMusic();
     }
 
 }
