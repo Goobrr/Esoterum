@@ -114,32 +114,32 @@ public class BinaryNode extends BinaryBlock{
         }
 
         @Override
-        // TODO "This is a mess" -Anuke (BulletType.java, L215)
         public boolean onConfigureTileTapped(Building other){
             if(linkValid(tile, other.tile)){
-                BinaryNodeBuild c = linkedNode();
-                if(c != null){
-                    BinaryNodeBuild cc = c.linkedNode();
-                    if(cc != null){
-                        cc.configure(-1);
-                    }
-                    c.configure(-1);
-                }
-
+                disconnect();
                 if(link == other.pos()){
                     configure(-1);
                 }else{
-                    BinaryNodeBuild o = ((BinaryNodeBuild)other).linkedNode();
-                    if(o != null){
-                        o.configure(-1);
-                    }
-                    other.configure(-1);
+                    ((BinaryNodeBuild)other).disconnect();
                     getLink(other.pos()).configure(pos());
                     configure(other.pos());
                 }
                 return false;
             }
             return true;
+        }
+
+        public void disconnect(){
+            if(linkedNode() != null){
+                linkedNode().configure(-1);
+            }
+            configure(-1);
+        }
+
+        @Override
+        public void remove(){
+            super.remove();
+            disconnect();
         }
 
         @Override
