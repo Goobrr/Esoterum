@@ -10,7 +10,7 @@ public class EsoMusicLoader {
     protected static Music loadMusic(String musicsName) {
         if (!Vars.headless) {
             String name = "musics/" + musicsName;
-            String path = Vars.tree.get(name + ".ogg").exists() ? name + ".ogg" : name + ".mp3";
+            String path = Vars.tree.get(name + ".mp3").exists() ? name + ".mp3" : name + ".ogg";
 
             Music music = new Music();
 
