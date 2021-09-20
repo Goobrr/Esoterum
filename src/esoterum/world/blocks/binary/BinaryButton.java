@@ -1,10 +1,18 @@
 package esoterum.world.blocks.binary;
 
+import arc.Core;
+import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.TextureRegion;
+import mindustry.graphics.Pal;
+
 public class BinaryButton extends BinaryBlock{
     // whether the button emits continuously (like a switch).
     public boolean continuous;
     // Buttons will have a pulse length of 60 ticks by default
     public float duration = 60;
+
+    public TextureRegion onRegion, offRegion;
 
     public BinaryButton(String name, boolean cont){
         super(name);
@@ -17,6 +25,23 @@ public class BinaryButton extends BinaryBlock{
             b.lastSignal = on;
             b.timer = duration;
         });
+    }
+
+    @Override
+    public void load() {
+        super.load();
+
+        onRegion = Core.atlas.find(name + "-on");
+        offRegion = Core.atlas.find(name + "-off");
+    }
+
+    @Override
+    protected TextureRegion[] icons() {
+        return new TextureRegion[]{
+            region,
+            topRegion,
+            offRegion,
+        };
     }
 
     public class BinaryButtonBuild extends BinaryBuild {
@@ -42,6 +67,12 @@ public class BinaryButton extends BinaryBlock{
             return false;
         }
 
+        @Override
+        public void draw() {
+            super.draw();
+            Draw.color();
+            Draw.rect(lastSignal ? onRegion : offRegion, x, y);
+        }
 
         // yes, there is no other way to do this
         // absolutely no way.

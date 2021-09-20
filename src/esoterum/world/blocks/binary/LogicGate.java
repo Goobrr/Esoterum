@@ -10,6 +10,7 @@ public class LogicGate extends BinaryBlock{
         outputs = new boolean[]{true, false, false, false};
         emits = true;
         rotate = true;
+        drawArrow = true;
 
         operation = e -> false;
     }

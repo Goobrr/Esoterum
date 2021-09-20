@@ -1,8 +1,7 @@
 package esoterum.world.blocks.binary;
 
-// too similar to BinaryRouter?
-public class BinaryJunction extends BinaryBlock{
-    public BinaryJunction(String name){
+public class BinaryRouter extends BinaryBlock{
+    public BinaryRouter(String name){
         super(name);
         emits = true;
 
@@ -10,7 +9,7 @@ public class BinaryJunction extends BinaryBlock{
         outputs = new boolean[]{true, true, true, true};
     }
 
-    public class BinaryJunctionBuild extends BinaryBuild {
+    public class BinaryRouterBuild extends BinaryBuild {
         @Override
         public void updateTile() {
             super.updateTile();
@@ -22,19 +21,19 @@ public class BinaryJunction extends BinaryBlock{
 
         @Override
         public boolean signalFront() {
-            return getSignal(nb.get(2), this);
+            return lastSignal;
         }
         @Override
         public boolean signalBack() {
-            return getSignal(nb.get(0), this);
+            return lastSignal;
         }
         @Override
         public boolean signalLeft() {
-            return getSignal(nb.get(3), this);
+            return lastSignal;
         }
         @Override
         public boolean signalRight() {
-            return getSignal(nb.get(1), this);
+            return lastSignal;
         }
     }
 }

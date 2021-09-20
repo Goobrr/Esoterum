@@ -4,6 +4,7 @@ import arc.Core;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.struct.Seq;
+import esoterum.graphics.EsoDrawf;
 import esoterum.interfaces.Binaryc;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -32,9 +33,9 @@ public class BinaryBlock extends Block {
 
     public void load() {
         super.load();
-        region = Core.atlas.find("esoterum-base");
-        connectionRegion = Core.atlas.find("esoterum-connection");
-        topRegion = Core.atlas.find(name + "-top");
+        region = Core.atlas.find(name + "-base", "esoterum-base");
+        connectionRegion = Core.atlas.find(name + "-connection", "esoterum-connection");
+        topRegion = Core.atlas.find(name + "-top", "esoterum-router-top"); // router supremacy
     }
 
     @Override
@@ -45,6 +46,12 @@ public class BinaryBlock extends Block {
         };
     }
 
+    @Override
+    public boolean canReplace(Block other) {
+        if(other.alwaysReplace) return true;
+        return (other != this || rotate) && other instanceof BinaryBlock && size == other.size;
+    }
+
     public class BinaryBuild extends Building implements Binaryc {
         public Seq<BinaryBuild> nb = new Seq<>(4);
         public boolean[] connections = new boolean[]{false, false, false, false};
@@ -53,7 +60,7 @@ public class BinaryBlock extends Block {
         public boolean lastSignal;
 
         @Override
-        public void draw() {
+        public void draw(){
             super.draw();
 
             Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
@@ -67,9 +74,9 @@ public class BinaryBlock extends Block {
         // Usually this doesn't cause any problems, but with the current implementation
         // it is necessary for non-rotatable binary blocks to have a rotation of 0.
         @Override
-        public void created() {
+        public void created(){
             super.created();
-            if(!rotate)rotation(0);
+            if(!rotate) rotation(0);
         }
 
         // connections
