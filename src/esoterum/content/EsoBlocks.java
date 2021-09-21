@@ -12,7 +12,7 @@ public class EsoBlocks implements ContentList{
         esoPanel, esoPanel1, esoPanel2, esoPanel3, esoPanelFlat, esoSolidPanel,
         esoPanelOpen, esoPanelE, esoPanelS, esoPanelO,
         // Signal distribution
-        esoWire, esoJunction, esoRouter, esoNode, esoLatch,
+        esoWire, esoJunction, esoRouter, esoNode, esoLatch, esoController,
         // Signal sources
         esoSwitch, esoButton,
         // Logic gates
@@ -47,6 +47,8 @@ public class EsoBlocks implements ContentList{
         esoNode = new BinaryNode("node", 5);
 
         esoLatch = new LatchBlock("latch");
+      
+        esoController = new SignalController("controller");
         // endregion distribution
 
         // region sources
