@@ -15,10 +15,11 @@ import mindustry.world.meta.BuildVisibility;
 public class BinaryBlock extends Block {
     public TextureRegion connectionRegion;
     public TextureRegion topRegion;
-    // in order {front, left, back, right}
+    /** in order {front, left, back, right} */
     public boolean[] outputs = new boolean[]{false, false, false, false};
+    /** in order {front, left, back, right} */
     public boolean[] inputs = new boolean[]{false, false, false, false};
-    public boolean emits = false;
+    public boolean emits;
 
     public BinaryBlock(String name) {
         super(name);
@@ -53,6 +54,7 @@ public class BinaryBlock extends Block {
     }
 
     public class BinaryBuild extends Building implements Binaryc {
+        /** in order {front, left, back, right} */
         public Seq<BinaryBuild> nb = new Seq<>(4);
         public boolean[] connections = new boolean[]{false, false, false, false};
 
@@ -64,10 +66,14 @@ public class BinaryBlock extends Block {
             super.draw();
 
             Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
+            drawConnections();
+            Draw.rect(topRegion, x, y, rotate ? rotdeg() : 0f);
+        }
+
+        public void drawConnections(){
             for(int i = 0; i < 4; i++){
                 if(connections[i]) Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
             }
-            Draw.rect(topRegion, x, y, rotate ? rotdeg() : 0f);
         }
 
         // Mindustry saves block placement rotation even for blocks that don't rotate.

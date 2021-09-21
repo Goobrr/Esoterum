@@ -34,7 +34,6 @@ public class BinaryWire extends BinaryBlock{
     }
 
     public class BinaryWireBuild extends BinaryBuild {
-
         @Override
         public void updateTile() {
             super.updateTile();
@@ -86,7 +85,7 @@ public class BinaryWire extends BinaryBlock{
 
         public boolean signalFront(){
             return (nb.get(2) != null ?
-                nb.get(2).rotation == rotation || !nb.get(2).block.rotate ?
+                connectionCheck(nb.get(2), this) || !nb.get(2).block.rotate ?
                     getSignal(nb.get(2), this) :
                     nextSignal
                 : nextSignal )
