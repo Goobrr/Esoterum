@@ -18,7 +18,7 @@ public class SignalController extends BinaryRouter{
 
     public SignalController(String name){
         super(name);
-        configurable = true;
+        configurable = saveConfig = true;
 
         config(IntSeq.class, (ControllerBuild b, IntSeq i) -> b.configs = IntSeq.with(i.items));
 
