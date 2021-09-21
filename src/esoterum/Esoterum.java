@@ -27,25 +27,26 @@ public class Esoterum extends Mod{
                 if(isEso != lastMapEso){
                     lastMapEso = !lastMapEso;
                     if(isEso){
-                        prevAmbient.clear();
-                        prevAmbient.addAll(control.sound.ambientMusic);
-                        prevDark.clear();
-                        prevDark.addAll(control.sound.darkMusic);
-                        control.sound.ambientMusic.clear();
-                        control.sound.ambientMusic.addAll(EsoMusic.esoAmbientMusic);
-                        control.sound.darkMusic.clear();
-                        control.sound.darkMusic.addAll(EsoMusic.esoDarkMusic);
+                        swapMusic(control.sound.ambientMusic, EsoMusic.esoAmbientMusic, prevAmbient);
+                        swapMusic(control.sound.darkMusic, EsoMusic.esoDarkMusic, prevDark);
                         //Log.info("Swapped to Eso music!");
                     }else{
-                        control.sound.ambientMusic.clear();
-                        control.sound.ambientMusic.addAll(prevAmbient);
-                        control.sound.darkMusic.clear();
-                        control.sound.darkMusic.addAll(prevDark);
+                        swapMusic(control.sound.ambientMusic, prevAmbient, null);
+                        swapMusic(control.sound.darkMusic, prevDark, null);
                         //Log.info("Swapped to Vanilla music!");
                     }
                 }
             });
         }
+    }
+
+    private void swapMusic(Seq<Music> target, Seq<Music> replacement, Seq<Music> save){
+        if(save != null){
+            save.clear();
+            save.addAll(target);
+        }
+        target.clear();
+        target.addAll(replacement);
     }
 
     @Override
