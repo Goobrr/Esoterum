@@ -7,7 +7,7 @@ import mindustry.graphics.*;
 
 // too similar to BinaryRouter?
 public class BinaryJunction extends BinaryBlock{
-    public TextureRegion[] directionRegion = new TextureRegion[2];
+    public TextureRegion[] directionRegions = new TextureRegion[2];
 
     public BinaryJunction(String name){
         super(name);
@@ -22,7 +22,7 @@ public class BinaryJunction extends BinaryBlock{
         super.load();
 
         for(int i = 0; i < 2; i++){
-            directionRegion[i] = Core.atlas.find(name + "-direction-" + i);
+            directionRegions[i] = Core.atlas.find(name + "-direction-" + i);
         }
     }
 
@@ -31,8 +31,8 @@ public class BinaryJunction extends BinaryBlock{
         return new TextureRegion[]{
             region,
             topRegion,
-            directionRegion[0],
-            directionRegion[1]
+            directionRegions[0],
+            directionRegions[1]
         };
     }
 
@@ -50,9 +50,9 @@ public class BinaryJunction extends BinaryBlock{
         public void drawConnections(){
 
             Draw.color(Color.white, Pal.accent, signalFront() || signalBack() ? 1f : 0f);
-            Draw.rect(directionRegion[0], x, y);
+            Draw.rect(directionRegions[0], x, y);
             Draw.color(Color.white, Pal.accent, signalLeft() || signalRight() ? 1f : 0f);
-            Draw.rect(directionRegion[1], x, y);
+            Draw.rect(directionRegions[1], x, y);
             Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
         }
 
