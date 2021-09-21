@@ -48,12 +48,10 @@ public class BinaryJunction extends BinaryBlock{
 
         @Override
         public void drawConnections(){
-
             Draw.color(Color.white, Pal.accent, signalFront() || signalBack() ? 1f : 0f);
             Draw.rect(directionRegions[0], x, y);
             Draw.color(Color.white, Pal.accent, signalLeft() || signalRight() ? 1f : 0f);
             Draw.rect(directionRegions[1], x, y);
-            Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
         }
 
         @Override

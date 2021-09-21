@@ -66,12 +66,13 @@ public class BinaryBlock extends Block {
         public void draw(){
             super.draw();
 
-            Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
             drawConnections();
+            Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
             Draw.rect(topRegion, x, y, rotate ? rotdeg() : 0f);
         }
 
         public void drawConnections(){
+            Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
             for(int i = 0; i < 4; i++){
                 if(connections[i]) Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
             }

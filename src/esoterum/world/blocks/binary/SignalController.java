@@ -67,7 +67,6 @@ public class SignalController extends BinaryRouter{
                     Draw.rect(outputRegion, x, y, i * 90f);
                 }
             }
-            Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
         }
 
         // i don't know how to arrange the buttons, so i just did this
