@@ -20,7 +20,7 @@ public class SignalController extends BinaryRouter{
         super(name);
         configurable = true;
 
-        config(IntSeq.class, (ControllerBuild b, IntSeq i) -> b.configs = i);
+        config(IntSeq.class, (ControllerBuild b, IntSeq i) -> b.configs = IntSeq.with(i.items));
 
         config(Integer.class, (ControllerBuild b, Integer i) -> {
             b.configs.incr(i, 1);
