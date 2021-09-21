@@ -1,11 +1,16 @@
 package esoterum.content;
 
 import esoterum.world.blocks.binary.*;
+import esoterum.world.blocks.environment.*;
 import mindustry.ctype.ContentList;
 import mindustry.world.*;
+import mindustry.world.blocks.environment.*;
 
-public class EsoBlocks implements ContentList {
+public class EsoBlocks implements ContentList{
     public Block
+        // Environment
+        esoPanel, esoPanel1, esoPanel2, esoPanel3, esoPanelFlat, esoSolidPanel,
+        esoPanelOpen, esoPanelE, esoPanelS, esoPanelO,
         // Signal distribution
         esoWire, esoJunction, esoRouter, esoNode, esoLatch,
         // Signal sources
@@ -14,7 +19,25 @@ public class EsoBlocks implements ContentList {
         esoAND, esoXOR, esoNOT;
 
     @Override
-    public void load() {
+    public void load(){
+        // region environment
+        esoPanel = new NonblendFloor("panel", 0);
+        esoPanel1 = new NonblendFloor("panel-1", 0);
+        esoPanel2 = new NonblendFloor("panel-2", 0);
+        esoPanel3 = new NonblendFloor("panel-3", 0);
+
+        esoPanelFlat = new NonblendFloor("panel-flat", 0);
+        esoSolidPanel = new StaticWall("panel-solid"){{
+            variants = 0;
+        }};
+        esoPanelOpen = new NonblendFloor("panel-open", 4);
+
+        esoPanelE = new NonblendFloor("panel-e", 0);
+        esoPanelS = new NonblendFloor("panel-s", 0);
+        esoPanelO = new NonblendFloor("panel-o", 0);
+        // endregion environment
+
+        // region distribution
         esoWire = new BinaryWire("wire");
 
         esoJunction = new BinaryJunction("junction");
@@ -24,11 +47,15 @@ public class EsoBlocks implements ContentList {
         esoNode = new BinaryNode("node", 5);
 
         esoLatch = new LatchBlock("latch");
+        // endregion distribution
 
+        // region sources
         esoSwitch = new BinaryButton("switch", true);
 
         esoButton = new BinaryButton("button", false);
+        // endregion sources
 
+        // region logic gates
         esoAND = new LogicGate("AND", false, true, true){{
             operation = i -> i[1] && i[2];
         }};
@@ -40,5 +67,6 @@ public class EsoBlocks implements ContentList {
         esoNOT = new LogicGate("NOT", false, true, false){{
             operation = i -> !i[1];
         }};
+        // endregion logic gates
     }
 }
