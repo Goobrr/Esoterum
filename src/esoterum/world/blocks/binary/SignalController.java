@@ -1,15 +1,21 @@
 package esoterum.world.blocks.binary;
 
 import arc.Core;
+import arc.graphics.*;
+import arc.graphics.g2d.*;
 import arc.math.geom.Vec2;
 import arc.scene.ui.*;
 import arc.scene.ui.layout.*;
 import arc.struct.*;
 import arc.util.*;
 import arc.util.io.*;
+import mindustry.graphics.*;
 
 // each side's behavior is configurable.
-public class SignalController extends BinaryRouter {
+public class SignalController extends BinaryRouter{
+    public String[] states = new String[]{"X", "I", "O"};
+    public TextureRegion inputRegion, outputRegion;
+
     public SignalController(String name){
         super(name);
         configurable = true;
@@ -22,16 +28,23 @@ public class SignalController extends BinaryRouter {
         });
     }
 
-    public class ControllerBuild extends BinaryRouterBuild {
-        // IO configuration
-        // 0 = ignore/do nothing
-        // 1 = input
-        // 2 = output
+    @Override
+    public void load(){
+        super.load();
+
+        inputRegion = Core.atlas.find(name + "-in");
+        outputRegion = Core.atlas.find(name + "-out");
+    }
+
+    public class ControllerBuild extends BinaryRouterBuild{
+        /** IO configuration:
+         * 0 = ignore/do nothing |
+         * 1 = input |
+         * 2 = output */
         public IntSeq configs = new IntSeq(new int[]{0, 0, 0, 0});
-        public String[] states = new String[]{"-", "I", "O"};
 
         @Override
-        public void updateTile() {
+        public void updateTile(){
             lastSignal = false;
             for(int i = 0; i < 4; i++){
                 // check if the current side is configured to accept input
@@ -39,10 +52,25 @@ public class SignalController extends BinaryRouter {
             }
         }
 
+        @Override
+        public void drawConnections(){
+            for(int i = 0; i < 4; i++){
+                int c = configs.get(i);
+                if(c == 0) continue;
+                if(c == 1){
+                    Draw.color(Color.white, Pal.accent, getSignal(nb.get(i), this) ? 1f : 0f);
+                    Draw.rect(inputRegion, x, y, i * 90f);
+                }else{
+                    Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
+                    Draw.rect(outputRegion, x, y, i * 90f);
+                }
+            }
+            Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
+        }
 
         // i don't know how to arrange the buttons, so i just did this
         @Override
-        public void buildConfiguration(Table table) {
+        public void buildConfiguration(Table table){
             table.table().size(40);
             addConfigButton(table, 1).align(Align.center);
             table.row();
@@ -54,7 +82,7 @@ public class SignalController extends BinaryRouter {
             addConfigButton(table, 3).align(Align.center);
         }
 
-        public Cell<Table> addConfigButton(Table table, int index) {
+        public Cell<Table> addConfigButton(Table table, int index){
             return table.table(t -> t.button(states[configs.get(index)], () -> {
                 configure(index);
                 ((TextButton) t.getChildren().first()).setText(states[configs.get(index)]);
