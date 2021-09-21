@@ -7,7 +7,7 @@ import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 
 public class EsoBlocks implements ContentList{
-    public Block
+    public static Block
         // Environment
         esoPanel, esoPanel1, esoPanel2, esoPanel3, esoPanelFlat, esoSolidPanel,
         esoPanelOpen, esoPanelE, esoPanelS, esoPanelO,
