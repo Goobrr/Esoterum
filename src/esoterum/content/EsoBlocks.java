@@ -47,7 +47,7 @@ public class EsoBlocks implements ContentList{
         esoNode = new BinaryNode("node", 5);
 
         esoLatch = new LatchBlock("latch");
-      
+
         esoController = new SignalController("controller");
         // endregion distribution
 
