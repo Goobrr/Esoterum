@@ -1,19 +1,24 @@
 package esoterum.world.blocks.binary;
 
 import arc.*;
+import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.scene.ui.*;
 import arc.scene.ui.layout.*;
 import arc.struct.*;
+import arc.util.*;
 import arc.util.io.*;
+import mindustry.graphics.Pal;
+import arc.math.geom.Vec2;
 
 public class GateController extends LogicGate{
-    public String[] states = new String[]{"R", "S", "L"};
+    public String[] states = new String[]{"L", "S", "R"};
     public String[] outs = new String[]{"0", "1"};
     public TextureRegion base, connecs;
     public TextureRegion[][][] gates = new TextureRegion[2][2][2];
     public GateController(String name, boolean l, boolean b, boolean r){
         super(name, l, b, r);
+        configurable = saveConfig = true;
         config(IntSeq.class, (GateControllerBuild c, IntSeq i) -> c.configs = IntSeq.with(i.items));
 
         config(Integer.class, (GateControllerBuild c, Integer i) -> {
@@ -51,7 +56,8 @@ public class GateController extends LogicGate{
         @Override
         public void draw(){
             Draw.rect(base, tile.drawx(), tile.drawy());
-            Draw.rect(connecs, tile.drawx(), tile.drawy(),90f*rotation);
+            Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
+            Draw.rect(connecs, tile.drawx(), tile.drawy(),90f*rotation-configs.get(3)*90f+180f);
             Draw.rect(gates[configs.get(0)][configs.get(1)][configs.get(2)], tile.drawx(), tile.drawy(),90f*rotation);
         }
 
@@ -65,13 +71,25 @@ public class GateController extends LogicGate{
             addConfigButton(outputs, 0);
             addConfigButton(outputs, 1);
             addConfigButton(outputs, 2);
+            table.add(outputs);
+        }
+
+        @Override
+        public void updateTableAlign(Table table){
+            Vec2 pos = Core.input.mouseScreen(x, y);
+            table.setPosition(pos.x, pos.y, Align.center);
         }
 
         @Override
         public boolean signal() {
-            boolean a = (configs.get(3)==0)?(getSignal(nb.get(2), this)):(getSignal(nb.get(1), this));
-            boolean b = (configs.get(3)==1)?(getSignal(nb.get(2), this)):(getSignal(nb.get(3), this));
-            return (!(a | b) && (configs.get(0) != 0)) || ((a & b) && (configs.get(3) != 0)) || ((a ^ b) && (configs.get(2) != 0));
+            boolean a = (configs.get(3)==0)?(getSignal(nb.get(2), this)):(getSignal(nb.get(3), this));
+            boolean b = (configs.get(3)==2)?(getSignal(nb.get(2), this)):(getSignal(nb.get(1), this));
+            return (!(a | b) & (configs.get(0) != 0)) || ((a & b) & (configs.get(2) != 0)) || ((a ^ b) & (configs.get(1) != 0));
+        }
+
+        @Override
+        public Object config() {
+            return configs;
         }
 
         @Override
