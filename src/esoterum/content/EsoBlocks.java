@@ -16,7 +16,7 @@ public class EsoBlocks implements ContentList{
         // Signal sources
         esoSwitch, esoButton,
         // Logic gates
-        esoAND, esoXOR, esoNOT;
+        esoAND, esoXOR, esoNOT, esoUniv;
 
     @Override
     public void load(){
@@ -69,6 +69,8 @@ public class EsoBlocks implements ContentList{
         esoNOT = new LogicGate("NOT", false, true, false){{
             operation = i -> !i[1];
         }};
+
+        esoUniv = new GateController("universal-gate", true, true, true);
         // endregion logic gates
     }
 }
