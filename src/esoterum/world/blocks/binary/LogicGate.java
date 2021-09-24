@@ -93,6 +93,7 @@ public class LogicGate extends BinaryBlock{
 
             write.i(configs.first());
             write.i(configs.peek());
+            write.i(nextConfig);
         }
 
         @Override
@@ -101,6 +102,7 @@ public class LogicGate extends BinaryBlock{
 
             if(revision >= 1){
                 configs = IntSeq.with(read.i(), read.i());
+                nextConfig = read.i();
             }
         }
 
