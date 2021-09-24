@@ -9,6 +9,7 @@ import arc.scene.ui.*;
 import arc.scene.ui.layout.*;
 import arc.struct.*;
 import arc.util.*;
+import arc.util.io.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 
@@ -86,6 +87,28 @@ public class LogicGate extends BinaryBlock{
             }
             Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
             Draw.rect(connectionRegion, x, y, rotdeg());
+        }
+
+        @Override
+        public void write(Writes write){
+            super.write(write);
+
+            write.i(configs.first());
+            write.i(configs.peek());
+        }
+
+        @Override
+        public void read(Reads read, byte revision){
+            super.read(read, revision);
+
+            if(revision >= 1){
+                configs = IntSeq.with(read.i(), read.i());
+            }
+        }
+
+        @Override
+        public byte version(){
+            return 1;
         }
     }
 }
