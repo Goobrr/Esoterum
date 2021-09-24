@@ -4,7 +4,7 @@
 
 A [accent]signal junction[] is used where different signal wires, that must not connect, cross. The junction is commonly used in conjunction with signal routers to distribute data without mixing the signals.
 
-[i]esoterum-wire-fig2[t]Fig 4.1. Signal Junction IO(Placeholder)
+[i]esoterum-wire-fig2[t]Fig 4.2. Signal Junction IO(Placeholder)
 
 The signal junction accepts input from any side and outputs to the opposite side. Thanks to improvements in the R&D department, signal junctions do not mix signals if two opposite sides are used as input.
 
