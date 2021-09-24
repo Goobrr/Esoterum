@@ -1,10 +1,10 @@
 [h]Signal Router
 
-[i]esoterum-router-fig1[t]Fig 1.1. Signal Router IO (Placeholder)
+[i]esoterum-router-fig1[t]Fig 1.1. Signal Router IO
 
 A [accent]signal router[] is used to split incoming signals to multiple directions, it takes inputs from and outputs to all sides.
 
-[i]esoterum-router-fig2[t]Fig 1.2. A Signal Router Chain (Placeholder)
+[i]esoterum-router-fig2[t]Fig 1.2. A Signal Router Chain
 
 Due to the behavior of the router, chaining them is [accent]not[] recommended as they will output to eachother and cause a feedback loop that will lock them into a high state, which is what I-03 considers to be - quote - "Heretical".
 
