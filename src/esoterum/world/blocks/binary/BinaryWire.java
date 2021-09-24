@@ -68,7 +68,7 @@ public class BinaryWire extends BinaryBlock{
 
         @Override
         public void drawConnections(){
-            for(int i = 0; i < 4; i++){
+            for(int i = 1; i < 4; i++){
                 if(connections[i]){
                     Draw.color(Color.white, Pal.accent, getSignal(nb.get(i), this) ? 1f : 0f);
                     Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
