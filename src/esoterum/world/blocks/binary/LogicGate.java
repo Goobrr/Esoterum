@@ -1,61 +1,91 @@
 package esoterum.world.blocks.binary;
 
-import arc.Core;
-import arc.func.Boolf;
-import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import mindustry.graphics.Pal;
+import arc.*;
+import arc.func.*;
+import arc.graphics.*;
+import arc.graphics.g2d.*;
+import arc.math.geom.*;
+import arc.scene.ui.*;
+import arc.scene.ui.layout.*;
+import arc.struct.*;
+import arc.util.*;
+import mindustry.gen.*;
+import mindustry.graphics.*;
 
 public class LogicGate extends BinaryBlock{
+    public String[] states = new String[]{"X", "I"};
+
     public Boolf<boolean[]> operation;
-    public LogicGate(String name, boolean l, boolean b, boolean r){
+
+    public LogicGate(String name){
         super(name);
-        inputs = new boolean[]{false, l, b, r};
+        inputs = new boolean[]{false, true, true, true};
         outputs = new boolean[]{true, false, false, false};
         emits = true;
         rotate = true;
         drawArrow = true;
+        configurable = saveConfig = true;
 
         operation = e -> false;
 
-        drawConnectionArrows = true;
+        config(IntSeq.class, (LogicGateBuild b, IntSeq i) -> b.configs = IntSeq.with(i.items));
+
+        config(Integer.class, (LogicGateBuild b, Integer i) -> {
+            b.configs.removeIndex(0);
+            b.configs.add(i);
+            b.nextConfig--;
+            if(b.nextConfig < 1) b.nextConfig = 3;
+        });
     }
 
     @Override
-    public void load() {
+    public void load(){
         super.load();
         region = Core.atlas.find("esoterum-gate-base");
     }
 
-    public class LogicGateBuild extends BinaryBuild {
+    public class LogicGateBuild extends BinaryBuild{
+        public IntSeq configs = IntSeq.with(3, 2);
+        public int nextConfig = 1;
 
         @Override
-        public void updateTile() {
+        public void updateTile(){
             super.updateTile();
             lastSignal = signal();
         }
 
         @Override
-        public boolean signal() {
+        public void buildConfiguration(Table table){
+            table.button(Icon.rotate, () -> configure(nextConfig)).size(40f);
+        }
+
+        @Override
+        public Object config() {
+            return configs;
+        }
+
+        @Override
+        public boolean signal(){ //Assumes logic gates only have 2 inputs.
             return operation.get(new boolean[]{
-                getSignal(nb.get(1), this),
-                getSignal(nb.get(2), this),
-                getSignal(nb.get(3), this)
+                getSignal(nb.get(configs.first()), this),
+                getSignal(nb.get(configs.peek()), this),
             });
         }
 
         @Override
-        public void draw(){
-            Draw.rect(region, x, y);
-
-            drawConnections();
-            Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
-            Draw.rect(topRegion, x, y, rotate ? rotdeg() : 0f);
+        public boolean signalFront() {
+            return signal();
         }
 
         @Override
-        public boolean signalFront() {
-            return lastSignal;
+        public void drawConnections(){
+            for(int i = 1; i < 4; i++){
+                if(!configs.contains(i)) continue;
+                Draw.color(Color.white, Pal.accent, getSignal(nb.get(i), this) ? 1f : 0f);
+                Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
+            }
+            Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
+            Draw.rect(connectionRegion, x, y, rotdeg());
         }
     }
 }

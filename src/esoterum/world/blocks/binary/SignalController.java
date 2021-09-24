@@ -14,6 +14,7 @@ import mindustry.graphics.*;
 // each side's behavior is configurable.
 public class SignalController extends BinaryRouter{
     public String[] states = new String[]{"X", "I", "O"};
+
     public TextureRegion inputRegion, outputRegion;
 
     public SignalController(String name){
@@ -43,7 +44,7 @@ public class SignalController extends BinaryRouter{
          * 0 = ignore/do nothing |
          * 1 = input |
          * 2 = output */
-        public IntSeq configs = new IntSeq(new int[]{0, 0, 0, 0});
+        public IntSeq configs = IntSeq.with(0, 0, 0, 0);
 
         @Override
         public void updateTile(){
@@ -84,10 +85,12 @@ public class SignalController extends BinaryRouter{
         }
 
         public Cell<Table> addConfigButton(Table table, int index){
-            return table.table(t -> t.button(states[configs.get(index)], () -> {
-                configure(index);
-                ((TextButton) t.getChildren().first()).setText(states[configs.get(index)]);
-            }).size(40f));
+            return table.table(t -> {
+                TextButton b = t.button(states[configs.get(index)], () -> {
+                    configure(index);
+                }).get();
+                b.update(() -> b.setText(states[configs.get(index)]));
+            }).size(40f);
         }
 
         @Override
