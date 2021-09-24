@@ -17,6 +17,7 @@ import mindustry.world.meta.BuildVisibility;
 
 public class Manual extends Block{
     public Effect landEffect = EsoFx.manualLand;
+    public float landTime = -1f;
     public Sound landSound = Sounds.bang;
 
     ManualDialog manual;
@@ -34,9 +35,10 @@ public class Manual extends Block{
     }
 
     @Override
-    public void init() {
+    public void init(){
         super.init();
         manual = new ManualDialog();
+        if(landTime < 0) landTime = landEffect.lifetime;
     }
 
     public class ManualBuild extends Building{
@@ -47,7 +49,7 @@ public class Manual extends Block{
         public void created(){
             super.created();
             landEffect.at(this);
-            Time.run(landEffect.lifetime, () -> {
+            Time.run(landTime, () -> {
                 if(!isValid() || draw) return;
                 landSound.at(this, Mathf.random(0.8f, 1.2f));
                 draw = true;
