@@ -18,7 +18,6 @@ public class ManualDialog extends BaseDialog{
     }
 
     public void build(){
-
         // clear dialog contents
         cont.clearChildren();
         buttons.clearChildren();
