@@ -15,6 +15,7 @@ import mindustry.graphics.*;
 
 public class LogicGate extends BinaryBlock{
     public Boolf<boolean[]> operation;
+    public boolean single;
 
     public LogicGate(String name){
         super(name);
@@ -44,7 +45,7 @@ public class LogicGate extends BinaryBlock{
     }
 
     public class LogicGateBuild extends BinaryBuild{
-        public IntSeq configs = IntSeq.with(3, 2);
+        public IntSeq configs = single ? IntSeq.with(2) : IntSeq.with(3, 2);
         public int nextConfig = 1;
 
         @Override
@@ -91,9 +92,9 @@ public class LogicGate extends BinaryBlock{
         public void write(Writes write){
             super.write(write);
 
-            write.i(configs.first());
-            write.i(configs.peek());
             write.i(nextConfig);
+            write.i(configs.first());
+            if(!single) write.i(configs.peek());
         }
 
         @Override
@@ -101,8 +102,12 @@ public class LogicGate extends BinaryBlock{
             super.read(read, revision);
 
             if(revision >= 1){
-                configs = IntSeq.with(read.i(), read.i());
                 nextConfig = read.i();
+                if(single){
+                    configs = IntSeq.with(read.i());
+                }else{
+                    configs = IntSeq.with(read.i(), read.i());
+                }
             }
         }
 

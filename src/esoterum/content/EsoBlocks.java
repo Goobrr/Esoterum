@@ -68,7 +68,10 @@ public class EsoBlocks implements ContentList{
             operation = i -> i[0] ^ i[1];
         }};
 
-        esoNOT = new LogicNot("NOT");
+        esoNOT = new LogicGate("NOT"){{
+            operation = i -> !i[0];
+            single = true;
+        }};
         // endregion logic gates
 
         esoManual = new Manual("manual");
