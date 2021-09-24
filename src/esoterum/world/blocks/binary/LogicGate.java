@@ -14,8 +14,6 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 
 public class LogicGate extends BinaryBlock{
-    public String[] states = new String[]{"X", "I"};
-
     public Boolf<boolean[]> operation;
 
     public LogicGate(String name){
