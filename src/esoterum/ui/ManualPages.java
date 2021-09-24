@@ -11,7 +11,8 @@ public class ManualPages {
                 makePage("distribution/Wire"),
                 makePage("distribution/Router"),
                 makePage("distribution/Controller"),
-                makePage("distribution/Junction")
+                makePage("distribution/Junction"),
+                makePage("distribution/Node")
         },
         // signal sources
         new ManualPage[]{},

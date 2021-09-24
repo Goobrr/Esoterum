@@ -1,0 +1,12 @@
+[h]Signal Node
+
+[i]esoterum-wire-fig2[t]Fig 5.1. Signal Node in Action(Placeholder)
+
+The basic use of [accent]signal nodes[] is to transmit signals over other components. Signal nodes are not intended to be a replacement for signal controllers, signal wires, signal junctions, nor signal routers, and such usage is discouraged and will not be tolerated unless given permission due to the budget that have been wasted by past Engineers.
+Experienced Engineers can use signal nodes as a bidirectional signal wire which can send data to and from both ends.
+
+[i]esoterum-wire-fig2[t]Fig 5.2. Signal Node IO(Placeholder)
+
+A signal node can have a singular bidirectional connection to another node. When a signal node receives input, the signal is sent to the connected signal node, which will output the signal to all sides. The sending signal node will remain unpowered. The receiving signal node, even if it is powered by the connected signal node, can transmit a signal which will be outputted as expected at the sister signal node.
+
+[#4c4c4c]The R&D department recommends replacing all signal nodes of the A2 type with signal nodes of the A3 type, as the issues with pairs of signal nodes disconnecting has been fixed in the new revision.
