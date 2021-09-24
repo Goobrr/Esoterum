@@ -1,0 +1,11 @@
+[h]Signal Junction
+
+[i]esoterum-wire-fig2[t]Fig 4.1. Signal Junction in Action(Placeholder)
+
+A [accent]signal junction[] is used where different signal wires, that must not connect, cross. The junction is commonly used in conjunction with signal routers to distribute data without mixing the signals.
+
+[i]esoterum-wire-fig2[t]Fig 4.1. Signal Junction IO(Placeholder)
+
+The signal junction accepts input from any side and outputs to the opposite side. Thanks to improvements in the R&D department, signal junctions do not mix signals if two opposite sides are used as input.
+
+[#4c4c4c]Excerpt from R&D Document 10867-309S: "...and one of the apprentices fell asleep, knocking some wires on the floor, and then it struck us. The wires were crossing on top of each other, and so the first iteration of it was made."
