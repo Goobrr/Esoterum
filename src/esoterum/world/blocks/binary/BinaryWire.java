@@ -72,13 +72,12 @@ public class BinaryWire extends BinaryBlock{
         }
 
         public boolean signalFront(){
+            boolean s = signal();
             return (nb.get(2) != null ?
                 nb.get(2).rotation == rotation || !nb.get(2).block.rotate ?
                     getSignal(nb.get(2), this) :
-                    nextSignal
-                : nextSignal )
-
-                | nextSignal;
+                    s
+                : s) | s;
         }
     }
 }
