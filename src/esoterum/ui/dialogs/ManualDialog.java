@@ -1,17 +1,12 @@
 package esoterum.ui.dialogs;
 
-import arc.scene.ui.ScrollPane;
-import arc.scene.ui.layout.Cell;
-import arc.util.Align;
-import esoterum.ui.ManualPage;
-import esoterum.ui.ManualPages;
-import mindustry.gen.Icon;
-import mindustry.gen.Tex;
-import mindustry.graphics.Pal;
-import mindustry.ui.Styles;
-import mindustry.ui.dialogs.BaseDialog;
+import esoterum.ui.*;
+import mindustry.gen.*;
+import mindustry.graphics.*;
+import mindustry.ui.*;
+import mindustry.ui.dialogs.*;
 
-public class ManualDialog extends BaseDialog {
+public class ManualDialog extends BaseDialog{
     int currentPage;
     int currentTopic;
 
@@ -19,6 +14,7 @@ public class ManualDialog extends BaseDialog {
         super("Esoterum Engineer's Manual");
 
         build();
+        build(); //Run build twice to deal with strange issues that happen the first build.
     }
 
     public void build(){
