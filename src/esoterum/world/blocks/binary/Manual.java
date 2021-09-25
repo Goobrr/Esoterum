@@ -10,6 +10,7 @@ import arc.util.io.Reads;
 import arc.util.io.Writes;
 import esoterum.content.*;
 import esoterum.ui.dialogs.ManualDialog;
+import mindustry.*;
 import mindustry.entities.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -40,7 +41,7 @@ public class Manual extends Block{
     @Override
     public void init(){
         super.init();
-        manual = new ManualDialog();
+        if(!Vars.headless) manual = new ManualDialog();
         if(landTime < 0) landTime = entryEffect.lifetime;
     }
 
