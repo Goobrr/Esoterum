@@ -15,7 +15,10 @@ public class ManualPages {
             makePage("distribution/Node")
         },
         // signal sources
-        new ManualPage[]{},
+        new ManualPage[]{
+            makePage("sources/Switch"),
+            makePage("sources/Button")
+        },
         // gates
         new ManualPage[]{},
         // circuits
