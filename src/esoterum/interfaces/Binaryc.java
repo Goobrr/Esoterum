@@ -1,8 +1,6 @@
 package esoterum.interfaces;
 
-import arc.Core;
-import arc.util.Log;
-import esoterum.util.EsoUtil;
+import esoterum.util.*;
 import esoterum.world.blocks.binary.*;
 import mindustry.gen.*;
 

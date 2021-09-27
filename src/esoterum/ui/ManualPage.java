@@ -55,4 +55,21 @@ public class ManualPage{
         }).pad(5).growX();
         cont.row();
     }
+
+    public void addNote(String content, @Nullable String author){
+        cont.table(Tex.button, t -> {
+            t.labelWrap(content)
+                .top().left()
+                .padLeft(5).growX();
+            if(author != null){
+                t.row();
+                t.labelWrap("- " + author)
+                    .fontScale(0.8f)
+                    .top().right()
+                    .padRight(5).growX()
+                    .get().setAlignment(Align.right);
+            }
+        }).pad(5).growX();
+        cont.row();
+    }
 }

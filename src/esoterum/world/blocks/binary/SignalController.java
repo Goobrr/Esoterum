@@ -1,9 +1,9 @@
 package esoterum.world.blocks.binary;
 
-import arc.Core;
+import arc.*;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
-import arc.math.geom.Vec2;
+import arc.math.geom.*;
 import arc.scene.ui.*;
 import arc.scene.ui.layout.*;
 import arc.struct.*;
@@ -88,6 +88,7 @@ public class SignalController extends BinaryRouter{
             return table.table(t -> {
                 TextButton b = t.button(states[configs.get(index)], () -> {
                     configure(index);
+                    updateProximity();
                 }).get();
                 b.update(() -> b.setText(states[configs.get(index)]));
             }).size(40f);
@@ -102,6 +103,26 @@ public class SignalController extends BinaryRouter{
         @Override
         public Object config() {
             return configs;
+        }
+
+        @Override
+        public boolean[] inputs() {
+            return new boolean[]{
+                configs.get(0) == 1,
+                configs.get(1) == 1,
+                configs.get(2) == 1,
+                configs.get(3) == 1,
+            };
+        }
+
+        @Override
+        public boolean[] outputs() {
+            return new boolean[]{
+                configs.get(0) == 2,
+                configs.get(1) == 2,
+                configs.get(2) == 2,
+                configs.get(3) == 2,
+            };
         }
 
         // check if the current side is configured to output

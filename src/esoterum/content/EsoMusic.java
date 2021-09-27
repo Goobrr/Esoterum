@@ -1,11 +1,11 @@
 package esoterum.content;
 
-import arc.Core;
-import arc.assets.AssetDescriptor;
-import arc.assets.loaders.MusicLoader;
-import arc.audio.Music;
+import arc.*;
+import arc.assets.*;
+import arc.assets.loaders.*;
+import arc.audio.*;
 import arc.struct.*;
-import mindustry.Vars;
+import mindustry.*;
 
 // no more "musics"
 public class EsoMusic {

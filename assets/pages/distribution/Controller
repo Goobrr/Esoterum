@@ -5,7 +5,7 @@
 A [accent]signal controller[] is a more advanced version of the signal router, each side is configurable to act as input, output, or to do nothing. Corporate did NOT intend this to be a replacement for wires or routers, as the manufacture of this component is costly.
 It is however, necessary when making compact circuits where components tend to interfere with eachother at close distances.
 
-[i]esoterum-wire-fig2[t]Fig 2.1. A Signal Controller IO(Placeholder)
+[i]esoterum-wire-fig2[t]Fig 2.1. Signal Controller IO(Placeholder)
 
 When an input side is high, all output sides will send out a high signal. Sides that are not configured will do nothing.
 

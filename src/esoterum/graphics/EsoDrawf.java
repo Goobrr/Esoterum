@@ -4,7 +4,7 @@ import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.math.geom.*;
 
-import static arc.math.Angles.*;
+import static arc.math.Angles.angle;
 import static arc.math.Mathf.*;
 
 public class EsoDrawf{

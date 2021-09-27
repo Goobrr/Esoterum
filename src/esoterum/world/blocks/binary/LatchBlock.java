@@ -1,10 +1,9 @@
 package esoterum.world.blocks.binary;
 
-import arc.Core;
-import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.TextureRegion;
-import mindustry.graphics.Pal;
+import arc.*;
+import arc.graphics.*;
+import arc.graphics.g2d.*;
+import mindustry.graphics.*;
 
 public class LatchBlock extends BinaryBlock{
     public TextureRegion latchRegion;

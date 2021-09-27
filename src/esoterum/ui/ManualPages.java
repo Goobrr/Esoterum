@@ -1,25 +1,27 @@
 package esoterum.ui;
 
-import arc.files.Fi;
-import arc.util.Log;
-import mindustry.Vars;
+import arc.files.*;
+import arc.util.*;
+import mindustry.*;
 
 public class ManualPages {
     public static ManualPage[][] topics = new ManualPage[][]{
         // signal distribution
         new ManualPage[]{
-                makePage("distribution/Wire"),
-                makePage("distribution/Router"),
-                makePage("distribution/Controller"),
-                makePage("distribution/Junction"),
-                makePage("distribution/Node")
+            makePage("distribution/Wire"),
+            makePage("distribution/Router"),
+            makePage("distribution/Controller"),
+            makePage("distribution/Junction"),
+            makePage("distribution/Node")
         },
         // signal sources
         new ManualPage[]{},
         // gates
         new ManualPage[]{},
         // circuits
-        new ManualPage[]{},
+        new ManualPage[]{
+            makePage("circuits/Intro")
+        },
     };
 
     // make a ManualPage from a file in assets/pages/
@@ -37,7 +39,7 @@ public class ManualPages {
             return new String[]{" "};
         }
 
-        return file.readString().split("\\R\\R");
+        return file.readString().split("\\r?\\n\\r?\\n");
     }
 
     // build a ManualPage from an array of strings
@@ -54,6 +56,13 @@ public class ManualPages {
                 if(line.startsWith("[i]")){
                     String[] tmp = line.substring(3).split("\\[t]");
                     t.addImage(tmp[0], tmp.length == 2 ? tmp[1] : null);
+                    continue;
+                }
+
+                // if the line starts with [n], parse it as a "personal" note
+                if(line.startsWith("[n]")){
+                    String[] tmp = line.substring(3).split("\\[t]");
+                    t.addNote(tmp[0], tmp.length == 2 ? tmp[1] : null);
                     continue;
                 }
 

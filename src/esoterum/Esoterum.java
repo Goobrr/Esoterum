@@ -4,8 +4,7 @@ import arc.*;
 import arc.audio.*;
 import arc.struct.*;
 import esoterum.content.*;
-import esoterum.ui.ManualPages;
-import mindustry.game.EventType;
+import esoterum.ui.dialogs.*;
 import mindustry.game.EventType.*;
 import mindustry.mod.*;
 import mindustry.mod.Mods.*;
@@ -13,29 +12,28 @@ import mindustry.mod.Mods.*;
 import static mindustry.Vars.*;
 
 public class Esoterum extends Mod{
-    private static final Seq<Music>
-        prevAmbient = new Seq<>(),
-        prevDark = new Seq<>();
+    public static ManualDialog manual;
+
+    private static final Seq<Music> prevAmbient = new Seq<>(), prevDark = new Seq<>();
     private boolean lastMapEso;
 
-    public Esoterum(){}
-
-    @Override
-    public void init(){
+    public Esoterum(){
         if(!headless){
             LoadedMod eso = mods.locateMod("esoterum");
+
+            Events.on(ClientLoadEvent.class, e -> manual = new ManualDialog());
+
             Events.on(WorldLoadEvent.class, e -> {
                 boolean isEso = state.map.mod != null && state.map.mod == eso;
+
                 if(isEso != lastMapEso){
                     lastMapEso = !lastMapEso;
                     if(isEso){
                         swapMusic(control.sound.ambientMusic, EsoMusic.esoAmbientMusic, prevAmbient);
                         swapMusic(control.sound.darkMusic, EsoMusic.esoDarkMusic, prevDark);
-                        //Log.info("Swapped to Eso music!");
                     }else{
                         swapMusic(control.sound.ambientMusic, prevAmbient, null);
                         swapMusic(control.sound.darkMusic, prevDark, null);
-                        //Log.info("Swapped to Vanilla music!");
                     }
                 }
             });
@@ -56,5 +54,4 @@ public class Esoterum extends Mod{
         new EsoBlocks().load();
         new EsoMusic().load();
     }
-
 }

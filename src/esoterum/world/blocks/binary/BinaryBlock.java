@@ -1,17 +1,16 @@
 package esoterum.world.blocks.binary;
 
-import arc.Core;
+import arc.*;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
-import arc.scene.ui.layout.Table;
-import arc.struct.Seq;
-import esoterum.graphics.EsoDrawf;
-import esoterum.interfaces.Binaryc;
+import arc.scene.ui.layout.*;
+import arc.struct.*;
+import esoterum.interfaces.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
-import mindustry.type.Category;
+import mindustry.type.*;
 import mindustry.world.*;
-import mindustry.world.meta.BuildVisibility;
+import mindustry.world.meta.*;
 
 public class BinaryBlock extends Block {
     public TextureRegion connectionRegion;

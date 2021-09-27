@@ -2,7 +2,7 @@ package esoterum.content;
 
 import esoterum.world.blocks.binary.*;
 import esoterum.world.blocks.environment.*;
-import mindustry.ctype.ContentList;
+import mindustry.ctype.*;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 
