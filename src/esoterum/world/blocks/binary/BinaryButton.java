@@ -3,6 +3,7 @@ package esoterum.world.blocks.binary;
 import arc.*;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
+import arc.util.io.*;
 import mindustry.graphics.*;
 
 public class BinaryButton extends BinaryBlock{
@@ -97,6 +98,27 @@ public class BinaryButton extends BinaryBlock{
         @Override
         public boolean signalRight() {
             return lastSignal;
+        }
+
+        @Override
+        public void read(Reads read, byte revision) {
+            super.read(read, revision);
+
+            if(revision >= 1){
+                timer = read.f();
+            }
+        }
+
+        @Override
+        public void write(Writes write) {
+            super.write(write);
+
+            write.f(timer);
+        }
+
+        @Override
+        public byte version() {
+            return 1;
         }
     }
 }

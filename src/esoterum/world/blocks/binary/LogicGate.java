@@ -75,6 +75,15 @@ public class LogicGate extends BinaryBlock{
         }
 
         @Override
+        public void draw() {
+            Draw.rect(region, x, y);
+
+            drawConnections();
+            Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
+            Draw.rect(topRegion, x, y, rotate ? rotdeg() : 0f);
+        }
+
+        @Override
         public void drawConnections(){
             for(int i = 1; i < 4; i++){
                 if(!configs.contains(i)) continue;

@@ -5,6 +5,7 @@ import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.scene.ui.layout.*;
 import arc.struct.*;
+import arc.util.io.*;
 import esoterum.interfaces.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -172,6 +173,27 @@ public class BinaryBlock extends Block {
         }
         public boolean[] inputs() {
             return inputs;
+        }
+
+        @Override
+        public void read(Reads read, byte revision) {
+            super.read(read, revision);
+
+            if(revision >= 1){
+                lastSignal = read.bool();
+            }
+        }
+
+        @Override
+        public void write(Writes write) {
+            super.write(write);
+
+            write.bool(lastSignal);
+        }
+
+        @Override
+        public byte version() {
+            return 1;
         }
     }
 }
