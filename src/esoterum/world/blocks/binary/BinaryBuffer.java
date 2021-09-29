@@ -13,7 +13,7 @@ import mindustry.graphics.*;
 import mindustry.ui.*;
 
 public class BinaryBuffer extends BinaryBlock{
-    public TextureRegion outputRegion;
+
     public BinaryBuffer(String name){
         super(name);
         emits = true;
@@ -27,20 +27,13 @@ public class BinaryBuffer extends BinaryBlock{
         config(IntSeq.class, (BinaryBufferBuild b, IntSeq i) -> b.configs = IntSeq.with(i.items));
     }
 
-    @Override
-    public void load() {
-        super.load();
-        outputRegion = Core.atlas.find("esoterum-connection");
-        connectionRegion = Core.atlas.find("esoterum-connection-large");
-    }
-
     public class BinaryBufferBuild extends BinaryBuild{
         public float delayTimer = 0f;
 
         public float delay = 5f;
 
-        // Direction, Multiplier
-        public IntSeq configs = IntSeq.with(1, 1);
+        /** Direction, Multiplier */
+        public IntSeq configs = IntSeq.with(2, 1);
 
         @Override
         public void updateTile() {
@@ -62,18 +55,18 @@ public class BinaryBuffer extends BinaryBlock{
         }
 
         public float trueDelay(){
-            return delay * configs.peek();
+            return delay * configs.get(1);
         }
 
         @Override
-        public void draw() {
+        public void draw(){
             Draw.rect(region, x, y);
 
             Draw.color(lastSignal ? Pal.accent : Color.white);
-            Draw.rect(outputRegion, x, y, rotdeg());
+            Draw.rect(connectionRegion, x, y, rotdeg());
             drawConnections();
             Draw.color(Color.white, Pal.accent, delayTimer / trueDelay());
-            Draw.rect(topRegion, x, y, rotdeg() + 90 * configs.first());
+            Draw.rect(topRegion, x, y, rotdeg());
         }
 
         public void drawConnections(){
@@ -111,9 +104,9 @@ public class BinaryBuffer extends BinaryBlock{
         public void buildConfiguration(Table table){
             table.setBackground(Styles.black5);
             table.button(Icon.rotate, () -> {
-                configs.incr(0, 1);
-                if(configs.first() + 1 > 4){
-                    configs.set(0, 1);
+                configs.incr(0, -1);
+                if(configs.first() < 1){
+                    configs.set(0, 3);
                 }
                 configure(configs);
             }).size(40f);
@@ -121,7 +114,7 @@ public class BinaryBuffer extends BinaryBlock{
                 t.left();
                 t.button(Icon.settingsSmall, Styles.emptyi, () -> {
                     configs.incr(1, 1);
-                    if(configs.peek() + 1 > 13){
+                    if(configs.get(1) >= 13){
                         configs.set(1, 1);
                     }
                     configure(configs);
@@ -139,6 +132,15 @@ public class BinaryBuffer extends BinaryBlock{
         }
 
         @Override
+        public void write(Writes write) {
+            super.write(write);
+
+            write.f(delayTimer);
+            write.i(configs.get(0));
+            write.i(configs.get(1));
+        }
+
+        @Override
         public void read(Reads read, byte revision) {
             super.read(read, revision);
 
@@ -148,15 +150,6 @@ public class BinaryBuffer extends BinaryBlock{
             if(revision >= 2){
                 configs = IntSeq.with(read.i(), read.i());
             }
-        }
-
-        @Override
-        public void write(Writes write) {
-            super.write(write);
-
-            write.f(delayTimer);
-            write.i(configs.get(0));
-            write.i(configs.get(1));
         }
 
         @Override

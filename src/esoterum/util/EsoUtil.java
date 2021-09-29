@@ -13,4 +13,10 @@ public class EsoUtil{
     public static float notePitch(int semitones){
         return (float)Math.pow(2, semitones / 12f);
     }
+
+    /** Extracts a number out of a string by removing every non-numerical character  */
+    public static String extractNumber(String s){
+        //God, I love google. I have no idea what the "[^\\d.]" part even is.
+        return s.replaceAll("[^\\d.]", "");
+    }
 }

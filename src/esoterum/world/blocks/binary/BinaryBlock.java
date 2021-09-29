@@ -22,6 +22,7 @@ public class BinaryBlock extends Block {
     public boolean[] inputs = new boolean[]{false, false, false, false};
     public boolean emits;
     public boolean drawConnectionArrows;
+    public boolean drawRot = true;
 
     public BinaryBlock(String name) {
         super(name);
@@ -69,7 +70,7 @@ public class BinaryBlock extends Block {
 
             drawConnections();
             Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
-            Draw.rect(topRegion, x, y, rotate ? rotdeg() : 0f);
+            Draw.rect(topRegion, x, y, (rotate && drawRot) ? rotdeg() : 0f);
         }
 
         public void drawConnections(){

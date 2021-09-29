@@ -17,6 +17,8 @@ public class EsoBlocks implements ContentList{
         esoSwitch, esoButton,
         // Logic gates
         esoAND, esoXOR, esoNOT,
+        // Logic outputs
+        noteBlock,
 
         esoManual;
 
@@ -75,6 +77,10 @@ public class EsoBlocks implements ContentList{
             single = true;
         }};
         // endregion logic gates
+
+        // region logic outputs
+        noteBlock = new NoteBlock("note-block");
+        // endregion logic outputs
 
         esoManual = new Manual("manual");
     }
