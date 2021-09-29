@@ -20,7 +20,12 @@ public class ManualPages {
             makePage("sources/Button")
         },
         // gates
-        new ManualPage[]{},
+        new ManualPage[]{
+            makePage("gates/AND_Gate"),
+            makePage("gates/XOR_Gate"),
+            makePage("gates/NOT_Gate"),
+            makePage("gates/Latch")
+        },
         // circuits
         new ManualPage[]{
             makePage("circuits/Intro")

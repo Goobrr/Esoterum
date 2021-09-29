@@ -1,0 +1,11 @@
+[h]AND Gate
+
+[i]esoterum-wire-fig2[t]Fig 1.1. A AND Gate in Action(Placeholder)
+
+The [accent]AND gate[] is 1 of the 3 fundamental gates made by the Esoterum Corporation. It is arguably the most vital gate together with the NOT, as in conjunction they can make all other gates. Corporate advices to not do this, as contrary to popular belief, it is more expensive to produce an AND and NOT gate rather thatn, for example, a XOR gate. The AND gates are arguably the ones that are in highest demand.
+
+[i]esoterum-wire-fig2[t]Fig 1.2. AND Gate IO(Placeholder)
+
+The AND gate takes 2 inputs from the configured sides and outputs high in the front if, and only if, both inputs are true.
+
+[#4c4c4c] After several weeks of backtracking to obvious answers and forgetting them after understanding how things work several times, the R&D department has officially concluded that the AND gates are effectively binary multiplication.

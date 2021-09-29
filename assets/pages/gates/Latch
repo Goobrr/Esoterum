@@ -1,0 +1,11 @@
+[h] Signal Latch
+
+[i]esoterum-wire-fig2[t]Fig 4.1. A Signal Latch in Action(Placeholder)
+
+The [accent]signal latch[] is one of the few miniaturized circuits the Esoterum Corporation has made. The choice of making signal latches into a separate component decreased the complexity of circuits vastly, and therefore the size. This decision was made due to the fact that signal latch circuits are needed in very high demands for more complex circuitry constructs.
+
+[i]esoterum-wire-fig2[t]Fig 4.2. Signal Latch IO(Placeholder)
+
+The signal latch has 3 inputs and 1 output. Left and right inputs are the signal to be written into memory. Back input toggles write mode. If write mode is on and either right or left signals are turned on, a high signal is written into the block. To save the state, turn off the write input. To clear the memory from the latch, simply turn on write mode when both side inputs are low.
+
+[#4c4c4c] Meeting 5836-R22D was one of the few meetings with the least disputes. Everyone attending the meeting effectively agreed on making latch circuits into their own components.

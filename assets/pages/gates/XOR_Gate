@@ -1,0 +1,11 @@
+[h]XOR Gate
+
+[i]esoterum-wire-fig2[t]Fig 3.1. A XOR Gate in Action(Placeholder)
+
+The [accent]XOR gate[] is 1 of the 3 fundamental gates made by the Esoterum Corporation. XOR gates are usually used in circuits like adders or toggleable NOT gates. The true potential of these gates has not yet been found.
+
+[i]esoterum-wire-fig2[t]Fig 3.2. XOR Gate IO(Placeholder)
+
+The XOR gate has 2 inputs and outputs its signal in the front. If either input signal is high, the output is high. If both input signals are low or high, the output is low.
+
+[#4c4c4c] See R&D document 4856-20FF for various uses of the XOR gate.
