@@ -65,7 +65,7 @@ public class LogicGate extends BinaryBlock{
         public boolean signal(){ //Assumes logic gates only have 2 inputs.
             return operation.get(new boolean[]{
                 getSignal(nb.get(configs.first()), this),
-                getSignal(nb.get(configs.peek()), this),
+                getSignal(nb.get(configs.get(single ? 0 : 1)), this),
             });
         }
 
@@ -100,7 +100,7 @@ public class LogicGate extends BinaryBlock{
 
             write.i(nextConfig);
             write.i(configs.first());
-            if(!single) write.i(configs.peek());
+            if(!single) write.i(configs.get(1));
         }
 
         @Override
