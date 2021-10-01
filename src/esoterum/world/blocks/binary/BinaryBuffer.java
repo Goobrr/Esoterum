@@ -165,7 +165,8 @@ public class BinaryBuffer extends BinaryBlock{
                 delayTimer = read.f();
             }
             if(revision >= 2){
-                configs = IntSeq.with(read.i(), read.i());
+                configs.set(0, read.i());
+                configs.set(1, read.i());
             }
             if(revision >= 3){
                 configs.set(2, read.i());

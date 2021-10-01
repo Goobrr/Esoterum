@@ -23,6 +23,7 @@ public class BinaryBlock extends Block {
     /** in order {front, left, back, right} */
     public boolean[] inputs = new boolean[]{false, false, false, false};
     public boolean emits;
+    public boolean allOutputs;
     public boolean drawConnectionArrows;
     public boolean drawRot = true;
 
@@ -176,6 +177,9 @@ public class BinaryBlock extends Block {
         }
         public boolean[] inputs() {
             return inputs;
+        }
+        public boolean allOutputs(){
+            return allOutputs;
         }
 
         @Override

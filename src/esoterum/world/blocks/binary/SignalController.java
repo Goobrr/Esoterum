@@ -9,6 +9,8 @@ import arc.scene.ui.layout.*;
 import arc.struct.*;
 import arc.util.*;
 import arc.util.io.*;
+import mindustry.entities.units.BuildPlan;
+import mindustry.gen.Unit;
 import mindustry.graphics.*;
 
 // each side's behavior is configurable.
@@ -20,6 +22,8 @@ public class SignalController extends BinaryRouter{
     public SignalController(String name){
         super(name);
         configurable = saveConfig = true;
+        allOutputs = true;
+        rotate = true;
 
         config(IntSeq.class, (ControllerBuild b, IntSeq i) -> b.configs = IntSeq.with(i.items));
 
@@ -103,6 +107,20 @@ public class SignalController extends BinaryRouter{
         @Override
         public Object config() {
             return configs;
+        }
+
+        @Override
+        public void configured(Unit builder, Object value) {
+            super.configured(builder, value);
+            for(int i = 0; i < rotation; i++){
+                configs = IntSeq.with(
+                    configs.get(3),
+                    configs.get(0),
+                    configs.get(1),
+                    configs.get(2)
+                );
+            }
+            rotation(0);
         }
 
         @Override
