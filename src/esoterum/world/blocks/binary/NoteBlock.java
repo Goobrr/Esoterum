@@ -278,7 +278,7 @@ public class NoteBlock extends BinaryBlock{
         public void control(LAccess type, double p1, double p2, double p3, double p4){
             if(type == LAccess.config){
                 //controlling capability
-                if (p1 < 0 || p1 >= 5){ //octave invalid
+                if (p1 < 0.0 || p1 >= 4.9){ //octave invalid
                     configs.set(1, 0);
                     configs.set(2, 2);
                     configure(configs);
@@ -288,12 +288,13 @@ public class NoteBlock extends BinaryBlock{
                 int whole = (int) p1; //octave
                 rem -= whole; // pitch
                 rem *= 100;
-                if (rem > 11){ // pitch invalid
+                if (rem > 11.1){ // pitch invalid
                     configs.set(1, 0);
                     configs.set(2, 2);
                     configure(configs);
                     return;
                 }
+                rem += 0.5; //forces typecast to work
                 configs.set(1, (int) rem);
                 configs.set(2, whole);
                 configure(configs);

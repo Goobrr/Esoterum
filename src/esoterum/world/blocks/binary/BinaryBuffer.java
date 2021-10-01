@@ -168,11 +168,9 @@ public class BinaryBuffer extends BinaryBlock{
                 configs = IntSeq.with(read.i(), read.i());
             }
             if(revision >= 3){
-                configs.setSize(3);
                 configs.set(2, read.i());
             }
             if(revision >= 4){
-                configs.setSize(4);
                 configs.set(3, read.i());
             }
         }
