@@ -25,7 +25,6 @@ public interface Binaryc{
 
     // get relative direction of "To" from "From"'s perspective then get the associated signal output.
     default boolean getSignalRelativeTo(BinaryBlock.BinaryBuild from, BinaryBlock.BinaryBuild to){
-        // if the building does not emit signals, return false.
         if(!from.emits())return false;
 
         return switch(EsoUtil.relativeDirection(from, to)){

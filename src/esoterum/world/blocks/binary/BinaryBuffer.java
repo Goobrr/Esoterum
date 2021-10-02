@@ -1,6 +1,5 @@
 package esoterum.world.blocks.binary;
 
-import arc.Core;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
@@ -8,6 +7,7 @@ import arc.scene.ui.layout.*;
 import arc.struct.*;
 import arc.util.*;
 import arc.util.io.*;
+import esoterum.graphics.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.ui.*;
@@ -33,7 +33,7 @@ public class BinaryBuffer extends BinaryBlock{
         public float delay = 5f;
         public float ticks = 1f;
 
-        /** Direction, Multiplier, Multiplier, Persistent */
+        /** Direction, Multiplier, Multiplier (but smol), Persistent */
         public IntSeq configs = IntSeq.with(2, 1, 0, 1);
 
         @Override
@@ -70,8 +70,19 @@ public class BinaryBuffer extends BinaryBlock{
             Draw.color(lastSignal ? Pal.accent : Color.white);
             Draw.rect(connectionRegion, x, y, rotdeg());
             drawConnections();
-            Draw.color(Color.white, Pal.accent, delayTimer / trueDelay());
-            Draw.rect(topRegion, x, y, rotdeg());
+            drawBuffer();
+        }
+
+        public void drawBuffer(){
+            Draw.color(Color.white);
+            Lines.stroke(0.5f);
+            Lines.circle(x, y, 1.5f);
+            Draw.color(Pal.accent);
+            EsoDrawf.arc(x, y, 1.85f, rotdeg() - 180, 360 * (delayTimer / trueDelay()));
+            if(configs.get(3) != 1){
+                Draw.color(EsoPal.esoDark);
+                Fill.circle(x, y, 0.8f);
+            }
         }
 
         public void drawConnections(){
