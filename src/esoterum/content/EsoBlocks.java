@@ -1,6 +1,7 @@
 package esoterum.content;
 
 import esoterum.world.blocks.binary.*;
+import esoterum.world.blocks.binary.defense.SurgeSource;
 import esoterum.world.blocks.environment.*;
 import mindustry.ctype.*;
 import mindustry.world.*;
@@ -20,7 +21,7 @@ public class EsoBlocks implements ContentList{
         // Logic outputs
         noteBlock,
 
-        esoManual;
+        esoManual, surgeSource;
 
     @Override
     public void load(){
@@ -85,5 +86,7 @@ public class EsoBlocks implements ContentList{
         // endregion logic outputs
 
         esoManual = new Manual("manual");
+
+        surgeSource = new SurgeSource("source");
     }
 }

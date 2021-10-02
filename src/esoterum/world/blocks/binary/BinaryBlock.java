@@ -63,6 +63,7 @@ public class BinaryBlock extends Block {
         /** in order {front, left, back, right} */
         public Seq<BinaryBuild> nb = new Seq<>(4);
         public boolean[] connections = new boolean[]{false, false, false, false};
+        public int routerCounter;
 
         public boolean nextSignal;
         public boolean lastSignal;
