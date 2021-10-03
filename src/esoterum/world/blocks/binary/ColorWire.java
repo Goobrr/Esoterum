@@ -37,7 +37,8 @@ public class ColorWire extends BinaryWire{
         super(name);
         configurable = true;
         config(Integer.class, (ColorWireBuild b, Integer c) -> {
-            b.colour = new Color().rgba8888(c);
+            b.colour = colors[c%16];
+            b.channel = c;
         });
     }
     @Override
@@ -49,11 +50,13 @@ public class ColorWire extends BinaryWire{
     public class ColorWireBuild extends BinaryWireBuild {
         public @Nullable Color colour = null;
         public int channel = 16;
-        public Seq<BundledWire.BundledWireBuild> nbb = Seq.with(null, null, null, null);
+        public Seq<BundledWire.BundledWireBuild> nbb = new Seq<>(4);
+        
         public BundledWire.BundledWireBuild checkType2(Building b){
-            if(b instanceof BundledWire.BundledWireBuild bb)return bb;
+            if(b instanceof BundledWire.BundledWireBuild bb) return bb;
             return null;
         }
+
         @Override
         public void onProximityUpdate(){
             super.onProximityUpdate();
@@ -78,7 +81,8 @@ public class ColorWire extends BinaryWire{
         @Override
         public void updateConnections(){
             for(int i = 0; i < 4; i++){
-                connections[i] = connectionCheck(nb.get(i), this) || connectionCheck(nbb.get(i), this);
+                connections[i] = connectionCheck(nb.get(i), this);
+                connections[i] = connections[i] || connectionCheck(nbb.get(i), this);
             }
         }
         @Override
@@ -108,12 +112,15 @@ public class ColorWire extends BinaryWire{
         @Override
         public boolean connectionCheck(Building from, BinaryBlock.BinaryBuild to){
             if(from instanceof BundledWire.BundledWireBuild b){
+                Log.info("stuff1");
                 return (b.outputs()[EsoUtil.relativeDirection(b, to)] & to.inputs()[EsoUtil.relativeDirection(to, b)]
                     || to.outputs()[EsoUtil.relativeDirection(to, b)] & b.inputs()[EsoUtil.relativeDirection(b, to)]);
             } if(from instanceof ColorWire.ColorWireBuild b && to instanceof ColorWire.ColorWireBuild bb){
+                Log.info("stuff2");
                 return (b.outputs()[EsoUtil.relativeDirection(b, to)] & to.inputs()[EsoUtil.relativeDirection(to, b)]
                     || to.outputs()[EsoUtil.relativeDirection(to, b)] & b.inputs()[EsoUtil.relativeDirection(b, to)]) && (b.colour == bb.colour);
             } else if(from instanceof BinaryBlock.BinaryBuild b){
+                Log.info("stuff3");
                 return b.outputs()[EsoUtil.relativeDirection(b, to)] & to.inputs()[EsoUtil.relativeDirection(to, b)]
                     || to.outputs()[EsoUtil.relativeDirection(to, b)] & b.inputs()[EsoUtil.relativeDirection(b, to)];
             }
@@ -148,10 +155,10 @@ public class ColorWire extends BinaryWire{
                 group.setMinCheckCount(1);
                 group.setMaxCheckCount(1);
                 for(int i = 0; i < colors.length; i++){
-                    Color color0 = colors[i];
+                    Color color0 = colors[i%16];
                     int j = i;
                     ImageButton button = table0.button(Tex.whiteui, Styles.clearTogglei, 34, () -> {
-                        configure(color0.rgba8888());
+                        configure(j);
                         this.channel = j;
                         this.onProximityUpdate();
                     }).group(group).size(48).get();
@@ -166,21 +173,18 @@ public class ColorWire extends BinaryWire{
         }
         @Override
         public Integer config(){
-            return this.colour.rgba8888();
+            return this.channel;
         }
         @Override
         public void read(Reads read, byte revision) {
             super.read(read, revision);
-            int i = read.i();
-            if(i == -1) this.colour = null;
-            else this.colour = new Color().rgba8888(i);
             this.channel = read.i();
+            this.colour = colors[this.channel%16];
         }
 
         @Override
         public void write(Writes write) {
             super.write(write);
-            write.i((this.colour==null)?-1:this.colour.rgba8888());
             write.i(this.channel);
         }
 
