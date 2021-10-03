@@ -28,7 +28,6 @@ public interface Bundledc{
     // get relative direction of "To" from "From"'s perspective then get the associated signal output.
     default short getSignalRelativeTo(BundledBlock.BundledBuild from, BundledBlock.BundledBuild to){
         if(!from.emits())return 0;
-        Log.info("hihi");
         return switch(EsoUtil.relativeDirection(from, to)){
             case 0 -> from.signalFront();
             case 1 -> from.signalLeft();
@@ -48,9 +47,6 @@ public interface Bundledc{
             case 3 -> (short)((from.signalRight()?1:0)<<from.channel);
             default -> 0;
         };
-        Log.info("hi");
-        Log.info(from.channel);
-        Log.info(a);
         return a;
     }
 
