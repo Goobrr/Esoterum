@@ -2,6 +2,7 @@ package esoterum.interfaces;
 
 import esoterum.util.*;
 import esoterum.world.blocks.binary.*;
+import esoterum.world.blocks.bundled.*;
 import mindustry.gen.*;
 
 
@@ -53,6 +54,10 @@ public interface Binaryc{
 
     default BinaryBlock.BinaryBuild checkType(Building b){
         if(b instanceof BinaryBlock.BinaryBuild bb)return bb;
+        return null;
+    }
+    default BundledWire.BundledWireBuild checkType2(Building b){
+        if(b instanceof BundledWire.BundledWireBuild bb) return bb;
         return null;
     }
 }

@@ -9,7 +9,7 @@ import arc.struct.*;
 import arc.util.*;
 import arc.util.io.*;
 import esoterum.util.*;
-import esoterum.world.blocks.bundled.BundledWire;
+import esoterum.world.blocks.bundled.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.ui.*;
@@ -51,15 +51,11 @@ public class ColorWire extends BinaryWire{
         public @Nullable Color colour = null;
         public int channel = 16;
         public Seq<BundledWire.BundledWireBuild> nbb = new Seq<>(4);
-        
-        public BundledWire.BundledWireBuild checkType2(Building b){
-            if(b instanceof BundledWire.BundledWireBuild bb) return bb;
-            return null;
-        }
+        public boolean[] connections2 = {false, false, false, false};
 
         @Override
         public void onProximityUpdate(){
-            super.onProximityUpdate();
+            
 
             // update connected builds only when necessary
             nb.clear();
@@ -76,13 +72,14 @@ public class ColorWire extends BinaryWire{
                 checkType2(back()),
                 checkType2(right())
             );
+            super.onProximityUpdate();
             updateConnections();
         }
         @Override
         public void updateConnections(){
             for(int i = 0; i < 4; i++){
                 connections[i] = connectionCheck(nb.get(i), this);
-                connections[i] = connections[i] || connectionCheck(nbb.get(i), this);
+                connections2[i] = connectionCheck(nbb.get(i), this);
             }
         }
         @Override
@@ -90,7 +87,7 @@ public class ColorWire extends BinaryWire{
             if(this.colour==null) this.colour = Color.valueOf("000000");
             Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
             for(int i = 0; i < 4; i++){
-                if(connections[i]){
+                if(connections[i] || connections2[i]){
                     Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
                     Draw.z(Draw.z()+0.1f);
                     Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
@@ -112,15 +109,12 @@ public class ColorWire extends BinaryWire{
         @Override
         public boolean connectionCheck(Building from, BinaryBlock.BinaryBuild to){
             if(from instanceof BundledWire.BundledWireBuild b){
-                Log.info("stuff1");
                 return (b.outputs()[EsoUtil.relativeDirection(b, to)] & to.inputs()[EsoUtil.relativeDirection(to, b)]
                     || to.outputs()[EsoUtil.relativeDirection(to, b)] & b.inputs()[EsoUtil.relativeDirection(b, to)]);
             } if(from instanceof ColorWire.ColorWireBuild b && to instanceof ColorWire.ColorWireBuild bb){
-                Log.info("stuff2");
                 return (b.outputs()[EsoUtil.relativeDirection(b, to)] & to.inputs()[EsoUtil.relativeDirection(to, b)]
                     || to.outputs()[EsoUtil.relativeDirection(to, b)] & b.inputs()[EsoUtil.relativeDirection(b, to)]) && (b.colour == bb.colour);
             } else if(from instanceof BinaryBlock.BinaryBuild b){
-                Log.info("stuff3");
                 return b.outputs()[EsoUtil.relativeDirection(b, to)] & to.inputs()[EsoUtil.relativeDirection(to, b)]
                     || to.outputs()[EsoUtil.relativeDirection(to, b)] & b.inputs()[EsoUtil.relativeDirection(b, to)];
             }
@@ -128,18 +122,21 @@ public class ColorWire extends BinaryWire{
         }
         public boolean getSignalRelativeTo(BundledWire.BundledWireBuild from, BinaryBlock.BinaryBuild to){
             if(!from.emits())return false;
-    
-            return switch(EsoUtil.relativeDirection(from, to)){
-                case 0 -> (from.signalFront() & (1 << this.channel))==1;
-                case 1 -> (from.signalLeft() & (1 << this.channel))==1;
-                case 2 -> (from.signalBack() & (1 << this.channel))==1;
-                case 3 -> (from.signalRight() & (1 << this.channel))==1;
-                default -> false;
+            Log.info("relative");
+            int a = switch(EsoUtil.relativeDirection(from, to)){
+                case 0 -> ((from.signalFront() >> this.channel) & 1);
+                case 1 -> ((from.signalLeft() >> this.channel) & 1);
+                case 2 -> ((from.signalBack() >> this.channel) & 1);
+                case 3 -> ((from.signalRight() >> this.channel) & 1);
+                default -> 0;
             };
+            Log.info(a);
+            return a==1;
         }
         @Override
         public boolean getSignal(Building from, BinaryBlock.BinaryBuild to){
             if(from instanceof BundledWire.BundledWireBuild b){
+                Log.info("bye");
                 return getSignalRelativeTo(b, to);
             } else if(from instanceof ColorWire.ColorWireBuild b && to instanceof ColorWire.ColorWireBuild bb){
                 return getSignalRelativeTo(b, to) && (b.colour == bb.colour);
@@ -191,6 +188,28 @@ public class ColorWire extends BinaryWire{
         @Override
         public byte version() {
             return 1;
+        }
+
+        @Override
+        public boolean signal() {
+            return getSignal(nb.get(1), this) | getSignal(nb.get(3), this) | getSignal(nbb.get(1), this) | getSignal(nbb.get(3), this);
+        }
+        @Override
+        public boolean signalFront(){
+            return ((nb.get(2) != null ?
+                nb.get(2).rotation == rotation || !nb.get(2).block.rotate || nb.get(2).allOutputs() ?
+                    getSignal(nb.get(2), this) :
+                    nextSignal
+                : nextSignal )
+
+                | nextSignal) |
+                ((nbb.get(2) != null ?
+                nbb.get(2).rotation == rotation || !nbb.get(2).block.rotate || nbb.get(2).allOutputs() ?
+                    getSignal(nbb.get(2), this) :
+                    nextSignal
+                : nextSignal )
+
+                | nextSignal);
         }
     }
 }

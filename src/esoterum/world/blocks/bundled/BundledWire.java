@@ -6,6 +6,7 @@ import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.math.geom.*;
 import arc.struct.*;
+import arc.util.Log;
 import esoterum.content.*;
 import mindustry.entities.units.*;
 import mindustry.world.*;
@@ -62,6 +63,7 @@ public class BundledWire extends BundledBlock{
             super.updateTile();
             lastSignal = (short) (nextSignal | getSignal(nb.get(2), this));
             nextSignal = signal();
+            Log.info(lastSignal);
         }
 
         @Override
