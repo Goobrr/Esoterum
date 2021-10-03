@@ -7,7 +7,6 @@ import arc.math.geom.*;
 import arc.util.*;
 import arc.util.io.*;
 import esoterum.graphics.*;
-import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.world.*;

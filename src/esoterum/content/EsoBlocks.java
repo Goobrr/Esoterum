@@ -1,6 +1,7 @@
 package esoterum.content;
 
 import esoterum.world.blocks.binary.*;
+import esoterum.world.blocks.bundled.*;
 import esoterum.world.blocks.environment.*;
 import mindustry.ctype.*;
 import mindustry.world.*;
@@ -12,7 +13,7 @@ public class EsoBlocks implements ContentList{
         esoPanel, esoPanel1, esoPanel2, esoPanel3, esoPanelFlat, esoSolidPanel,
         esoPanelOpen, esoPanelE, esoPanelS, esoPanelO,
         // Signal distribution
-        esoWire, esoJunction, esoRouter, esoNode, esoLatch, esoController, esoBuffer,
+        esoWire, esoJunction, esoRouter, esoNode, esoLatch, esoController, esoBuffer, colorWire, bundledWire, bundledJunction,
         // Signal sources
         esoSwitch, esoButton, esoClock,
         // Logic gates
@@ -55,6 +56,12 @@ public class EsoBlocks implements ContentList{
         esoController = new SignalController("controller");
 
         esoBuffer = new BinaryBuffer("buffer");
+
+        colorWire = new ColorWire("colorwire");
+
+        bundledWire = new BundledWire("bundledwire");
+
+        bundledJunction = new BundledJunction("bundledjunction");
         // endregion distribution
 
         // region sources

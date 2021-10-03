@@ -1,20 +1,18 @@
-package esoterum.world.blocks.binary;
+package esoterum.world.blocks.bundled;
 
 import arc.*;
-import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.scene.ui.layout.*;
 import arc.struct.*;
 import arc.util.io.*;
 import esoterum.interfaces.*;
+import esoterum.world.blocks.binary.ColorWire;
 import mindustry.gen.*;
-import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.world.*;
 import mindustry.world.meta.*;
-import mindustry.logic.*;
 
-public class BinaryBlock extends Block {
+public class BundledBlock extends Block {
     public TextureRegion connectionRegion;
     public TextureRegion topRegion;
     /** in order {front, left, back, right} */
@@ -26,7 +24,7 @@ public class BinaryBlock extends Block {
     public boolean drawConnectionArrows;
     public boolean drawRot = true;
 
-    public BinaryBlock(String name) {
+    public BundledBlock(String name) {
         super(name);
         rotate = false;
         update = true;
@@ -40,8 +38,8 @@ public class BinaryBlock extends Block {
     public void load() {
         super.load();
         region = Core.atlas.find(name + "-base", "esoterum-base");
-        connectionRegion = Core.atlas.find(name + "-connection", "esoterum-connection");
-        topRegion = Core.atlas.find(name + "-top", "esoterum-router-top"); // router supremacy
+        connectionRegion = Core.atlas.find(name + "-connection", "esoterum-bundled-connection");
+        topRegion = Core.atlas.find(name + "-bundled-top"); // router supremacy
     }
 
     @Override
@@ -55,69 +53,30 @@ public class BinaryBlock extends Block {
     @Override
     public boolean canReplace(Block other) {
         if(other.alwaysReplace) return true;
-        return (other != this || rotate) && other instanceof BinaryBlock && size == other.size;
+        return (other != this || rotate) && other instanceof BundledBlock && size == other.size;
     }
 
-    public class BinaryBuild extends Building implements Binaryc {
+    public class BundledBuild extends Building implements Bundledc {
         /** in order {front, left, back, right} */
-        public Seq<BinaryBuild> nb = new Seq<>(4);
+        public Seq<BundledBuild> nb = new Seq<>(4);
+        public Seq<ColorWire.ColorWireBuild> nbb = new Seq<>(4);
         public boolean[] connections = new boolean[]{false, false, false, false};
 
-        public boolean nextSignal;
-        public boolean lastSignal;
+        public short nextSignal = 0;
+        public short lastSignal = 0;
 
         @Override
         public void draw(){
             super.draw();
             Draw.z(Draw.z()+0.1f);
             drawConnections();
-            Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
             Draw.rect(topRegion, x, y, (rotate && drawRot) ? rotdeg() : 0f);
             Draw.z(Draw.z()-0.1f);
         }
 
         public void drawConnections(){
-            Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
             for(int i = 0; i < 4; i++){
                 if(connections[i]) Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
-            }
-        }
-
-        // bad, bad, bad, bad, bad, bad, bad, bad, bad, bad, bad
-        // TODO fix layering without DOING THIS SHIT
-        @Override
-        public void drawSelect(){
-            if(!drawConnectionArrows) return;
-            BinaryBuild b;
-            for(int i = 0; i < 4; i++){
-                if(connections[i]){
-                    b = nb.get(i);
-
-                    Draw.z(Layer.overlayUI);
-                    Lines.stroke(3f);
-                    Draw.color(Pal.gray);
-                    Lines.line(x, y, b.x, b.y);
-                }
-            }
-
-            for(int i = 0; i < 4; i++){
-                if(outputs()[i] && connections[i]){
-                    b = nb.get(i);
-                    Draw.z(Layer.overlayUI + 1);
-                    Drawf.arrow(x, y, b.x, b.y, 2f, 2f, lastSignal ? Pal.accent : Color.white);
-                }
-            }
-
-            for (int i = 0; i < 4; i++){
-                if(connections[i]) {
-                    b = nb.get(i);
-                    Draw.z(Layer.overlayUI + 3);
-                    Lines.stroke(1f);
-                    Draw.color((outputs()[i] ? lastSignal : getSignal(b, this)) ? Pal.accent : Color.white);
-                    Lines.line(x, y, b.x, b.y);
-
-                    Draw.reset();
-                }
             }
         }
 
@@ -143,12 +102,19 @@ public class BinaryBlock extends Block {
                 checkType(back()),
                 checkType(right())
             );
+            nbb.clear();
+            nbb.add(
+                checkType2(front()),
+                checkType2(left()),
+                checkType2(back()),
+                checkType2(right())
+            );
             updateConnections();
         }
 
         public void updateConnections(){
             for(int i = 0; i < 4; i++){
-                connections[i] = connectionCheck(nb.get(i), this);
+                connections[i] = connectionCheck(nb.get(i), this) || connectionCheck(nbb.get(i), this);
             }
         }
 
@@ -160,7 +126,7 @@ public class BinaryBlock extends Block {
                     e.clearChildren();
                     e.row();
                     e.left();
-                    e.label(() -> "State: " + (lastSignal ? "1" : "0")).color(Color.lightGray);
+                    //e.label(() -> "State: " + (lastSignal ? "1" : "0")).color(Color.lightGray);
                 };
 
                 e.update(rebuild);
@@ -185,28 +151,18 @@ public class BinaryBlock extends Block {
         @Override
         public void read(Reads read, byte revision) {
             super.read(read, revision);
-
-            if(revision >= 1){
-                lastSignal = read.bool();
-            }
+            lastSignal = read.s();
         }
 
         @Override
         public void write(Writes write) {
             super.write(write);
-
-            write.bool(lastSignal);
+            write.s(lastSignal);
         }
 
         @Override
         public byte version() {
             return 1;
-        }
-
-        @Override
-        public double sense(LAccess sensor){
-            if(sensor == LAccess.enabled) return lastSignal ? 1 : 0;
-            return super.sense(sensor);
         }
     }
 }
