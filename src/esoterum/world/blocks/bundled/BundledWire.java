@@ -63,7 +63,6 @@ public class BundledWire extends BundledBlock{
             super.updateTile();
             lastSignal = (short) (nextSignal | getSignal(nb.get(2), this));
             nextSignal = signal();
-            Log.info(lastSignal);
         }
 
         @Override
