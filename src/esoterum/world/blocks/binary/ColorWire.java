@@ -204,7 +204,7 @@ public class ColorWire extends BinaryWire{
 
                 | nextSignal) |
                 ((nbb.get(2) != null ?
-                nbb.get(2).rotation == rotation || !nbb.get(2).block.rotate || nbb.get(2).allOutputs() ?
+                !nbb.get(2).block.rotate || nbb.get(2).allOutputs() ?
                     getSignal(nbb.get(2), this) :
                     nextSignal
                 : nextSignal )
