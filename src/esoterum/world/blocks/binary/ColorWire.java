@@ -122,7 +122,6 @@ public class ColorWire extends BinaryWire{
         }
         public boolean getSignalRelativeTo(BundledWire.BundledWireBuild from, BinaryBlock.BinaryBuild to){
             if(!from.emits())return false;
-            Log.info("relative");
             int a = switch(EsoUtil.relativeDirection(from, to)){
                 case 0 -> ((from.signalFront() >> this.channel) & 1);
                 case 1 -> ((from.signalLeft() >> this.channel) & 1);
@@ -130,13 +129,11 @@ public class ColorWire extends BinaryWire{
                 case 3 -> ((from.signalRight() >> this.channel) & 1);
                 default -> 0;
             };
-            Log.info(a);
             return a==1;
         }
         @Override
         public boolean getSignal(Building from, BinaryBlock.BinaryBuild to){
             if(from instanceof BundledWire.BundledWireBuild b){
-                Log.info("bye");
                 return getSignalRelativeTo(b, to);
             } else if(from instanceof ColorWire.ColorWireBuild b && to instanceof ColorWire.ColorWireBuild bb){
                 return getSignalRelativeTo(b, to) && (b.colour == bb.colour);
@@ -204,9 +201,7 @@ public class ColorWire extends BinaryWire{
 
                 | nextSignal) |
                 ((nbb.get(2) != null ?
-                !nbb.get(2).block.rotate || nbb.get(2).allOutputs() ?
-                    getSignal(nbb.get(2), this) :
-                    nextSignal
+                getSignal(nbb.get(2), this)
                 : nextSignal )
 
                 | nextSignal);

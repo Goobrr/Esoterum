@@ -18,7 +18,7 @@ public class BundledJunction extends BundledBlock{
     @Override
     public void load(){
         super.load();
-
+        topRegion = Core.atlas.find("esoterum-bundled-junction-top");
         for(int i = 0; i < 2; i++){
             directionRegions[i] = Core.atlas.find("bundled-junction-direction-" + i);
         }
