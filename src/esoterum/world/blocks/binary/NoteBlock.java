@@ -26,10 +26,10 @@ public class NoteBlock extends BinaryBlock{
         new NoteSample(EsoSounds.organ, "Organ"),
         new NoteSample(EsoSounds.drums, "Drum Kit"){{
             noteNames = new String[]{
-                "%o C", "%o C#", "%o D",
-                "%o D#", "%o E", "%o F",
-                "%o F#", "%o G", "%o G#",
-                "%o A", "%o A#", "%o B"
+                "%s C", "%s C#", "%s D",
+                "%s D#", "%s E", "%s F",
+                "%s F#", "%s G", "%s G#",
+                "%s A", "%s A#", "%s B"
             };
 
             String[] drums = new String[]{"?", "Kick", "Snare", "Hi-hat", "?"};
@@ -312,10 +312,10 @@ public class NoteBlock extends BinaryBlock{
         String name;
         /** Used to display the name of notes */
         public String[] noteNames = new String[]{
-            "C%o", "C%o#", "D%o",
-            "D%o#", "E%o", "F%o",
-            "F%o#", "G%o", "G%o#",
-            "A%o", "A%o#", "B%o"
+            "C%s", "C%s#", "D%s",
+            "D%s#", "E%s", "F%s",
+            "F%s#", "G%s", "G%s#",
+            "A%s", "A%s#", "B%s"
         };
         /** Processes octave and pitch to create name */
         public Notef titleProcessor = (o, p) -> String.valueOf(o + 2 + (p >= 9 ? 1 : 0));
