@@ -6,21 +6,18 @@ import arc.graphics.g2d.*;
 import arc.scene.ui.layout.*;
 import arc.struct.*;
 import arc.util.io.*;
-import esoterum.interfaces.*;
+import esoterum.util.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.world.*;
 import mindustry.world.meta.*;
 import mindustry.logic.*;
-import mindustry.core.*;
 
 public class BinaryBlock extends Block {
-    public TextureRegion connectionRegion;
-    public TextureRegion topRegion;
+    public TextureRegion topRegion, connectionRegion;
     /** in order {front, left, back, right} */
     public boolean[] outputs = new boolean[]{false, false, false, false};
-    /** in order {front, left, back, right} */
     public boolean[] inputs = new boolean[]{false, false, false, false};
     public boolean emits;
     public boolean allOutputs;
@@ -59,13 +56,66 @@ public class BinaryBlock extends Block {
         return (other != this || rotate) && other instanceof BinaryBlock && size == other.size;
     }
 
-    public class BinaryBuild extends Building implements Binaryc {
-        /** in order {front, left, back, right} */
+    public class BinaryBuild extends Building {
         public Seq<BinaryBuild> nb = new Seq<>(4);
         public boolean[] connections = new boolean[]{false, false, false, false};
 
         public boolean nextSignal;
         public boolean lastSignal;
+
+        public boolean signal(){
+            return false;
+        }
+
+        public boolean signalFront(){
+            return false;
+        }
+
+        public boolean signalLeft(){
+            return false;
+        }
+
+        public boolean signalBack(){
+            return false;
+        }
+
+        public boolean signalRight(){
+            return false;
+        }
+    
+        // get relative direction of "To" from "From"'s perspective then get the associated signal output.
+        public boolean getSignalRelativeTo(BinaryBlock.BinaryBuild from, BinaryBlock.BinaryBuild to){
+            if(!from.emits()) return false;
+            
+            return switch(EsoUtil.relativeDirection(from, to)) {
+                case 0 -> from.signalFront(); //front
+                case 1 -> from.signalLeft(); //left
+                case 2 -> from.signalBack(); //back
+                case 3 -> from.signalRight(); //right
+                default -> false;
+            };
+        }
+    
+        public boolean connectionCheck(Building from, BinaryBlock.BinaryBuild to){
+            
+            if(from instanceof BinaryBlock.BinaryBuild b){
+                int t = EsoUtil.relativeDirection(b, to);
+                int f = EsoUtil.relativeDirection(to, b);
+                return b.outputs(t) & to.inputs(f)
+                    || to.outputs(f) & b.inputs(t);
+            }
+            return false;
+        }
+    
+        public boolean getSignal(Building from, BinaryBlock.BinaryBuild to){
+            if(from instanceof BinaryBlock.BinaryBuild b) return getSignalRelativeTo(b, to);
+            return false;
+        }
+    
+        public BinaryBlock.BinaryBuild checkType(Building b){
+            if(b instanceof BinaryBlock.BinaryBuild bb) return bb;
+            return null;
+        }
 
         @Override
         public void draw(){
@@ -83,8 +133,6 @@ public class BinaryBlock extends Block {
             }
         }
 
-        // bad, bad, bad, bad, bad, bad, bad, bad, bad, bad, bad
-        // TODO fix layering without DOING THIS SHIT
         @Override
         public void drawSelect(){
             if(!drawConnectionArrows) return;
@@ -101,7 +149,7 @@ public class BinaryBlock extends Block {
             }
 
             for(int i = 0; i < 4; i++){
-                if(outputs()[i] && connections[i]){
+                if(outputs(i) && connections[i]){
                     b = nb.get(i);
                     Draw.z(Layer.overlayUI + 1);
                     Drawf.arrow(x, y, b.x, b.y, 2f, 2f, lastSignal ? Pal.accent : Color.white);
@@ -113,7 +161,7 @@ public class BinaryBlock extends Block {
                     b = nb.get(i);
                     Draw.z(Layer.overlayUI + 3);
                     Lines.stroke(1f);
-                    Draw.color((outputs()[i] ? lastSignal : getSignal(b, this)) ? Pal.accent : Color.white);
+                    Draw.color((outputs(i) ? lastSignal : getSignal(b, this)) ? Pal.accent : Color.white);
                     Lines.line(x, y, b.x, b.y);
 
                     Draw.reset();
@@ -121,6 +169,7 @@ public class BinaryBlock extends Block {
             }
         }
 
+        
         // Mindustry saves block placement rotation even for blocks that don't rotate.
         // Usually this doesn't cause any problems, but with the current implementation
         // it is necessary for non-rotatable binary blocks to have a rotation of 0.
@@ -172,11 +221,11 @@ public class BinaryBlock extends Block {
             return emits;
         }
 
-        public boolean[] outputs(){
-            return outputs;
+        public boolean outputs(int i){
+            return outputs[i];
         }
-        public boolean[] inputs() {
-            return inputs;
+        public boolean inputs(int i) {
+            return inputs[i];
         }
         public boolean allOutputs(){
             return allOutputs;

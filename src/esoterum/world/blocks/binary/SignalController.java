@@ -124,23 +124,13 @@ public class SignalController extends BinaryRouter{
         }
 
         @Override
-        public boolean[] inputs() {
-            return new boolean[]{
-                configs.get(0) == 1,
-                configs.get(1) == 1,
-                configs.get(2) == 1,
-                configs.get(3) == 1,
-            };
+        public boolean inputs(int i) {
+            return configs.get(i) == 1;
         }
 
         @Override
-        public boolean[] outputs() {
-            return new boolean[]{
-                configs.get(0) == 2,
-                configs.get(1) == 2,
-                configs.get(2) == 2,
-                configs.get(3) == 2,
-            };
+        public boolean outputs(int i) {
+            return configs.get(i) == 2;
         }
 
         // check if the current side is configured to output

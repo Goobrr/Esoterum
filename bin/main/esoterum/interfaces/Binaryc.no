@@ -3,8 +3,8 @@ package esoterum.interfaces;
 import esoterum.util.*;
 import esoterum.world.blocks.binary.*;
 import mindustry.gen.*;
-/*
-// TODO merge with BinaryBuild, as this is redundant.
+
+
 public interface Binaryc{
     default boolean signal(){
         return false;
@@ -56,4 +56,3 @@ public interface Binaryc{
         return null;
     }
 }
-*/

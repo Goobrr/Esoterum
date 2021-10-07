@@ -1,6 +1,5 @@
 package esoterum.util;
 
-import arc.math.*;
 import mindustry.gen.*;
 
 public class EsoUtil{
