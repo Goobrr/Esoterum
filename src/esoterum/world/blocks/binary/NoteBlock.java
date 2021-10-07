@@ -330,7 +330,7 @@ public class NoteBlock extends BinaryBlock{
         }
     }
 
-    public interface Notef(){
+    public interface Notef{
         String title(int octave, int pitch);
     }
 }

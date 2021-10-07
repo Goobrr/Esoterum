@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Set up PATH
       run: |
         echo "${ANDROID_HOME}/build-tools/30.0.1" >> $GITHUB_PATH
@@ -16,7 +16,7 @@ jobs:
       with:
         java-version: 16
     - name: Set Version
-      run: sed -i "\$s/$/-$(git rev-list `git describe --abbrev=0 --tags`.. --count)/" mod.hjson
+      run: sed -i "\$s/$/-$(git rev-list $(git describe --abbrev=0 --tags).. --count)/" mod.hjson
     - name: Build mod jar
       run: ./gradlew deploy
     - name: Upload built jar file
