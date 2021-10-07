@@ -258,7 +258,7 @@ public class NoteBlock extends BinaryBlock{
         }
 
         public String noteString(){
-            return samples[configs.get(4)].noteString(configs.get(2), configs.get(1);
+            return samples[configs.get(4)].noteString(configs.get(2), configs.get(1));
         }
 
         @Override
