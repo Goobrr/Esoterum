@@ -315,7 +315,7 @@ public class NoteBlock extends BinaryBlock{
         }
 
         public String noteString(int octave, int pitch){
-            return String.format(noteNames[pitch], titleProcessor.title(octave, pitch));
+            return noteNames[pitch].charAt(0) + titleProcessor.title(octave, pitch) + (noteNames[pitch].length() == 4 ? "#" : "");
         }
     }
 
