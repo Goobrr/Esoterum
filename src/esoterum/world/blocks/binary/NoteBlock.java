@@ -17,6 +17,8 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.ui.*;
 import mindustry.logic.*;
+import mindustry.world.*;
+import mindustry.world.meta.*;
 
 public class NoteBlock extends BinaryBlock{
     public NoteSample[] samples = {
@@ -337,11 +339,13 @@ public class NoteBlock extends BinaryBlock{
             configs.addAll(build.configs);
         }
         else if(builds.first().block.name.equals("betamindy-note-block") || builds.first().block.name.equals("betamindy-star-note-block")){
-            //let the reflection pain begin
-            IntSeq pp = Reflect.invoke(builds.first(), "packSeq"); // Direction, Pitch, Octave, Volume, Note Sample
-
-            if(pp.size == 5){
-                configs = pp;
+            if(builds.first().config() instanceof byte[] pp){
+                if(pp.size == 3){ //inst, pitch, vol (100)
+                    configs.set(1, pp[1] % 12);
+                    configs.set(2, pp[1] / 12);
+                    configs.set(3, pp[2] / 10);
+                    configs.set(4, pp[0] % samples.length);
+                }
             }
         }
     }
