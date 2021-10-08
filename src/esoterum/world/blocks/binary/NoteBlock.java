@@ -339,7 +339,7 @@ public class NoteBlock extends BinaryBlock{
             }
             else if(builds.first().block.name.equals("betamindy-note-block") || builds.first().block.name.equals("betamindy-star-note-block")){
                 if(builds.first().config() instanceof byte[] pp){
-                    if(pp.size == 3){ //inst, pitch, vol (100)
+                    if(pp.length == 3){ //inst, pitch, vol (100)
                         configs.set(1, pp[1] % 12);
                         configs.set(2, pp[1] / 12);
                         configs.set(3, pp[2] / 10);
