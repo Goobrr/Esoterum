@@ -45,6 +45,7 @@ public class NoteBlock extends BinaryBlock{
         emits = true;
         rotate = true;
         drawRot = false;
+        group = BlockGroup.logic;
 
         inputs = new boolean[]{false, true, true, true};
         outputs = new boolean[]{true, false, false, false};
@@ -58,6 +59,16 @@ public class NoteBlock extends BinaryBlock{
         outputRegion = Core.atlas.find("esoterum-connection");
         connectionRegion = Core.atlas.find("esoterum-connection");
         region = Core.atlas.find("esoterum-gate-base");
+    }
+    
+    public boolean isNoteBlock(Block other){
+        return (other instanceof NoteBlock) || other.name.equals("betamindy-note-block") || other.name.equals("betamindy-star-note-block");
+    }
+
+    @Override
+    public boolean canReplace(Block other){
+        if(other.alwaysReplace) return true;
+        return other.size == size && isNoteBlock(other);
     }
 
     public class NoteBlockBuild extends BinaryBuild{
@@ -314,6 +325,23 @@ public class NoteBlock extends BinaryBlock{
                     configs.set(3, (int) (p2 * 10 + 0.0001));
                 }
                 configure(configs);
+            }
+        }
+    }
+    
+    //betamindy compatibility
+    @Override
+    public void overwrote(Seq<Building> builds){
+        if(builds.first() instanceof NoteBlockBuild build){
+            configs.clear();
+            configs.addAll(build.configs);
+        }
+        else if(builds.first().block.name.equals("betamindy-note-block") || builds.first().block.name.equals("betamindy-star-note-block")){
+            //let the reflection pain begin
+            IntSeq pp = Reflect.invoke(builds.first(), "packSeq"); // Direction, Pitch, Octave, Volume, Note Sample
+
+            if(pp.size == 5){
+                configs = pp;
             }
         }
     }
