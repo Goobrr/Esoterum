@@ -301,6 +301,19 @@ public class NoteBlock extends BinaryBlock{
                 configs.set(1, (int) rem);
                 configs.set(2, whole);
                 configure(configs);
+            } else if (type == LAccess.color){
+                // r is instrument, b is volume, g does absolutely nothing
+                if (p1 + 0.01 - samples.length >= 0  || 0 - p1 >= 0.0001){ // invalid instrument
+                    configs.set(4,0);
+                } else {
+                    configs.set(4, (int) (p1 + 0.01));
+                }
+                if (0 - p2 >= 0.0001){
+                    configs.set(3, 10);
+                } else {
+                    configs.set(3, (int) (p2 * 10 + 0.0001));
+                }
+                configure(configs);
             }
         }
     }
