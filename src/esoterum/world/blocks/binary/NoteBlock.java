@@ -342,7 +342,7 @@ public class NoteBlock extends BinaryBlock{
                     if(pp.length == 3){ //inst, pitch, vol (100)
                         configs.set(1, pp[1] % 12);
                         configs.set(2, pp[1] / 12);
-                        configs.set(3, pp[2] / 10);
+                        configs.set(3, pp[2]);
                         configs.set(4, pp[0] % samples.length);
                     }
                 }
