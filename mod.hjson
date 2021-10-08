@@ -4,10 +4,12 @@ name: "esoterum"
 
 author: "Goober, Meep, Python"
 
+description: "adds a redstone-like wire-based logic system, tailored for making circuits."
+
 main: "esoterum.Esoterum"
 
 minGameVersion: 130
 
 java: true
 
-version: 2.0
+version: 2.01

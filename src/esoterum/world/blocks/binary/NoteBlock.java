@@ -4,6 +4,7 @@ import arc.*;
 import arc.audio.*;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
+import arc.math.*;
 import arc.scene.*;
 import arc.scene.ui.*;
 import arc.scene.ui.layout.*;
@@ -17,6 +18,8 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.ui.*;
 import mindustry.logic.*;
+import mindustry.world.*;
+import mindustry.world.meta.*;
 
 public class NoteBlock extends BinaryBlock{
     public NoteSample[] samples = {
@@ -45,6 +48,7 @@ public class NoteBlock extends BinaryBlock{
         emits = true;
         rotate = true;
         drawRot = false;
+        group = BlockGroup.logic;
 
         inputs = new boolean[]{false, true, true, true};
         outputs = new boolean[]{true, false, false, false};
@@ -58,6 +62,16 @@ public class NoteBlock extends BinaryBlock{
         outputRegion = Core.atlas.find("esoterum-connection");
         connectionRegion = Core.atlas.find("esoterum-connection");
         region = Core.atlas.find("esoterum-gate-base");
+    }
+    
+    public boolean isNoteBlock(Block other){
+        return (other instanceof NoteBlock) || other.name.contains("note-block");
+    }
+
+    @Override
+    public boolean canReplace(Block other){
+        if(other.alwaysReplace) return true;
+        return other.size == size && isNoteBlock(other);
     }
 
     public class NoteBlockBuild extends BinaryBuild{
@@ -308,12 +322,31 @@ public class NoteBlock extends BinaryBlock{
                 } else {
                     configs.set(4, (int) (p1 + 0.01));
                 }
-                if (0 - p2 >= 0.0001){
+                if (0 - p3 >= 0.0001){
                     configs.set(3, 10);
                 } else {
-                    configs.set(3, (int) (p2 * 10 + 0.0001));
+                    configs.set(3, (int) (p3 * 10 + 0.0001));
                 }
                 configure(configs);
+            }
+        }
+        
+        //betamindy compatibility
+        @Override
+        public void overwrote(Seq<Building> builds){
+            if(builds.first() instanceof NoteBlockBuild build){
+                configs.clear();
+                configs.addAll(build.configs);
+            }
+            else if(builds.first().block.name.contains("note-block")){
+                if(builds.first().config() instanceof byte[] pp){
+                    if(pp.length == 3){ //inst, pitch, vol (100)
+                        configs.set(1, Mathf.mod(pp[1], 12));
+                        configs.set(2, Mathf.clamp(pp[1] / 12, 0, 4));
+                        configs.set(3, Mathf.clamp(pp[2], 0, 100));
+                        configs.set(4, Mathf.mod(pp[0], samples.length));
+                    }
+                }
             }
         }
     }
