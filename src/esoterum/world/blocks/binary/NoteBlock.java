@@ -329,22 +329,22 @@ public class NoteBlock extends BinaryBlock{
                 configure(configs);
             }
         }
-    }
-    
-    //betamindy compatibility
-    @Override
-    public void overwrote(Seq<Building> builds){
-        if(builds.first() instanceof NoteBlockBuild build){
-            configs.clear();
-            configs.addAll(build.configs);
-        }
-        else if(builds.first().block.name.equals("betamindy-note-block") || builds.first().block.name.equals("betamindy-star-note-block")){
-            if(builds.first().config() instanceof byte[] pp){
-                if(pp.size == 3){ //inst, pitch, vol (100)
-                    configs.set(1, pp[1] % 12);
-                    configs.set(2, pp[1] / 12);
-                    configs.set(3, pp[2] / 10);
-                    configs.set(4, pp[0] % samples.length);
+        
+        //betamindy compatibility
+        @Override
+        public void overwrote(Seq<Building> builds){
+            if(builds.first() instanceof NoteBlockBuild build){
+                configs.clear();
+                configs.addAll(build.configs);
+            }
+            else if(builds.first().block.name.equals("betamindy-note-block") || builds.first().block.name.equals("betamindy-star-note-block")){
+                if(builds.first().config() instanceof byte[] pp){
+                    if(pp.size == 3){ //inst, pitch, vol (100)
+                        configs.set(1, pp[1] % 12);
+                        configs.set(2, pp[1] / 12);
+                        configs.set(3, pp[2] / 10);
+                        configs.set(4, pp[0] % samples.length);
+                    }
                 }
             }
         }
