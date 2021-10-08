@@ -13,26 +13,26 @@ public class BinaryRouter extends BinaryBlock{
         @Override
         public void updateTile() {
             super.updateTile();
-            lastSignal = false;
+            lastSignal = 0;
             for(BinaryBuild b : nb){
                 lastSignal |= getSignal(b, this);
             };
         }
 
         @Override
-        public boolean signalFront() {
+        public int signalFront() {
             return lastSignal;
         }
         @Override
-        public boolean signalBack() {
+        public int signalBack() {
             return lastSignal;
         }
         @Override
-        public boolean signalLeft() {
+        public int signalLeft() {
             return lastSignal;
         }
         @Override
-        public boolean signalRight() {
+        public int signalRight() {
             return lastSignal;
         }
     }

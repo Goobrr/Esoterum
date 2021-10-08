@@ -18,8 +18,12 @@ public class LatchBlock extends BinaryBlock{
         rotate = true;
         drawArrow = true;
         
-        config(Boolean.class, (LatchBuild l, Boolean b) -> {
+        config(Integer.class, (LatchBuild l, Integer b) -> {
             l.store = b;
+        });
+
+        config(Boolean.class, (LatchBuild l, Boolean b) -> {
+            l.store = b ? 1 : 0;
         });
     }
 
@@ -39,18 +43,18 @@ public class LatchBlock extends BinaryBlock{
     }
 
     public class LatchBuild extends BinaryBuild {
-        public boolean store;
+        public int store;
         @Override
         public void updateTile() {
             super.updateTile();
             lastSignal = signal();
-            if(getSignal(nb.get(2), this)){
+            if(getSignal(nb.get(2), this) > 0){
                 configure(getSignal(nb.get(1), this) | getSignal(nb.get(3), this));
             }
         }
 
         @Override
-        public boolean signal() {
+        public int signal() {
             return getSignal(nb.get(1), this) | getSignal(nb.get(2), this) | getSignal(nb.get(3), this);
         }
 
@@ -58,21 +62,22 @@ public class LatchBlock extends BinaryBlock{
         public void draw() {
             super.draw();
 
-            Draw.color(store ? Pal.accent : Color.white);
+            Draw.color(store > 0 ? Pal.accent : Color.white);
             Draw.rect(latchRegion, x, y);
         }
 
         @Override
-        public boolean signalFront() {
+        public int signalFront() {
             return store;
         }
 
         @Override
         public void read(Reads read, byte revision) {
             super.read(read, revision);
-
-            if(revision >= 2){
-                store = read.bool();
+            if(revision >= 3){
+                store = read.i();
+            } else if(revision >= 2){
+                store = read.bool() ? 1: 0;
             }
         }
 
@@ -80,12 +85,12 @@ public class LatchBlock extends BinaryBlock{
         public void write(Writes write) {
             super.write(write);
 
-            write.bool(store);
+            write.i(store);
         }
 
         @Override
         public byte version() {
-            return 2;
+            return 3;
         }
     }
 }

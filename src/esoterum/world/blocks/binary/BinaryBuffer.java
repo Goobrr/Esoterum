@@ -38,7 +38,7 @@ public class BinaryBuffer extends BinaryBlock{
 
         @Override
         public void updateTile() {
-            if(signal()){
+            if(signal() > 0){
                 delayTimer += Time.delta;
             }else{
                 if(configs.get(3) == 0){
@@ -49,11 +49,11 @@ public class BinaryBuffer extends BinaryBlock{
 
             // this looks terrible
             if(delayTimer > trueDelay()){
-                lastSignal  = true;
+                lastSignal  = 1;
                 delayTimer = trueDelay();
             }
             if(delayTimer < 0f){
-                lastSignal = false;
+                lastSignal = 0;
                 delayTimer = 0f;
             }
         }
@@ -67,7 +67,7 @@ public class BinaryBuffer extends BinaryBlock{
         public void draw(){
             Draw.rect(region, x, y);
 
-            Draw.color(lastSignal ? Pal.accent : Color.white);
+            Draw.color(lastSignal > 0 ? Pal.accent : Color.white);
             Draw.rect(connectionRegion, x, y, rotdeg());
             drawConnections();
             drawBuffer();
@@ -86,17 +86,17 @@ public class BinaryBuffer extends BinaryBlock{
         }
 
         public void drawConnections(){
-            Draw.color(signal() ? Pal.accent : Color.white);
+            Draw.color(signal() > 0 ? Pal.accent : Color.white);
             Draw.rect(connectionRegion, x, y, rotdeg() + 90 * configs.first());
         }
 
         @Override
-        public boolean signal() {
+        public int signal() {
             return getSignal(nb.get(configs.first()), this);
         }
 
         @Override
-        public boolean signalFront() {
+        public int signalFront() {
             return lastSignal;
         }
 

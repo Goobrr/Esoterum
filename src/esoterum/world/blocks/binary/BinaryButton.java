@@ -24,7 +24,7 @@ public class BinaryButton extends BinaryBlock{
         emits = true;
 
         config(Boolean.class, (BinaryButtonBuild b, Boolean on) -> {
-            b.lastSignal = on;
+            b.lastSignal = on ? 1 : 0;
             b.timer = duration;
         });
     }
@@ -54,7 +54,7 @@ public class BinaryButton extends BinaryBlock{
             super.updateTile();
             if(!continuous){
                 if((timer -= delta()) <= 0){
-                    lastSignal = false;
+                    lastSignal = 0;
                 }
             }
         }
@@ -62,7 +62,7 @@ public class BinaryButton extends BinaryBlock{
         @Override
         public boolean configTapped(){
             if(continuous){
-                configure(!lastSignal);
+                configure(lastSignal <= 0);
             }else{
                 configure(true);
             }
@@ -72,33 +72,33 @@ public class BinaryButton extends BinaryBlock{
         @Override
         public void draw() {
             Draw.rect(region, x, y);
-            Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
+            Draw.color(Color.white, Pal.accent, lastSignal > 0 ? 1f : 0f);
             for(int i = 0; i < 4; i++){
                 if(connections[i]) Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
             }
             Draw.color();
-            Draw.rect(lastSignal ? onRegion : offRegion, x, y);
+            Draw.rect(lastSignal > 0 ? onRegion : offRegion, x, y);
         }
 
         // yes, there is no other way to do this
         // absolutely no way.
         @Override
-        public boolean signalFront() {
+        public int signalFront() {
             return lastSignal;
         }
 
         @Override
-        public boolean signalLeft() {
+        public int signalLeft() {
             return lastSignal;
         }
 
         @Override
-        public boolean signalBack() {
+        public int signalBack() {
             return lastSignal;
         }
 
         @Override
-        public boolean signalRight() {
+        public int signalRight() {
             return lastSignal;
         }
 
@@ -127,7 +127,7 @@ public class BinaryButton extends BinaryBlock{
         public void control(LAccess type, double p1, double p2, double p3, double p4){
             if(type == LAccess.enabled){
                 //controlling capability
-                lastSignal = !Mathf.zero((float)p1);
+                lastSignal = Mathf.zero((float)p1) ? 0 : 1;
             }
         }
     }

@@ -11,7 +11,7 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 
 public class LogicGate extends BinaryBlock{
-    public Boolf<boolean[]> operation;
+    public Boolf<int[]> operation;
     public boolean single;
 
     public LogicGate(String name){
@@ -67,15 +67,15 @@ public class LogicGate extends BinaryBlock{
         }
 
         @Override
-        public boolean signal(){ //Assumes logic gates only have 2 inputs.
-            return operation.get(new boolean[]{
+        public int signal(){ //Assumes logic gates only have 2 inputs.
+            return operation.get(new int[]{
                 getSignal(nb.get(configs.first()), this),
                 getSignal(nb.get(configs.get(single ? 0 : 1)), this),
-            });
+            }) ? 1 : 0;
         }
 
         @Override
-        public boolean signalFront() {
+        public int signalFront() {
             return configs.first() == 2 ? signal() : lastSignal;
         }
 
@@ -84,7 +84,7 @@ public class LogicGate extends BinaryBlock{
             Draw.rect(region, x, y);
 
             drawConnections();
-            Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
+            Draw.color(Color.white, Pal.accent, lastSignal > 0 ? 1f : 0f);
             Draw.rect(topRegion, x, y, rotate ? rotdeg() : 0f);
         }
 
@@ -92,10 +92,10 @@ public class LogicGate extends BinaryBlock{
         public void drawConnections(){
             for(int i = 1; i < 4; i++){
                 if(!configs.contains(i)) continue;
-                Draw.color(Color.white, Pal.accent, getSignal(nb.get(i), this) ? 1f : 0f);
+                Draw.color(Color.white, Pal.accent, getSignal(nb.get(i), this) > 0 ? 1f : 0f);
                 Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
             }
-            Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
+            Draw.color(Color.white, Pal.accent, lastSignal > 0 ? 1f : 0f);
             Draw.rect(connectionRegion, x, y, rotdeg());
         }
 

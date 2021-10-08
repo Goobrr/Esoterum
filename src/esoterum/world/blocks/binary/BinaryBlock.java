@@ -60,39 +60,39 @@ public class BinaryBlock extends Block {
         public Seq<BinaryBuild> nb = new Seq<>(4);
         public boolean[] connections = new boolean[]{false, false, false, false};
 
-        public boolean nextSignal;
-        public boolean lastSignal;
+        public int nextSignal;
+        public int lastSignal;
 
-        public boolean signal(){
-            return false;
+        public int signal(){
+            return 0;
         }
 
-        public boolean signalFront(){
-            return false;
+        public int signalFront(){
+            return 0;
         }
 
-        public boolean signalLeft(){
-            return false;
+        public int signalLeft(){
+            return 0;
         }
 
-        public boolean signalBack(){
-            return false;
+        public int signalBack(){
+            return 0;
         }
 
-        public boolean signalRight(){
-            return false;
+        public int signalRight(){
+            return 0;
         }
     
         // get relative direction of "To" from "From"'s perspective then get the associated signal output.
-        public boolean getSignalRelativeTo(BinaryBlock.BinaryBuild from, BinaryBlock.BinaryBuild to){
-            if(!from.emits()) return false;
+        public int getSignalRelativeTo(BinaryBlock.BinaryBuild from, BinaryBlock.BinaryBuild to){
+            if(!from.emits()) return 0;
             
             return switch(EsoUtil.relativeDirection(from, to)) {
                 case 0 -> from.signalFront(); //front
                 case 1 -> from.signalLeft(); //left
                 case 2 -> from.signalBack(); //back
                 case 3 -> from.signalRight(); //right
-                default -> false;
+                default -> 0;
             };
         }
     
@@ -107,9 +107,9 @@ public class BinaryBlock extends Block {
             return false;
         }
     
-        public boolean getSignal(Building from, BinaryBlock.BinaryBuild to){
+        public int getSignal(Building from, BinaryBlock.BinaryBuild to){
             if(from instanceof BinaryBlock.BinaryBuild b) return getSignalRelativeTo(b, to);
-            return false;
+            return 0;
         }
     
         public BinaryBlock.BinaryBuild checkType(Building b){
@@ -122,12 +122,12 @@ public class BinaryBlock extends Block {
             super.draw();
 
             drawConnections();
-            Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
+            Draw.color(Color.white, Pal.accent, lastSignal > 0 ? 1f : 0f);
             Draw.rect(topRegion, x, y, (rotate && drawRot) ? rotdeg() : 0f);
         }
 
         public void drawConnections(){
-            Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
+            Draw.color(Color.white, Pal.accent, lastSignal > 0 ? 1f : 0f);
             for(int i = 0; i < 4; i++){
                 if(connections[i]) Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
             }
@@ -152,7 +152,7 @@ public class BinaryBlock extends Block {
                 if(outputs(i) && connections[i]){
                     b = nb.get(i);
                     Draw.z(Layer.overlayUI + 1);
-                    Drawf.arrow(x, y, b.x, b.y, 2f, 2f, lastSignal ? Pal.accent : Color.white);
+                    Drawf.arrow(x, y, b.x, b.y, 2f, 2f, lastSignal > 0 ? Pal.accent : Color.white);
                 }
             }
 
@@ -161,7 +161,7 @@ public class BinaryBlock extends Block {
                     b = nb.get(i);
                     Draw.z(Layer.overlayUI + 3);
                     Lines.stroke(1f);
-                    Draw.color((outputs(i) ? lastSignal : getSignal(b, this)) ? Pal.accent : Color.white);
+                    Draw.color((outputs(i) ? lastSignal : getSignal(b, this)) > 0 ? Pal.accent : Color.white);
                     Lines.line(x, y, b.x, b.y);
 
                     Draw.reset();
@@ -209,7 +209,7 @@ public class BinaryBlock extends Block {
                     e.clearChildren();
                     e.row();
                     e.left();
-                    e.label(() -> "State: " + (lastSignal ? "1" : "0")).color(Color.lightGray);
+                    e.label(() -> "State: " + (lastSignal > 0 ? "1" : "0")).color(Color.lightGray);
                 };
 
                 e.update(rebuild);
@@ -234,9 +234,10 @@ public class BinaryBlock extends Block {
         @Override
         public void read(Reads read, byte revision) {
             super.read(read, revision);
-
-            if(revision >= 1){
-                nextSignal = lastSignal = read.bool();
+            if(revision >= 2){
+                nextSignal = lastSignal = read.i();
+            } else if(revision >= 1){
+                nextSignal = lastSignal = read.bool()?1:0;
             }
         }
 
@@ -244,17 +245,17 @@ public class BinaryBlock extends Block {
         public void write(Writes write) {
             super.write(write);
 
-            write.bool(lastSignal);
+            write.i(lastSignal);
         }
 
         @Override
         public byte version() {
-            return 1;
+            return 2;
         }
 
         @Override
         public double sense(LAccess sensor){
-            if(sensor == LAccess.enabled) return lastSignal ? 1 : 0;
+            if(sensor == LAccess.enabled) return lastSignal > 0 ? 1 : 0;
             return super.sense(sensor);
         }
     }

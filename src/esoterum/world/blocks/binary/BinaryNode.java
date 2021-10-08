@@ -69,7 +69,7 @@ public class BinaryNode extends BinaryBlock{
         public void updateTile(){
             super.updateTile();
             BinaryNodeBuild c = linkedNode();
-            lastSignal = c != null && c.signal();
+            lastSignal = (c != null ? 1 : 0) & c.signal();
             if(c != null && c.link != pos()){
                 configure(null);
             }
@@ -94,7 +94,7 @@ public class BinaryNode extends BinaryBlock{
             if(c != null){
                 Draw.z(Layer.power);
                 Lines.stroke(1f);
-                Draw.color(Color.white, Pal.accent, signal() ? 1f : 0f);
+                Draw.color(Color.white, Pal.accent, signal() > 0 ? 1f : 0f);
                 EsoDrawf.curvedLine(x, y, c.x, c.y, -curveWidth); //Negative so that it goes clockwise if positive
 
                 float time = (Time.time / 60f) % 3f;
@@ -109,16 +109,16 @@ public class BinaryNode extends BinaryBlock{
         }
 
         @Override
-        public boolean signal(){
+        public int signal(){
             for(BinaryBuild b : nb){
-                if(getSignal(b, this)) return true;
+                if(getSignal(b, this) > 0) return 1;
             }
-            return false;
+            return 0;
         }
 
         @Override
         public void drawConfigure(){
-            Tmp.c1.set(Color.white).lerp(Pal.accent, lastSignal ? 1f : 0f);
+            Tmp.c1.set(Color.white).lerp(Pal.accent, lastSignal > 0 ? 1f : 0f);
 
             Drawf.circles(x, y, size * tilesize / 2f + 1f + Mathf.absin(Time.time, 4f, 1f), Tmp.c1);
             Drawf.circles(x, y, range * tilesize, Tmp.c1);
@@ -170,22 +170,22 @@ public class BinaryNode extends BinaryBlock{
         // yes, there is no other way to do this
         // absolutely no way.
         @Override
-        public boolean signalFront(){
+        public int signalFront(){
             return lastSignal;
         }
 
         @Override
-        public boolean signalLeft(){
+        public int signalLeft(){
             return lastSignal;
         }
 
         @Override
-        public boolean signalBack(){
+        public int signalBack(){
             return lastSignal;
         }
 
         @Override
-        public boolean signalRight(){
+        public int signalRight(){
             return lastSignal;
         }
 

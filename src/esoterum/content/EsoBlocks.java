@@ -67,15 +67,15 @@ public class EsoBlocks implements ContentList{
 
         // region logic gates
         esoAND = new LogicGate("AND"){{
-            operation = i -> i[0] && i[1];
+            operation = i -> (i[0] & i[1]) > 0;
         }};
 
         esoXOR = new LogicGate("XOR"){{
-            operation = i -> i[0] ^ i[1];
+            operation = i -> (i[0] ^ i[1]) > 0;
         }};
 
         esoNOT = new LogicGate("NOT"){{
-            operation = i -> !i[0];
+            operation = i -> ~i[0] > 0;
             single = true;
         }};
         // endregion logic gates

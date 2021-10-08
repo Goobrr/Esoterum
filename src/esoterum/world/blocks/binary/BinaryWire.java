@@ -70,18 +70,18 @@ public class BinaryWire extends BinaryBlock{
         public void drawConnections(){
             for(int i = 1; i < 4; i++){
                 if(connections[i]){
-                    Draw.color(Color.white, Pal.accent, getSignal(nb.get(i), this) ? 1f : 0f);
+                    Draw.color(Color.white, Pal.accent, getSignal(nb.get(i), this) > 0 ? 1f : 0f);
                     Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
                 }
             }
         }
 
         @Override
-        public boolean signal() {
+        public int signal() {
             return getSignal(nb.get(1), this) | getSignal(nb.get(3), this);
         }
 
-        public boolean signalFront(){
+        public int signalFront(){
             return (nb.get(2) != null ?
                 nb.get(2).rotation == rotation || !nb.get(2).block.rotate || nb.get(2).allOutputs() ?
                     getSignal(nb.get(2), this) :

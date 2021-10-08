@@ -82,21 +82,21 @@ public class NoteBlock extends BinaryBlock{
         public void updateTile(){
             lastSignal = nextSignal;
             nextSignal = signal();
-            if(nextSignal && !lastSignal) playSound();
+            if(nextSignal > 0 && lastSignal <= 0) playSound();
         }
 
         @Override
         public void draw(){
             Draw.rect(region, x, y);
 
-            Draw.color(lastSignal ? Pal.accent : Color.white);
+            Draw.color(lastSignal > 0 ? Pal.accent : Color.white);
             Draw.rect(outputRegion, x, y, rotdeg());
             drawConnections();
             Draw.rect(topRegion, x, y);
         }
 
         public void drawConnections(){
-            Draw.color(lastSignal ? Pal.accent : Color.white);
+            Draw.color(lastSignal > 0 ? Pal.accent : Color.white);
             Draw.rect(connectionRegion, x, y, rotdeg() + 90 * configs.first());
         }
 
@@ -105,12 +105,12 @@ public class NoteBlock extends BinaryBlock{
         }
 
         @Override
-        public boolean signal(){
+        public int signal(){
             return getSignal(nb.get(configs.first()), this);
         }
 
         @Override
-        public boolean signalFront(){
+        public int signalFront(){
             return configs.first() == 2 ? signal() : lastSignal;
         }
 
