@@ -4,6 +4,7 @@ import arc.*;
 import arc.audio.*;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
+import arc.math.*;
 import arc.scene.*;
 import arc.scene.ui.*;
 import arc.scene.ui.layout.*;
@@ -64,7 +65,7 @@ public class NoteBlock extends BinaryBlock{
     }
     
     public boolean isNoteBlock(Block other){
-        return (other instanceof NoteBlock) || other.name.equals("betamindy-note-block") || other.name.equals("betamindy-star-note-block");
+        return (other instanceof NoteBlock) || other.name.contains("note-block");
     }
 
     @Override
@@ -337,13 +338,13 @@ public class NoteBlock extends BinaryBlock{
                 configs.clear();
                 configs.addAll(build.configs);
             }
-            else if(builds.first().block.name.equals("betamindy-note-block") || builds.first().block.name.equals("betamindy-star-note-block")){
+            else if(builds.first().block.name.contains("note-block")){
                 if(builds.first().config() instanceof byte[] pp){
                     if(pp.length == 3){ //inst, pitch, vol (100)
-                        configs.set(1, pp[1] % 12);
-                        configs.set(2, pp[1] / 12);
-                        configs.set(3, pp[2]);
-                        configs.set(4, pp[0] % samples.length);
+                        configs.set(1, Mathf.mod(pp[1], 12));
+                        configs.set(2, Mathf.clamp(pp[1] / 12, 0, 4));
+                        configs.set(3, Mathf.clamp(pp[2], 0, 100));
+                        configs.set(4, Mathf.mod(pp[0], samples.length));
                     }
                 }
             }
