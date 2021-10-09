@@ -43,7 +43,7 @@ public class BinaryClock extends BinaryBlock{
 
             drawConnections();
             Lines.stroke(0.5f);
-            Draw.color(Color.white, Pal.accent, lastSignal > 0 ? 1f : 0f);
+            Draw.color(Color.white, Pal.accent, lastSignal != 0 ? 1f : 0f);
             Lines.circle(x, y, 1.5f);
             Draw.color(Pal.accent);
             EsoDrawf.arc(x, y, 1.85f, -configs.get(2) / (float)configs.first() * 360f + 90f, configs.get(1) / (float)configs.first() * 360f);
@@ -171,7 +171,7 @@ public class BinaryClock extends BinaryBlock{
 
         @Override
         public void read(Reads read, byte revision){
-            super.read(read, revision);
+            super.read(read, (byte)(revision + 1));
 
             if(revision >= 2){
                 configs = IntSeq.with(read.i(), read.i(), read.i());

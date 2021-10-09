@@ -84,7 +84,7 @@ public class LogicGate extends BinaryBlock{
             Draw.rect(region, x, y);
 
             drawConnections();
-            Draw.color(Color.white, Pal.accent, lastSignal > 0 ? 1f : 0f);
+            Draw.color(Color.white, Pal.accent, lastSignal != 0 ? 1f : 0f);
             Draw.rect(topRegion, x, y, rotate ? rotdeg() : 0f);
         }
 
@@ -92,10 +92,10 @@ public class LogicGate extends BinaryBlock{
         public void drawConnections(){
             for(int i = 1; i < 4; i++){
                 if(!configs.contains(i)) continue;
-                Draw.color(Color.white, Pal.accent, getSignal(nb.get(i), this) > 0 ? 1f : 0f);
+                Draw.color(Color.white, Pal.accent, getSignal(nb.get(i), this) != 0 ? 1f : 0f);
                 Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
             }
-            Draw.color(Color.white, Pal.accent, lastSignal > 0 ? 1f : 0f);
+            Draw.color(Color.white, Pal.accent, lastSignal != 0 ? 1f : 0f);
             Draw.rect(connectionRegion, x, y, rotdeg());
         }
 
@@ -110,7 +110,7 @@ public class LogicGate extends BinaryBlock{
 
         @Override
         public void read(Reads read, byte revision){
-            super.read(read, revision);
+            super.read(read, (byte)(revision + 1));
 
             if(revision >= 1){
                 nextConfig = read.i();

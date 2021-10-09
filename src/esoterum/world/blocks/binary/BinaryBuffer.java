@@ -38,7 +38,7 @@ public class BinaryBuffer extends BinaryBlock{
 
         @Override
         public void updateTile() {
-            if(signal() > 0){
+            if(signal() != 0){
                 delayTimer += Time.delta;
             }else{
                 if(configs.get(3) == 0){
@@ -67,7 +67,7 @@ public class BinaryBuffer extends BinaryBlock{
         public void draw(){
             Draw.rect(region, x, y);
 
-            Draw.color(lastSignal > 0 ? Pal.accent : Color.white);
+            Draw.color(lastSignal != 0 ? Pal.accent : Color.white);
             Draw.rect(connectionRegion, x, y, rotdeg());
             drawConnections();
             drawBuffer();
@@ -86,7 +86,7 @@ public class BinaryBuffer extends BinaryBlock{
         }
 
         public void drawConnections(){
-            Draw.color(signal() > 0 ? Pal.accent : Color.white);
+            Draw.color(signal() != 0 ? Pal.accent : Color.white);
             Draw.rect(connectionRegion, x, y, rotdeg() + 90 * configs.first());
         }
 
@@ -170,7 +170,7 @@ public class BinaryBuffer extends BinaryBlock{
 
         @Override
         public void read(Reads read, byte revision) {
-            super.read(read, revision);
+            super.read(read, (byte)(revision + 1));
 
             if(revision >= 1){
                 delayTimer = read.f();

@@ -89,10 +89,10 @@ public class ColorWire extends BinaryWire {
         @Override
         public void drawConnections(){
             if(this.colour==null) this.colour = Color.valueOf("000000");
-            Draw.color(Color.white, Pal.accent, lastSignal > 0 ? 1f : 0f);
+            Draw.color(Color.white, Pal.accent, lastSignal != 0 ? 1f : 0f);
             for(int i = 0; i < 4; i++){
                 if(connections[i] || connections2[i]){
-                    Draw.color(Color.white, Pal.accent, lastSignal > 0 ? 1f : 0f);
+                    Draw.color(Color.white, Pal.accent, lastSignal != 0 ? 1f : 0f);
                     Draw.z(Draw.z()+0.1f);
                     Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
                     Draw.color(Color.white, this.colour, 1f);
@@ -157,7 +157,7 @@ public class ColorWire extends BinaryWire {
         @Override
         public int getSignal(Building from, BinaryBlock.BinaryBuild to){
             if(from instanceof ColorWire.ColorWireBuild b && to instanceof ColorWire.ColorWireBuild bb){
-                return getSignalRelativeTo(b, to) > 0 && (b.colour == bb.colour) ? 1 : 0;
+                return getSignalRelativeTo(b, to) != 0 && (b.colour == bb.colour) ? 1 : 0;
             } else if(from instanceof BinaryBlock.BinaryBuild b){
                 return getSignalRelativeTo(b, to);
             }

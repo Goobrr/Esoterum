@@ -122,12 +122,12 @@ public class BinaryBlock extends Block {
             super.draw();
 
             drawConnections();
-            Draw.color(Color.white, Pal.accent, lastSignal > 0 ? 1f : 0f);
+            Draw.color(Color.white, Pal.accent, lastSignal != 0 ? 1f : 0f);
             Draw.rect(topRegion, x, y, (rotate && drawRot) ? rotdeg() : 0f);
         }
 
         public void drawConnections(){
-            Draw.color(Color.white, Pal.accent, lastSignal > 0 ? 1f : 0f);
+            Draw.color(Color.white, Pal.accent, lastSignal != 0 ? 1f : 0f);
             for(int i = 0; i < 4; i++){
                 if(connections[i]) Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
             }
@@ -152,7 +152,7 @@ public class BinaryBlock extends Block {
                 if(outputs(i) && connections[i]){
                     b = nb.get(i);
                     Draw.z(Layer.overlayUI + 1);
-                    Drawf.arrow(x, y, b.x, b.y, 2f, 2f, lastSignal > 0 ? Pal.accent : Color.white);
+                    Drawf.arrow(x, y, b.x, b.y, 2f, 2f, lastSignal != 0 ? Pal.accent : Color.white);
                 }
             }
 
@@ -161,7 +161,7 @@ public class BinaryBlock extends Block {
                     b = nb.get(i);
                     Draw.z(Layer.overlayUI + 3);
                     Lines.stroke(1f);
-                    Draw.color((outputs(i) ? lastSignal : getSignal(b, this)) > 0 ? Pal.accent : Color.white);
+                    Draw.color((outputs(i) ? lastSignal : getSignal(b, this)) != 0 ? Pal.accent : Color.white);
                     Lines.line(x, y, b.x, b.y);
 
                     Draw.reset();
@@ -209,7 +209,7 @@ public class BinaryBlock extends Block {
                     e.clearChildren();
                     e.row();
                     e.left();
-                    e.label(() -> "State: " + (lastSignal > 0 ? "1" : "0")).color(Color.lightGray);
+                    e.label(() -> "State: " + (lastSignal != 0 ? "1" : "0")).color(Color.lightGray);
                 };
 
                 e.update(rebuild);
@@ -255,7 +255,7 @@ public class BinaryBlock extends Block {
 
         @Override
         public double sense(LAccess sensor){
-            if(sensor == LAccess.enabled) return lastSignal > 0 ? 1 : 0;
+            if(sensor == LAccess.enabled) return lastSignal != 0 ? 1 : 0;
             return super.sense(sensor);
         }
     }

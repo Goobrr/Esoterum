@@ -67,7 +67,7 @@ public class SignalController extends BinaryRouter{
             lastSignal = 0;
             for(int i = 0; i < 4; i++){
                 // check if the current side is configured to accept input
-                lastSignal |= getSignal(nb.get(i), this) > 0 && configs.get(i) == 1 ? 1 : 0;
+                lastSignal |= getSignal(nb.get(i), this) != 0 && configs.get(i) == 1 ? 1 : 0;
             }
         }
 
@@ -77,10 +77,10 @@ public class SignalController extends BinaryRouter{
                 int c = configs.get(i);
                 if(c == 0) continue;
                 if(c == 1){
-                    Draw.color(Color.white, Pal.accent, getSignal(nb.get(i), this) > 0 ? 1f : 0f);
+                    Draw.color(Color.white, Pal.accent, getSignal(nb.get(i), this) != 0 ? 1f : 0f);
                     Draw.rect(inputRegion, x, y, i * 90f);
                 }else{
-                    Draw.color(Color.white, Pal.accent, lastSignal > 0 ? 1f : 0f);
+                    Draw.color(Color.white, Pal.accent, lastSignal != 0 ? 1f : 0f);
                     Draw.rect(outputRegion, x, y, i * 90f);
                 }
             }
@@ -136,22 +136,22 @@ public class SignalController extends BinaryRouter{
         // check if the current side is configured to output
         @Override
         public int signalFront() {
-            return lastSignal > 0 && configs.get(0) == 2 ? 1 : 0;
+            return lastSignal != 0 && configs.get(0) == 2 ? 1 : 0;
         }
 
         @Override
         public int signalBack() {
-            return lastSignal > 0 && configs.get(2) == 2 ? 1 : 0;
+            return lastSignal != 0 && configs.get(2) == 2 ? 1 : 0;
         }
 
         @Override
         public int signalLeft() {
-            return lastSignal > 0 && configs.get(1) == 2 ? 1 : 0;
+            return lastSignal != 0 && configs.get(1) == 2 ? 1 : 0;
         }
 
         @Override
         public int signalRight() {
-            return lastSignal > 0 && configs.get(3) == 2 ? 1 : 0;
+            return lastSignal != 0 && configs.get(3) == 2 ? 1 : 0;
         }
 
         @Override
@@ -161,7 +161,7 @@ public class SignalController extends BinaryRouter{
 
         @Override
         public void read(Reads read, byte revision) {
-            super.read(read, revision);
+            super.read(read, (byte)(revision + 1));
 
             if(revision == 1){
                 for(int i = 0; i < 4; i++){

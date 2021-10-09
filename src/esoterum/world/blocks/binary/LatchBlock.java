@@ -48,7 +48,7 @@ public class LatchBlock extends BinaryBlock{
         public void updateTile() {
             super.updateTile();
             lastSignal = signal();
-            if(getSignal(nb.get(2), this) > 0){
+            if(getSignal(nb.get(2), this) != 0){
                 configure(getSignal(nb.get(1), this) | getSignal(nb.get(3), this));
             }
         }
@@ -62,7 +62,7 @@ public class LatchBlock extends BinaryBlock{
         public void draw() {
             super.draw();
 
-            Draw.color(store > 0 ? Pal.accent : Color.white);
+            Draw.color(store != 0 ? Pal.accent : Color.white);
             Draw.rect(latchRegion, x, y);
         }
 
@@ -73,7 +73,7 @@ public class LatchBlock extends BinaryBlock{
 
         @Override
         public void read(Reads read, byte revision) {
-            super.read(read, revision);
+            super.read(read, (byte)(revision + 1));
             if(revision >= 3){
                 store = read.i();
             } else if(revision >= 2){

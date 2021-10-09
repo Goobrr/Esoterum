@@ -72,12 +72,12 @@ public class BinaryButton extends BinaryBlock{
         @Override
         public void draw() {
             Draw.rect(region, x, y);
-            Draw.color(Color.white, Pal.accent, lastSignal > 0 ? 1f : 0f);
+            Draw.color(Color.white, Pal.accent, lastSignal != 0 ? 1f : 0f);
             for(int i = 0; i < 4; i++){
                 if(connections[i]) Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
             }
             Draw.color();
-            Draw.rect(lastSignal > 0 ? onRegion : offRegion, x, y);
+            Draw.rect(lastSignal != 0 ? onRegion : offRegion, x, y);
         }
 
         // yes, there is no other way to do this
@@ -104,7 +104,7 @@ public class BinaryButton extends BinaryBlock{
 
         @Override
         public void read(Reads read, byte revision) {
-            super.read(read, revision);
+            super.read(read, (byte)(revision + 1));
 
             if(revision >= 1){
                 timer = read.f();
