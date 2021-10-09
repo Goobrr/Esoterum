@@ -20,9 +20,9 @@ public class EsoSounds{
     }
 
     public static Sound[] loadNotes(String soundName){
-        Sound[] out = new Sound[5];
-        for(int i = 0; i < 5; i++){
-            out[i] = loadSound(soundName + "/Eso" + soundName + "C" + (2 + i));
+        Sound[] out = new Sound[7];
+        for(int i = 0; i < 7; i++){
+            out[i] = loadSound(soundName + "/Eso" + soundName + "C" + (1 + i));
         }
         return out;
     }

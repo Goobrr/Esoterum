@@ -101,7 +101,7 @@ public class NoteBlock extends BinaryBlock{
         }
 
         public void playSound(){
-            if(!Vars.headless) samples[configs.get(4)].octaves[configs.get(2)].play((float)configs.get(3) / 10f, EsoUtil.notePitch(configs.get(1)), 0);
+            if(!Vars.headless) samples[configs.get(4)].octaves[configs.get(2) + 1].play((float)configs.get(3) / 10f, EsoUtil.notePitch(configs.get(1)), 0);
         }
 
         @Override
@@ -141,8 +141,8 @@ public class NoteBlock extends BinaryBlock{
                 n.table(b -> {
                     b.button("-", () -> {
                         configs.incr(2, -1);
-                        if(configs.get(2) < 0){
-                            configs.set(2, 0);
+                        if(configs.get(2) < -1){
+                            configs.set(2, -1);
                             configs.set(1, 0);
                         }
                         configure(configs);
@@ -150,8 +150,8 @@ public class NoteBlock extends BinaryBlock{
                     }).size(48f).growX();
                     b.button("+", () -> {
                         configs.incr(2, 1);
-                        if(configs.get(2) > 4){
-                            configs.set(2, 4);
+                        if(configs.get(2) > 5){
+                            configs.set(2, 5);
                             configs.set(1, 11);
                         }
                         configure(configs);
@@ -164,7 +164,7 @@ public class NoteBlock extends BinaryBlock{
                     b.button("-", () -> {
                         configs.incr(1, -1);
                         if(configs.get(1) < 0){
-                            if(configs.get(2) == 0){
+                            if(configs.get(2) == -1){
                                 configs.set(1, 0);
                             }else{ //wrap around
                                 configs.set(1, 11);
@@ -177,7 +177,7 @@ public class NoteBlock extends BinaryBlock{
                     b.button("+", () -> {
                         configs.incr(1, 1);
                         if(configs.get(1) > 11){
-                            if(configs.get(2) == 4){
+                            if(configs.get(2) == 5){
                                 configs.set(1, 11);
                             }else{
                                 configs.set(1, 0);
@@ -295,7 +295,7 @@ public class NoteBlock extends BinaryBlock{
         public void control(LAccess type, double p1, double p2, double p3, double p4){
             if(type == LAccess.config){
                 //controlling capability
-                if (p1 < 0.0 || p1 >= 4.9){ //octave invalid
+                if (p1 < -0.9 || p1 >= 5.9){ //octave invalid
                     configs.set(1, 0);
                     configs.set(2, 2);
                     configure(configs);
@@ -305,6 +305,9 @@ public class NoteBlock extends BinaryBlock{
                 int whole = (int) p1; //octave
                 rem -= whole; // pitch
                 rem *= 100;
+                if (rem < 0) { // -1.02 should be D1
+                    rem = 0 - rem;
+                }
                 if (rem > 11.1){ // pitch invalid
                     configs.set(1, 0);
                     configs.set(2, 2);
@@ -352,7 +355,7 @@ public class NoteBlock extends BinaryBlock{
     }
 
     public static class NoteSample{
-        /** Array of sounds. Should contain C2, C3, C4, C5, and C6 */
+        /** Array of sounds. Should contain C1, C2, C3, C4, C5, C6, and C7 */
         Sound[] octaves;
         /** Used in config to display the name of the sample */
         String name;
