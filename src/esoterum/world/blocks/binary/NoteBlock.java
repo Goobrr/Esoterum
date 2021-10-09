@@ -322,10 +322,10 @@ public class NoteBlock extends BinaryBlock{
                 } else {
                     configs.set(4, (int) (p1 + 0.01));
                 }
-                if (0 - p3 >= 0.0001){
+                if (0 - p2 >= 0.0001){
                     configs.set(3, 10);
                 } else {
-                    configs.set(3, (int) (p3 * 10 + 0.0001));
+                    configs.set(3, (int) (p2 * 10 + 0.0001));
                 }
                 configure(configs);
             }
