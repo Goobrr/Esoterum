@@ -48,7 +48,7 @@ public class EsoBlocks implements ContentList{
 
         esoRouter = new BinaryRouter("router");
 
-        esoNode = new BinaryNode("node", 5);
+        esoNode = new BinaryNode("node", 6);
 
         esoLatch = new LatchBlock("latch");
 
