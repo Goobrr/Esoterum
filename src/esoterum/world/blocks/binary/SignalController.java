@@ -155,9 +155,9 @@ public class SignalController extends BinaryRouter{
 
         @Override
         public void read(Reads read, byte revision) {
-            super.read(read, revision);
+            super.read(read, (byte)(revision + 1));
 
-            if(revision == 1){
+            if(revision >= 1){
                 for(int i = 0; i < 4; i++){
                     configs.set(i, read.i());
                 }
