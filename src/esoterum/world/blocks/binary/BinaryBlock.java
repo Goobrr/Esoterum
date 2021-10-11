@@ -26,7 +26,7 @@ public class BinaryBlock extends Block {
     public boolean drawRot = true;
     public int baseType = -1;
     public boolean rotatedBase = false;
-    public int depthLimit = 100;
+    public int depthLimit = 5000;
 
     public BinaryBlock(String name) {
         super(name);
@@ -77,10 +77,20 @@ public class BinaryBlock extends Block {
             return;
         }
 
+        public boolean terminal(){
+            boolean r = true;
+            if(outputs(0) && nb.get(0) != null && nb.get(0).inputs(EsoUtil.relativeDirection(nb.get(0), this))) r = false;
+            if(outputs(1) && nb.get(1) != null && nb.get(1).inputs(EsoUtil.relativeDirection(nb.get(1), this))) r = false;
+            if(outputs(2) && nb.get(2) != null && nb.get(2).inputs(EsoUtil.relativeDirection(nb.get(2), this))) r = false;
+            if(outputs(3) && nb.get(3) != null && nb.get(3).inputs(EsoUtil.relativeDirection(nb.get(3), this))) r = false;
+            return r;
+        }
+
         @Override
         public void updateTile(){
             super.updateTile();
-            updateSignal(0);
+            if(terminal())
+                updateSignal(0);
         }
 
         public boolean signal(){
