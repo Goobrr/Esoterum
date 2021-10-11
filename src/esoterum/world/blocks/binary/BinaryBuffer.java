@@ -41,9 +41,17 @@ public class BinaryBuffer extends BinaryBlock{
 
         @Override
         public void updateSignal(int depth) {
+            if(depth < depthLimit){
+                if(nb.get(1) != null && connectionCheck(nb.get(1), this))
+                    nb.get(1).updateSignal(depth + 1);
+                if(nb.get(2) != null && connectionCheck(nb.get(2), this))
+                    nb.get(2).updateSignal(depth + 1);
+                if(nb.get(3) != null && connectionCheck(nb.get(3), this))
+                    nb.get(3).updateSignal(depth + 1);
+            }
             if(signal()){
                 delayTimer += Time.delta;
-            }else{
+            } else {
                 if(configs.get(3) == 0){
                     delayTimer = 0;
                 }
@@ -163,7 +171,7 @@ public class BinaryBuffer extends BinaryBlock{
 
         @Override
         public void read(Reads read, byte revision) {
-            super.read(read, revision);
+            super.read(read, (byte)(revision + 1));
 
             if(revision >= 1){
                 delayTimer = read.f();

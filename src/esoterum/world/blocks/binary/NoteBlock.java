@@ -277,7 +277,7 @@ public class NoteBlock extends BinaryBlock{
 
         @Override
         public void read(Reads read, byte revision){
-            super.read(read, revision);
+            super.read(read, (byte)(revision + 1));
 
             configs = IntSeq.with(read.i(), read.i(), read.i(), read.i(), read.i());
             if(revision < 2) configs.incr(2, 1);

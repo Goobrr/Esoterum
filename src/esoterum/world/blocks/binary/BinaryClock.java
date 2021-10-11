@@ -150,7 +150,7 @@ public class BinaryClock extends BinaryBlock{
 
         @Override
         public void read(Reads read, byte revision){
-            super.read(read, revision);
+            super.read(read, (byte)(revision + 1));
 
             if(revision >= 2){
                 configs = IntSeq.with(read.i(), read.i(), read.i());

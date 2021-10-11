@@ -67,7 +67,7 @@ public class LatchBlock extends BinaryBlock{
 
         @Override
         public void read(Reads read, byte revision) {
-            super.read(read, revision);
+            super.read(read, (byte)(revision + 1));
 
             if(revision >= 2){
                 signal[0] = read.bool();

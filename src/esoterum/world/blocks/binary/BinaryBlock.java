@@ -26,7 +26,7 @@ public class BinaryBlock extends Block {
     public boolean drawRot = true;
     public int baseType = -1;
     public boolean rotatedBase = false;
-    public int depthLimit = 5000;
+    public int depthLimit = 4096;
     public boolean transmits = true;
 
     public BinaryBlock(String name) {
