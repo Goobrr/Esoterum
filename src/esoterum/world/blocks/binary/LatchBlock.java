@@ -44,14 +44,17 @@ public class LatchBlock extends BinaryBlock{
     public class LatchBuild extends BinaryBuild {
         @Override
         public void updateSignal(int depth) {
-            if(depth < depthLimit){
-                if(nb.get(1) != null && connectionCheck(nb.get(1), this))
-                    nb.get(1).updateSignal(depth + 1);
-                if(nb.get(2) != null && connectionCheck(nb.get(2), this))
-                    nb.get(2).updateSignal(depth + 1);
-                if(nb.get(3) != null && connectionCheck(nb.get(3), this))
-                    nb.get(3).updateSignal(depth + 1);
-            }
+            try {
+                super.updateSignal(depth);
+                if(depth < depthLimit){
+                    if(nb.get(1) != null && connectionCheck(nb.get(1), this))
+                        nb.get(1).updateSignal(depth + 1);
+                    if(nb.get(2) != null && connectionCheck(nb.get(2), this))
+                        nb.get(2).updateSignal(depth + 1);
+                    if(nb.get(3) != null && connectionCheck(nb.get(3), this))
+                        nb.get(3).updateSignal(depth + 1);
+                }
+            } catch(StackOverflowError e){}
             if(getSignal(nb.get(2), this)){
                 configure(getSignal(nb.get(1), this) | getSignal(nb.get(3), this));
             }

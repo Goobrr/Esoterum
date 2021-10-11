@@ -5,6 +5,7 @@ import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.scene.ui.layout.*;
 import arc.struct.*;
+import arc.util.Log;
 import arc.util.io.*;
 import esoterum.util.*;
 import mindustry.gen.*;
@@ -26,7 +27,7 @@ public class BinaryBlock extends Block {
     public boolean drawRot = true;
     public int baseType = -1;
     public boolean rotatedBase = false;
-    public int depthLimit = 4096;
+    public int depthLimit = 100000;
     public boolean transmits = true;
 
     public BinaryBlock(String name) {
@@ -36,7 +37,6 @@ public class BinaryBlock extends Block {
         solid = true;
         destructible = true;
         buildVisibility = BuildVisibility.shown;
-
         category = Category.logic;
     }
 
@@ -73,9 +73,11 @@ public class BinaryBlock extends Block {
         public boolean[] connections = new boolean[]{false, false, false, false};
 
         public boolean[] signal = new boolean[]{false, false, false, false};
-
+        public boolean visited = false;
         public void updateSignal(int depth){
-            return;
+            if(visited)
+                throw new StackOverflowError();
+            else visited = true;
         }
 
         public boolean terminal(){
@@ -92,6 +94,7 @@ public class BinaryBlock extends Block {
             super.updateTile();
             if(terminal())
                 updateSignal(0);
+            visited = false;
         }
 
         public boolean signal(){

@@ -40,15 +40,8 @@ public class BinaryBuffer extends BinaryBlock{
         public IntSeq configs = IntSeq.with(2, 1, 0, 1);
 
         @Override
-        public void updateSignal(int depth) {
-            if(depth < depthLimit){
-                if(nb.get(1) != null && connectionCheck(nb.get(1), this))
-                    nb.get(1).updateSignal(depth + 1);
-                if(nb.get(2) != null && connectionCheck(nb.get(2), this))
-                    nb.get(2).updateSignal(depth + 1);
-                if(nb.get(3) != null && connectionCheck(nb.get(3), this))
-                    nb.get(3).updateSignal(depth + 1);
-            }
+        public void updateTile(){
+            super.updateTile();
             if(signal()){
                 delayTimer += Time.delta;
             } else {
@@ -67,6 +60,22 @@ public class BinaryBuffer extends BinaryBlock{
                 signal[0] = false;
                 delayTimer = 0f;
             }
+        }
+
+        @Override
+        public void updateSignal(int depth) {
+            try {
+                super.updateSignal(depth);
+                if(depth < depthLimit){
+                    if(nb.get(1) != null && connectionCheck(nb.get(1), this))
+                        nb.get(1).updateSignal(depth + 1);
+                    if(nb.get(2) != null && connectionCheck(nb.get(2), this))
+                        nb.get(2).updateSignal(depth + 1);
+                    if(nb.get(3) != null && connectionCheck(nb.get(3), this))
+                        nb.get(3).updateSignal(depth + 1);
+                }
+            } catch(StackOverflowError e){}
+            signal[0] = getSignal(nb.get(configs.first()), this);
         }
 
         public float trueDelay(){

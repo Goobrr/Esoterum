@@ -92,8 +92,11 @@ public class NoteBlock extends BinaryBlock{
         @Override
         public void updateSignal(int depth){
             boolean tmp = signal[0];
-            if(depth < depthLimit && nb.get(configs.first()) != null && connectionCheck(nb.get(configs.first()), this))
-                nb.get(configs.first()).updateSignal(depth + 1);
+            try {
+                super.updateSignal(depth);
+                if(depth < depthLimit && nb.get(configs.first()) != null && connectionCheck(nb.get(configs.first()), this))
+                    nb.get(configs.first()).updateSignal(depth + 1);
+            } catch(StackOverflowError e){}
             signal[0] = getSignal(nb.get(configs.first()), this);
             if(signal[0] && !tmp) playSound();
         }

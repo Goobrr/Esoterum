@@ -53,6 +53,9 @@ public class BinaryButton extends BinaryBlock{
 
         @Override
         public void updateSignal(int depth) {
+            try {
+                super.updateSignal(depth);
+            } catch(StackOverflowError e){}
             if(!continuous){
                 if((timer -= delta()) <= 0){
                     signal(false);

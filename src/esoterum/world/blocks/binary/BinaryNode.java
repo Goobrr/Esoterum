@@ -69,18 +69,21 @@ public class BinaryNode extends BinaryBlock{
         @Override
         public void updateSignal(int depth){
             BinaryNodeBuild c = linkedNode();
-            if(depth < depthLimit){
-                if(nb.get(0) != null && connectionCheck(nb.get(1), this))
-                    nb.get(0).updateSignal(depth + 1);
-                if(nb.get(1) != null && connectionCheck(nb.get(1), this))
-                    nb.get(1).updateSignal(depth + 1);
-                if(nb.get(2) != null && connectionCheck(nb.get(2), this))
-                    nb.get(2).updateSignal(depth + 1);
-                if(nb.get(3) != null && connectionCheck(nb.get(3), this))
-                    nb.get(3).updateSignal(depth + 1);
-                if(c != null)
-                    c.updateSignal(depthLimit + 1);
-            }
+            try {
+                super.updateSignal(depth);
+                if(depth < depthLimit){
+                    if(nb.get(0) != null && connectionCheck(nb.get(1), this))
+                        nb.get(0).updateSignal(depth + 1);
+                    if(nb.get(1) != null && connectionCheck(nb.get(1), this))
+                        nb.get(1).updateSignal(depth + 1);
+                    if(nb.get(2) != null && connectionCheck(nb.get(2), this))
+                        nb.get(2).updateSignal(depth + 1);
+                    if(nb.get(3) != null && connectionCheck(nb.get(3), this))
+                        nb.get(3).updateSignal(depth + 1);
+                    if(c != null)
+                        c.updateSignal(depthLimit + 1);
+                }
+            } catch(StackOverflowError e){}
             signal(c != null && c.signal());
             if(c != null && c.link != pos()){
                 configure(null);
