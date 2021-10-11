@@ -11,8 +11,7 @@ public class BinaryRouter extends BinaryBlock{
 
     public class BinaryRouterBuild extends BinaryBuild {
         @Override
-        public void updateTile() {
-            super.updateTile();
+        public void updateSignal(int depth) {
             signal(false);
             for(BinaryBuild b : nb){
                 signal(signal() || getSignal(b, this));

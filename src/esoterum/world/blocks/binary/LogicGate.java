@@ -53,8 +53,15 @@ public class LogicGate extends BinaryBlock{
         public int nextConfig = 1;
 
         @Override
-        public void updateTile(){
-            super.updateTile();
+        public void updateSignal(int depth){
+            if(depth < depthLimit){
+                if(nb.get(1) != null && connectionCheck(nb.get(1), this))
+                    nb.get(1).updateSignal(depth + 1);
+                if(nb.get(2) != null && connectionCheck(nb.get(2), this))
+                    nb.get(2).updateSignal(depth + 1);
+                if(nb.get(3) != null && connectionCheck(nb.get(3), this))
+                    nb.get(3).updateSignal(depth + 1);
+            }
             signal[0] = operation.get(new boolean[]{
                 getSignal(nb.get(configs.first()), this),
                 getSignal(nb.get(configs.get(single ? 0 : 1)), this),

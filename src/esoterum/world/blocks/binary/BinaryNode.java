@@ -66,8 +66,7 @@ public class BinaryNode extends BinaryBlock{
         public int link = -1;
 
         @Override
-        public void updateTile(){
-            super.updateTile();
+        public void updateSignal(int depth){
             BinaryNodeBuild c = linkedNode();
             signal(c != null && c.signal());
             if(c != null && c.link != pos()){

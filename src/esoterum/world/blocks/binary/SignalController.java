@@ -52,7 +52,17 @@ public class SignalController extends BinaryRouter{
         public IntSeq configs = IntSeq.with(0, 0, 0, 0);
 
         @Override
-        public void updateTile(){
+        public void updateSignal(int depth){
+            if(depth < depthLimit){
+                if(nb.get(0) != null && configs.get(0) == 1 && connectionCheck(nb.get(0), this))
+                    nb.get(0).updateSignal(depth + 1);
+                if(nb.get(1) != null && configs.get(1) == 1 && connectionCheck(nb.get(1), this))
+                    nb.get(1).updateSignal(depth + 1);
+                if(nb.get(2) != null && configs.get(2) == 1 && connectionCheck(nb.get(2), this))
+                    nb.get(2).updateSignal(depth + 1);
+                if(nb.get(3) != null && configs.get(3) == 1 && connectionCheck(nb.get(3), this))
+                    nb.get(3).updateSignal(depth + 1);
+            }
             if(!rotInit){
                 for(int i = 0; i < rotation; i++){
                     configs = IntSeq.with(

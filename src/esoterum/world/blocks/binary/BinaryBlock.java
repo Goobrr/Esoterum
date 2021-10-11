@@ -26,6 +26,7 @@ public class BinaryBlock extends Block {
     public boolean drawRot = true;
     public int baseType = -1;
     public boolean rotatedBase = false;
+    public int depthLimit = 100;
 
     public BinaryBlock(String name) {
         super(name);
@@ -71,6 +72,16 @@ public class BinaryBlock extends Block {
         public boolean[] connections = new boolean[]{false, false, false, false};
 
         public boolean[] signal = new boolean[]{false, false, false, false};
+
+        public void updateSignal(int depth){
+            return;
+        }
+
+        @Override
+        public void updateTile(){
+            super.updateTile();
+            updateSignal(0);
+        }
 
         public boolean signal(){
             return signal[0] || signal[1] || signal[2] || signal[3];

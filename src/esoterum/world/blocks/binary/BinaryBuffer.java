@@ -39,7 +39,7 @@ public class BinaryBuffer extends BinaryBlock{
         public IntSeq configs = IntSeq.with(2, 1, 0, 1);
 
         @Override
-        public void updateTile() {
+        public void updateSignal(int depth) {
             if(signal()){
                 delayTimer += Time.delta;
             }else{

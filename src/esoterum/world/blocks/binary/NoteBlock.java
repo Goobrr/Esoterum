@@ -90,8 +90,10 @@ public class NoteBlock extends BinaryBlock{
         public IntSeq configs = IntSeq.with(2, 0, 3, 100, 0);
 
         @Override
-        public void updateTile(){
+        public void updateSignal(int depth){
             boolean tmp = signal[0];
+            if(depth < depthLimit && nb.get(configs.first()) != null && connectionCheck(nb.get(configs.first()), this))
+                nb.get(configs.first()).updateSignal(depth + 1);
             signal[0] = getSignal(nb.get(configs.first()), this);
             if(signal[0] && !tmp) playSound();
         }

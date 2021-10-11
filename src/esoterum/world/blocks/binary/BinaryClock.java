@@ -33,8 +33,7 @@ public class BinaryClock extends BinaryBlock{
         public IntSeq configs = IntSeq.with(60, 20, 0);
 
         @Override
-        public void updateTile(){
-            super.updateTile();
+        public void updateSignal(int depth){
             signal(Mathf.mod(Time.time - configs.get(2), configs.first()) <= configs.get(1));
         }
 

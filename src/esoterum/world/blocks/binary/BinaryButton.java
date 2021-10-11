@@ -51,8 +51,7 @@ public class BinaryButton extends BinaryBlock{
         public float timer;
 
         @Override
-        public void updateTile() {
-            super.updateTile();
+        public void updateSignal(int depth) {
             if(!continuous){
                 if((timer -= delta()) <= 0){
                     signal(false);

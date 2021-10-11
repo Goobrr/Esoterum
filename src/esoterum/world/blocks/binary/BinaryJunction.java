@@ -38,8 +38,7 @@ public class BinaryJunction extends BinaryBlock{
 
     public class BinaryJunctionBuild extends BinaryBuild{
         @Override
-        public void updateTile(){
-            super.updateTile();
+        public void updateSignal(int depth){
             signal[0] = getSignal(nb.get(2), this);
             signal[1] = getSignal(nb.get(3), this);
             signal[2] = getSignal(nb.get(0), this);
