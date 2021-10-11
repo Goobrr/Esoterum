@@ -5,6 +5,7 @@ import esoterum.world.blocks.defense.*;
 import esoterum.world.blocks.environment.*;
 import mindustry.ctype.*;
 import mindustry.entities.bullet.*;
+import mindustry.gen.Sounds;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.meta.BuildVisibility;
@@ -94,10 +95,15 @@ public class EsoBlocks implements ContentList{
         // region defense
         smallSentry = new SentryTurret("small-sentry"){{
             reloadTime = 6f;
-            range = 45f;
+            range = 70f;
             buildVisibility = BuildVisibility.shown;
             powerUse = 2f;
             shootCone = 45f;
+            detectionCone = 20f;
+            swayMag = 90f / 2;
+            swayScl = 30f;
+
+            inaccuracy = 8f;
 
             shootType = new BasicBulletType(16f, 20){{
                 width = 2f;

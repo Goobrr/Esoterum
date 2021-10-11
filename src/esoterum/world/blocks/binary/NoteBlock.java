@@ -294,7 +294,7 @@ public class NoteBlock extends BinaryBlock{
 
                 // currently using -1 as the lowest octave for backwards compatibility
                 // this will be replaced with a 0-indexed system later
-                if (p1 < -1.12 || p1 >= 5.9){ //octave invalid
+                if(p1 < -1.12 || p1 >= 5.9){ //octave invalid
                     configs.set(1, 0);
                     configs.set(2, 3);
                     configure(configs);
@@ -304,10 +304,10 @@ public class NoteBlock extends BinaryBlock{
                 int whole = (int) p1; //octave
                 rem -= whole; // pitch
                 rem *= 100;
-                if (rem < 0){
+                if(rem < 0){
                     rem = -rem;
                 }
-                if (rem > 11.1){ // pitch invalid
+                if(rem > 11.1){ // pitch invalid
                     configs.set(1, 0);
                     configs.set(2, 3);
                     configure(configs);
@@ -317,16 +317,16 @@ public class NoteBlock extends BinaryBlock{
                 configs.set(1, (int) rem);
                 configs.set(2, whole + 1);
                 configure(configs);
-            } else if (type == LAccess.color){
+            }else if (type == LAccess.color){
                 // r is instrument, b is volume, g does absolutely nothing
-                if (p1 + 0.01 - samples.length >= 0  || 0 - p1 >= 0.0001){ // invalid instrument
+                if(p1 + 0.01 - samples.length >= 0  || 0 - p1 >= 0.0001){ // invalid instrument
                     configs.set(4,0);
-                } else {
+                }else{
                     configs.set(4, (int) (p1 + 0.01));
                 }
-                if (0 - p2 >= 0.0001){
+                if(0 - p2 >= 0.0001){
                     configs.set(3, 10);
-                } else {
+                }else{
                     configs.set(3, (int) (p2 * 10 + 0.0001));
                 }
                 configure(configs);
