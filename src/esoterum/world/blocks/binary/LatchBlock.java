@@ -22,7 +22,7 @@ public class LatchBlock extends BinaryBlock{
         baseType = 1;
         
         config(Boolean.class, (LatchBuild l, Boolean b) -> {
-            l.store = b;
+            l.signal[0] = b;
         });
     }
 
@@ -42,32 +42,20 @@ public class LatchBlock extends BinaryBlock{
     }
 
     public class LatchBuild extends BinaryBuild {
-        public boolean store;
         @Override
         public void updateTile() {
             super.updateTile();
-            lastSignal = signal();
             if(getSignal(nb.get(2), this)){
                 configure(getSignal(nb.get(1), this) | getSignal(nb.get(3), this));
             }
         }
 
         @Override
-        public boolean signal() {
-            return getSignal(nb.get(1), this) | getSignal(nb.get(2), this) | getSignal(nb.get(3), this);
-        }
-
-        @Override
         public void draw() {
             super.draw();
 
-            Draw.color(store ? Pal.accent : Color.white);
+            Draw.color(signal[0] ? Pal.accent : Color.white);
             Draw.rect(latchRegion, x, y);
-        }
-
-        @Override
-        public boolean signalFront() {
-            return store;
         }
 
         @Override
@@ -75,7 +63,7 @@ public class LatchBlock extends BinaryBlock{
             super.read(read, revision);
 
             if(revision >= 2){
-                store = read.bool();
+                signal[0] = read.bool();
             }
         }
 
@@ -83,7 +71,7 @@ public class LatchBlock extends BinaryBlock{
         public void write(Writes write) {
             super.write(write);
 
-            write.bool(store);
+            write.bool(signal[0]);
         }
 
         @Override

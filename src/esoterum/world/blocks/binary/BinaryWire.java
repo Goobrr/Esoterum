@@ -62,8 +62,7 @@ public class BinaryWire extends BinaryBlock{
         @Override
         public void updateTile(){
             super.updateTile();
-            lastSignal = nextSignal | getSignal(nb.get(2), this);
-            nextSignal = signal();
+            signal[0] = getSignal(nb.get(1), this) | getSignal(nb.get(2), this) | getSignal(nb.get(3), this);
         }
 
         @Override
@@ -74,21 +73,6 @@ public class BinaryWire extends BinaryBlock{
                     Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
                 }
             }
-        }
-
-        @Override
-        public boolean signal() {
-            return getSignal(nb.get(1), this) | getSignal(nb.get(3), this);
-        }
-
-        public boolean signalFront(){
-            return (nb.get(2) != null ?
-                nb.get(2).rotation == rotation || !nb.get(2).block.rotate || nb.get(2).allOutputs() ?
-                    getSignal(nb.get(2), this) :
-                    nextSignal
-                : nextSignal )
-
-                | nextSignal;
         }
     }
 }

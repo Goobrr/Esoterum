@@ -40,38 +40,18 @@ public class BinaryJunction extends BinaryBlock{
         @Override
         public void updateTile(){
             super.updateTile();
-            lastSignal = false;
-            for(BinaryBuild b : nb){
-                lastSignal |= getSignal(b, this);
-            };
+            signal[0] = getSignal(nb.get(2), this);
+            signal[1] = getSignal(nb.get(3), this);
+            signal[2] = getSignal(nb.get(0), this);
+            signal[3] = getSignal(nb.get(1), this);
         }
 
         @Override
         public void drawConnections(){
-            Draw.color(Color.white, Pal.accent, signalFront() || signalBack() ? 1f : 0f);
+            Draw.color(Color.white, Pal.accent, signal[0] || signal[2] ? 1f : 0f);
             Draw.rect(directionRegions[0], x, y);
-            Draw.color(Color.white, Pal.accent, signalLeft() || signalRight() ? 1f : 0f);
+            Draw.color(Color.white, Pal.accent, signal[1] || signal[3] ? 1f : 0f);
             Draw.rect(directionRegions[1], x, y);
-        }
-
-        @Override
-        public boolean signalFront(){
-            return getSignal(nb.get(2), this);
-        }
-
-        @Override
-        public boolean signalBack(){
-            return getSignal(nb.get(0), this);
-        }
-
-        @Override
-        public boolean signalLeft(){
-            return getSignal(nb.get(3), this);
-        }
-
-        @Override
-        public boolean signalRight(){
-            return getSignal(nb.get(1), this);
         }
     }
 }

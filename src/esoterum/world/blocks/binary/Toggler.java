@@ -23,11 +23,10 @@ public class Toggler extends BinaryBlock{
         @Override
         public void updateTile() {
             super.updateTile();
-            lastSignal = nextSignal;
-            nextSignal = signal();
+            signal[0] = getSignal(nb.get(1), this) | getSignal(nb.get(2), this) | getSignal(nb.get(3), this);
 
             if(front() != null){
-                front().control(LAccess.enabled, lastSignal ? 1d : 0d, 0d, 0d, 0d);
+                front().control(LAccess.enabled, signal() ? 1d : 0d, 0d, 0d, 0d);
             }
         }
 
@@ -35,19 +34,9 @@ public class Toggler extends BinaryBlock{
         public void drawSelect() {
             super.drawSelect();
             if(front() != null){
-                Draw.color(lastSignal ? Pal.accent : Color.white);
+                Draw.color(signal() ? Pal.accent : Color.white);
                 Lines.square(front().x, front().y, 4 * front().block.size);
             }
-        }
-
-        @Override
-        public boolean signal() {
-            return getSignal(nb.get(1), this) | getSignal(nb.get(2), this) | getSignal(nb.get(3), this);
-        }
-
-        @Override
-        public boolean signalFront() {
-            return lastSignal;
         }
     }
 }

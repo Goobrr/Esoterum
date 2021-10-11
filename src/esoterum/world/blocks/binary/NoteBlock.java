@@ -91,28 +91,18 @@ public class NoteBlock extends BinaryBlock{
 
         @Override
         public void updateTile(){
-            lastSignal = nextSignal;
-            nextSignal = signal();
-            if(nextSignal && !lastSignal) playSound();
+            boolean tmp = signal[0];
+            signal[0] = getSignal(nb.get(configs.first()), this);
+            if(signal[0] && !tmp) playSound();
         }
 
         public void drawConnections(){
-            Draw.color(lastSignal ? Pal.accent : Color.white);
+            Draw.color(signal() ? Pal.accent : Color.white);
             Draw.rect(connectionRegion, x, y, rotdeg() + 90 * configs.first());
         }
 
         public void playSound(){
             if(!Vars.headless) samples[configs.get(4)].octaves[configs.get(2)].play((float)configs.get(3) / 100f, EsoUtil.notePitch(configs.get(1)), 0);
-        }
-
-        @Override
-        public boolean signal(){
-            return getSignal(nb.get(configs.first()), this);
-        }
-
-        @Override
-        public boolean signalFront(){
-            return configs.first() == 2 ? signal() : lastSignal;
         }
 
         @Override

@@ -35,7 +35,7 @@ public class BinaryClock extends BinaryBlock{
         @Override
         public void updateTile(){
             super.updateTile();
-            lastSignal = Mathf.mod(Time.time - configs.get(2), configs.first()) <= configs.get(1);
+            signal(Mathf.mod(Time.time - configs.get(2), configs.first()) <= configs.get(1));
         }
 
         @Override
@@ -44,7 +44,7 @@ public class BinaryClock extends BinaryBlock{
 
             drawConnections();
             Lines.stroke(0.5f);
-            Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
+            Draw.color(Color.white, Pal.accent, signal() ? 1f : 0f);
             Lines.circle(x, y, 1.5f);
             Draw.color(Pal.accent);
             EsoDrawf.arc(x, y, 1.85f, -configs.get(2) / (float)configs.first() * 360f + 90f, configs.get(1) / (float)configs.first() * 360f);
@@ -137,28 +137,6 @@ public class BinaryClock extends BinaryBlock{
         @Override
         public Object config(){
             return configs;
-        }
-
-        // yes, there is no other way to do this
-        // absolutely no way.
-        @Override
-        public boolean signalFront() {
-            return lastSignal;
-        }
-
-        @Override
-        public boolean signalLeft() {
-            return lastSignal;
-        }
-
-        @Override
-        public boolean signalBack() {
-            return lastSignal;
-        }
-
-        @Override
-        public boolean signalRight() {
-            return lastSignal;
         }
 
         @Override

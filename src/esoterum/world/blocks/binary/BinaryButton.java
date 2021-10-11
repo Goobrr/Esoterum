@@ -25,7 +25,7 @@ public class BinaryButton extends BinaryBlock{
         baseType = 1;
 
         config(Boolean.class, (BinaryButtonBuild b, Boolean on) -> {
-            b.lastSignal = on;
+            b.signal(on);
             b.timer = duration;
         });
     }
@@ -55,7 +55,7 @@ public class BinaryButton extends BinaryBlock{
             super.updateTile();
             if(!continuous){
                 if((timer -= delta()) <= 0){
-                    lastSignal = false;
+                    signal(false);
                 }
             }
         }
@@ -63,7 +63,7 @@ public class BinaryButton extends BinaryBlock{
         @Override
         public boolean configTapped(){
             if(continuous){
-                configure(!lastSignal);
+                configure(!signal());
             }else{
                 configure(true);
             }
@@ -73,39 +73,17 @@ public class BinaryButton extends BinaryBlock{
         @Override
         public void draw() {
             Draw.rect(region, x, y);
-            Draw.color(Color.white, Pal.accent, lastSignal ? 1f : 0f);
+            Draw.color(Color.white, Pal.accent, signal() ? 1f : 0f);
             for(int i = 0; i < 4; i++){
                 if(connections[i]) Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
             }
             Draw.color();
-            Draw.rect(lastSignal ? onRegion : offRegion, x, y);
-        }
-
-        // yes, there is no other way to do this
-        // absolutely no way.
-        @Override
-        public boolean signalFront() {
-            return lastSignal;
-        }
-
-        @Override
-        public boolean signalLeft() {
-            return lastSignal;
-        }
-
-        @Override
-        public boolean signalBack() {
-            return lastSignal;
-        }
-
-        @Override
-        public boolean signalRight() {
-            return lastSignal;
+            Draw.rect(signal() ? onRegion : offRegion, x, y);
         }
 
         @Override
         public void read(Reads read, byte revision) {
-            super.read(read, revision);
+            super.read(read, (byte)(revision + 1));
 
             if(revision >= 1){
                 timer = read.f();
@@ -128,7 +106,7 @@ public class BinaryButton extends BinaryBlock{
         public void control(LAccess type, double p1, double p2, double p3, double p4){
             if(type == LAccess.enabled){
                 //controlling capability
-                lastSignal = !Mathf.zero((float)p1);
+                signal(!Mathf.zero((float)p1));
             }
         }
     }

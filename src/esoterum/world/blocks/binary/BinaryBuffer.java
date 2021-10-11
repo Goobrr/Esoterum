@@ -51,11 +51,11 @@ public class BinaryBuffer extends BinaryBlock{
 
             // this looks terrible
             if(delayTimer > trueDelay()){
-                lastSignal  = true;
+                signal[0]  = true;
                 delayTimer = trueDelay();
             }
             if(delayTimer < 0f){
-                lastSignal = false;
+                signal[0] = false;
                 delayTimer = 0f;
             }
         }
@@ -69,7 +69,7 @@ public class BinaryBuffer extends BinaryBlock{
         public void draw(){
             Draw.rect(region, x, y);
 
-            Draw.color(lastSignal ? Pal.accent : Color.white);
+            Draw.color(signal() ? Pal.accent : Color.white);
             Draw.rect(connectionRegion, x, y, rotdeg());
             drawConnections();
             drawBuffer();
@@ -90,16 +90,6 @@ public class BinaryBuffer extends BinaryBlock{
         public void drawConnections(){
             Draw.color(signal() ? Pal.accent : Color.white);
             Draw.rect(connectionRegion, x, y, rotdeg() + 90 * configs.first());
-        }
-
-        @Override
-        public boolean signal() {
-            return getSignal(nb.get(configs.first()), this);
-        }
-
-        @Override
-        public boolean signalFront() {
-            return lastSignal;
         }
 
         @Override
