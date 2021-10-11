@@ -13,7 +13,7 @@ import mindustry.gen.Tex;
 import mindustry.graphics.*;
 
 // each side's behavior is configurable.
-public class SignalController extends BinaryRouter{
+public class SignalController extends BinaryBlock{
     public String[] states = new String[]{"X", "I", "O"};
 
     public TextureRegion inputRegion, outputRegion;
@@ -25,6 +25,9 @@ public class SignalController extends BinaryRouter{
         rotate = true;
         rotatedBase = false;
         transmits = true;
+        emits = true;
+        inputs = new boolean[]{true, true, true, true};
+        outputs = new boolean[]{true, true, true, true};
         config(IntSeq.class, (ControllerBuild b, IntSeq i) -> b.configs = IntSeq.with(i.items));
 
         config(Integer.class, (ControllerBuild b, Integer i) -> {
@@ -43,7 +46,7 @@ public class SignalController extends BinaryRouter{
         outputRegion = Core.atlas.find(name + "-out");
     }
 
-    public class ControllerBuild extends BinaryRouterBuild{
+    public class ControllerBuild extends BinaryBuild{
         public boolean rotInit = false;
         /** IO configuration:
          * 0 = ignore/do nothing |
