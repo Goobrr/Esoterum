@@ -8,17 +8,23 @@ import arc.graphics.g2d.Lines;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.scene.ui.layout.Table;
+import arc.util.Log;
 import arc.util.Time;
+import arc.util.Tmp;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import esoterum.graphics.EsoDrawf;
+import esoterum.world.blocks.binary.BinaryBlock;
 import mindustry.Vars;
+import mindustry.core.World;
 import mindustry.entities.Units;
 import mindustry.game.Team;
+import mindustry.gen.Building;
 import mindustry.gen.Icon;
 import mindustry.gen.Sounds;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
+import mindustry.world.Tile;
 import mindustry.world.blocks.defense.turrets.PowerTurret;
 
 public class SentryTurret extends PowerTurret {
@@ -44,6 +50,8 @@ public class SentryTurret extends PowerTurret {
     public class SentryBuild extends PowerTurretBuild {
         public float startAngle = 0f;
         public boolean wasLocked = false;
+        public Tile obstacle;
+        public float maxRange = 0f;
 
         // config
         @Override
@@ -79,12 +87,10 @@ public class SentryTurret extends PowerTurret {
             Draw.z(Layer.turret - 1);
 
             Draw.blend(Blending.additive);
-            Draw.color(Color.red);
+            Draw.color(obstacle != null ? Color.red : Pal.accent);
             Lines.stroke(1);
             if(target == null){
-                Lines.lineAngle(x, y, size * 4,rotation, range);
-            }else{
-                Lines.lineAngle(x, y, Angles.angleDist(angleTo(target), rotation), range);
+                Lines.lineAngle(x, y, size * 4,rotation, maxRange - size * 4);
             }
             Draw.blend();
         }
@@ -97,6 +103,7 @@ public class SentryTurret extends PowerTurret {
 
         @Override
         public void updateTile(){
+            maxRange = getObstacle();
             super.updateTile();
             if((target != null) && !wasLocked) onDetect();
             wasLocked = (target != null);
@@ -127,7 +134,21 @@ public class SentryTurret extends PowerTurret {
                 }
             }
 
-            if(target != null && !Angles.within(angleTo(target), rotation, detectionCone / 2)) target = null;
+            if(
+                target != null && (!Angles.within(angleTo(target), rotation, detectionCone / 2)
+                || maxRange < dst(target))
+            ) target = null;
+        }
+
+        public float getObstacle(){
+            Tmp.v2.set(0f, 0f).trnsExact(rotation, range);
+
+            obstacle = null;
+
+            boolean found = Vars.world.raycast(tileX(), tileY(), World.toTile(x + Tmp.v2.x), World.toTile(y + Tmp.v2.y),
+                (x, y) -> (obstacle = Vars.world.tile(x, y)) != null && (obstacle.build != null) && obstacle.build != this);
+
+            return found && obstacle != null ? Mathf.dst(x, y, obstacle.worldx(), obstacle.worldy()) : range;
         }
 
         // saving
