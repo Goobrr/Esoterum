@@ -100,7 +100,7 @@ public class LogicGate extends BinaryBlock{
 
         @Override
         public void read(Reads read, byte revision){
-            super.read(read, revision);
+            super.read(read, (byte)(revision + 1));
 
             if(revision >= 1){
                 nextConfig = read.i();
