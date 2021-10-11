@@ -4,7 +4,7 @@ public class BinaryRouter extends BinaryBlock{
     public BinaryRouter(String name){
         super(name);
         emits = true;
-
+        transmits = true;
         inputs = new boolean[]{true, true, true, true};
         outputs = new boolean[]{true, true, true, true};
     }

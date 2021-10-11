@@ -23,6 +23,7 @@ public class BinaryClock extends BinaryBlock{
         outputs = new boolean[]{true, true, true, true};
         configurable = true;
         emits = true;
+        transmits = false;
         baseType = 1;
 
         config(IntSeq.class, (BinaryClockBuild b, IntSeq i) -> b.configs = IntSeq.with(i.items));

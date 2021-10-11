@@ -21,6 +21,7 @@ public class BinaryNode extends BinaryBlock{
         super(name);
         rotate = false;
         emits = true;
+        transmits = true;
         range = linkRange;
         configurable = true;
 

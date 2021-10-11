@@ -15,7 +15,7 @@ public class Toggler extends BinaryBlock{
         emits = true;
         outputs = new boolean[]{true, false, false, false};
         inputs = new boolean[]{false, true, true, true};
-
+        transmits = false;
 
     }
 

@@ -20,6 +20,7 @@ public class BinaryWire extends BinaryBlock{
         outputs = new boolean[]{true, false, false, false};
         inputs = new boolean[]{false, true, true, true};
         emits = true;
+        transmits = true;
         rotate = true;
         drawArrow = true;
 

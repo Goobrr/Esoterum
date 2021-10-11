@@ -17,6 +17,7 @@ public class BinaryBuffer extends BinaryBlock{
     public BinaryBuffer(String name){
         super(name);
         emits = true;
+        transmits = false;
         rotate = true;
         rotatedBase = true;
         drawArrow = true;

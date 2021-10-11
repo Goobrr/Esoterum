@@ -23,7 +23,7 @@ public class LogicGate extends BinaryBlock{
         rotatedBase = true;
         drawArrow = true;
         configurable = saveConfig = true;
-
+        transmits = false;
         baseType = 0;
 
         operation = e -> false;

@@ -24,7 +24,7 @@ public class SignalController extends BinaryRouter{
         allOutputs = true;
         rotate = true;
         rotatedBase = false;
-
+        transmits = true;
         config(IntSeq.class, (ControllerBuild b, IntSeq i) -> b.configs = IntSeq.with(i.items));
 
         config(Integer.class, (ControllerBuild b, Integer i) -> {

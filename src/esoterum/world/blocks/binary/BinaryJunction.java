@@ -12,7 +12,7 @@ public class BinaryJunction extends BinaryBlock{
     public BinaryJunction(String name){
         super(name);
         emits = true;
-
+        transmits = true;
         inputs = new boolean[]{true, true, true, true};
         outputs = new boolean[]{true, true, true, true};
     }

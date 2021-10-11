@@ -27,6 +27,7 @@ public class BinaryBlock extends Block {
     public int baseType = -1;
     public boolean rotatedBase = false;
     public int depthLimit = 5000;
+    public boolean transmits = true;
 
     public BinaryBlock(String name) {
         super(name);
@@ -79,10 +80,10 @@ public class BinaryBlock extends Block {
 
         public boolean terminal(){
             boolean r = true;
-            if(outputs(0) && nb.get(0) != null && nb.get(0).inputs(EsoUtil.relativeDirection(nb.get(0), this))) r = false;
-            if(outputs(1) && nb.get(1) != null && nb.get(1).inputs(EsoUtil.relativeDirection(nb.get(1), this))) r = false;
-            if(outputs(2) && nb.get(2) != null && nb.get(2).inputs(EsoUtil.relativeDirection(nb.get(2), this))) r = false;
-            if(outputs(3) && nb.get(3) != null && nb.get(3).inputs(EsoUtil.relativeDirection(nb.get(3), this))) r = false;
+            if(outputs(0) && nb.get(0) != null && nb.get(0).transmits() && nb.get(0).inputs(EsoUtil.relativeDirection(nb.get(0), this))) r = false;
+            if(outputs(1) && nb.get(1) != null && nb.get(1).transmits() && nb.get(1).inputs(EsoUtil.relativeDirection(nb.get(1), this))) r = false;
+            if(outputs(2) && nb.get(2) != null && nb.get(2).transmits() && nb.get(2).inputs(EsoUtil.relativeDirection(nb.get(2), this))) r = false;
+            if(outputs(3) && nb.get(3) != null && nb.get(3).transmits() && nb.get(3).inputs(EsoUtil.relativeDirection(nb.get(3), this))) r = false;
             return r;
         }
 
@@ -230,6 +231,10 @@ public class BinaryBlock extends Block {
         // emission
         public boolean emits(){
             return emits;
+        }
+
+        public boolean transmits(){
+            return transmits;
         }
 
         public boolean outputs(int i){

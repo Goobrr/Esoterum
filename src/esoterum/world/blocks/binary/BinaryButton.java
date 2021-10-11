@@ -21,6 +21,7 @@ public class BinaryButton extends BinaryBlock{
         outputs = new boolean[]{true, true, true, true};
         configurable = true;
         continuous = cont;
+        transmits = false;
         emits = true;
         baseType = 1;
 

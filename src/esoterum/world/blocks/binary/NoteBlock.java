@@ -60,7 +60,7 @@ public class NoteBlock extends BinaryBlock{
         baseType = 0;
         drawRot = false;
         group = BlockGroup.logic;
-
+        transmits = false;
         inputs = new boolean[]{false, true, true, true};
         outputs = new boolean[]{true, false, false, false};
 

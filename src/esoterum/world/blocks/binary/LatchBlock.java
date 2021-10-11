@@ -18,7 +18,7 @@ public class LatchBlock extends BinaryBlock{
         rotate = true;
         rotatedBase = true;
         drawArrow = true;
-
+        transmits = false;
         baseType = 1;
         
         config(Boolean.class, (LatchBuild l, Boolean b) -> {
