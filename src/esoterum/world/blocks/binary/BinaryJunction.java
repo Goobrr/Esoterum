@@ -37,13 +37,13 @@ public class BinaryJunction extends BinaryBlock{
 
     public class BinaryJunctionBuild extends BinaryBuild{
         @Override
-        public void updateSignal(){
-            try{super.updateSignal();} catch(StackOverflowError e){}
+        public void updateSignal(int source){
+            try{super.updateSignal(source);} catch(StackOverflowError e){}
             signal[0] = getSignal(nb.get(2), this);
             signal[1] = getSignal(nb.get(3), this);
             signal[2] = getSignal(nb.get(0), this);
             signal[3] = getSignal(nb.get(1), this);
-            propagateSignal(true, true, true, true);
+            propagateSignal(source == 2, source == 3, source == 0, source == 1);
         }
 
         @Override

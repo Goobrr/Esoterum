@@ -66,21 +66,6 @@ public class BinaryNode extends BinaryBlock{
         public int link = -1;
 
         @Override
-        public void propagateSignal(boolean front, boolean left, boolean back, boolean right){
-            try {
-                if(front && nb.get(0) != null && connectionCheck(nb.get(0), this))
-                    nb.get(0).updateSignal();
-                if(left && nb.get(1) != null && connectionCheck(nb.get(1), this))
-                    nb.get(1).updateSignal();
-                if(back && nb.get(2) != null && connectionCheck(nb.get(2), this))
-                    nb.get(2).updateSignal();
-                if(right && nb.get(3) != null && connectionCheck(nb.get(3), this))
-                    nb.get(3).updateSignal();
-                linkedNode().updateSignal();
-            } catch(StackOverflowError e){}
-        }
-
-        @Override
         public void updateTile(){
             super.updateTile();
             BinaryNodeBuild c = linkedNode();
@@ -89,14 +74,24 @@ public class BinaryNode extends BinaryBlock{
             }
         }
         @Override
-        public void updateSignal(){
-            BinaryNodeBuild c = linkedNode();
-            try{super.updateSignal();} catch(StackOverflowError e){}
-            signal[4] = c != null && c.signal();
-            if(signal() != signal[4]){
-                signal(signal[4]);
-                propagateSignal(true, true, true, true);
+        public void updateSignal(int source){
+            try{super.updateSignal(source);} catch(StackOverflowError e){}
+            boolean tmp = signal[4];
+            signal[4] = false;
+            for(BinaryBuild b : nb){
+                signal[4] |= getSignal(b, this);
             }
+            BinaryNodeBuild c = linkedNode();
+            if(tmp != signal[4]){
+                tmp = signal[4];
+                try {if(c != null && source != 4) c.updateSignal(4);} catch(StackOverflowError e){}
+            }
+            signal[4] = c != null && c.signal();
+            if(signal[0] != signal[4]){
+                signal(signal[4]);
+                propagateSignal(source != 0, source != 1, source != 2, source != 3);
+            }
+            signal[4] = tmp;
             
         }
 
@@ -135,10 +130,7 @@ public class BinaryNode extends BinaryBlock{
 
         @Override
         public boolean signal(){
-            for(BinaryBuild b : nb){
-                if(getSignal(b, this)) return true;
-            }
-            return false;
+            return signal[4];
         }
 
         @Override
@@ -160,7 +152,7 @@ public class BinaryNode extends BinaryBlock{
                 disconnect();
                 if(other.pos() == link){
                     configure(null);
-                }else if(other != self()){
+                } else if(other != self()){
                     ((BinaryNodeBuild)other).disconnect();
                     getLink(other.pos()).configure(pos());
                     configure(other.pos());

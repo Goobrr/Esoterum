@@ -42,8 +42,8 @@ public class LatchBlock extends BinaryBlock{
 
     public class LatchBuild extends BinaryBuild {
         @Override
-        public void updateSignal() {
-            try {super.updateSignal();} catch(StackOverflowError e){}
+        public void updateSignal(int source) {
+            try {super.updateSignal(source);} catch(StackOverflowError e){}
             if(getSignal(nb.get(2), this)){
                 signal[4] = getSignal(nb.get(1), this) | getSignal(nb.get(3), this);
             }

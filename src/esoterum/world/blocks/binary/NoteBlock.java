@@ -89,11 +89,11 @@ public class NoteBlock extends BinaryBlock{
         public IntSeq configs = IntSeq.with(2, 0, 3, 100, 0);
 
         @Override
-        public void updateSignal(){
-            try{super.updateSignal();} catch(StackOverflowError e){}
+        public void updateSignal(int source){
+            try{super.updateSignal(source);} catch(StackOverflowError e){}
             signal[4] = getSignal(nb.get(configs.first()), this);
             if(signal[0] != signal[4]){
-                if(signal[0] && !signal[4]) playSound();
+                if(!signal[0] && signal[4]) playSound();
                 signal[0] = signal[4];
                 propagateSignal(true, false, false, false);
             }

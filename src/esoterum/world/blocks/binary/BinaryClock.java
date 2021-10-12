@@ -33,8 +33,8 @@ public class BinaryClock extends BinaryBlock{
         public IntSeq configs = IntSeq.with(60, 20, 0);
 
         @Override
-        public void updateSignal(){
-            try {super.updateSignal();} catch(StackOverflowError e){}
+        public void updateSignal(int source){
+            try {super.updateSignal(source);} catch(StackOverflowError e){}
             signal[4] = signal();
             signal(Mathf.mod(Time.time - configs.get(2), configs.first()) <= configs.get(1));
             if(signal[4] != signal()) propagateSignal(true, true, true, true);

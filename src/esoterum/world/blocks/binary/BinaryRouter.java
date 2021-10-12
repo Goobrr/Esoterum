@@ -10,15 +10,15 @@ public class BinaryRouter extends BinaryBlock{
 
     public class BinaryRouterBuild extends BinaryBuild {
         @Override
-        public void updateSignal() {
-            try{super.updateSignal();} catch(StackOverflowError e){}
+        public void updateSignal(int source) {
+            try{super.updateSignal(source);} catch(StackOverflowError e){}
             signal[4] = false;
             for(BinaryBuild b : nb){
                 signal[4] |= getSignal(b, this);
             };
             if(signal() != signal[4]){
                 signal(signal[4]);
-                propagateSignal(true, true, true, true);
+                propagateSignal(source != 0, source != 1, source != 2, source != 3);
             }
         }
     }

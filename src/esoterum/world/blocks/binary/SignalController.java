@@ -54,8 +54,8 @@ public class SignalController extends BinaryBlock{
         public IntSeq configs = IntSeq.with(0, 0, 0, 0);
 
         @Override
-        public void updateSignal(){
-            try{super.updateSignal();} catch(StackOverflowError e){}
+        public void updateSignal(int source){
+            try{super.updateSignal(source);} catch(StackOverflowError e){}
             if(!rotInit){
                 for(int i = 0; i < rotation; i++){
                     configs = IntSeq.with(
@@ -78,7 +78,7 @@ public class SignalController extends BinaryBlock{
                 signal[1] = signal[4] && configs.get(1) == 2;
                 signal[2] = signal[4] && configs.get(2) == 2;
                 signal[3] = signal[4] && configs.get(3) == 2;
-                propagateSignal(configs.get(0) == 2, configs.get(1) == 2, configs.get(2) == 2, configs.get(3) == 2);
+                propagateSignal(configs.get(0) == 2 && source != 0, configs.get(1) == 2 && source != 1, configs.get(2) == 2 && source != 2, configs.get(3) == 2 && source != 3);
             }
         }
 

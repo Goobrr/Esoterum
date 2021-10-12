@@ -51,8 +51,8 @@ public class BinaryButton extends BinaryBlock{
         public float timer;
 
         @Override
-        public void updateSignal() {
-            try{super.updateSignal();} catch(StackOverflowError e){}
+        public void updateSignal(int source) {
+            try{super.updateSignal(source);} catch(StackOverflowError e){}
             if(!continuous){
                 if((timer -= delta()) <= 0){
                     signal(false);

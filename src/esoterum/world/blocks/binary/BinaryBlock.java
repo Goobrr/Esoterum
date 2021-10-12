@@ -74,7 +74,8 @@ public class BinaryBlock extends Block {
         public boolean[] signal = new boolean[]{false, false, false, false, false};
         public boolean visited = false;
 
-        public void updateSignal(){
+        //front, left, back, right, node, none
+        public void updateSignal(int source){
             if(visited)
                 throw new StackOverflowError();
             else visited = true;
@@ -83,19 +84,26 @@ public class BinaryBlock extends Block {
         @Override
         public void placed(){
             super.placed();
-            updateSignal();
+            updateSignal(5);
+        }
+
+        @Override
+        public void onRemoved(){
+            super.onRemoved();
+            signal(false);
+            propagateSignal(outputs(0), outputs(1), outputs(2), outputs(3));
         }
 
         public void propagateSignal(boolean front, boolean left, boolean back, boolean right){
             try {
-                if(front && nb.get(0) != null && connectionCheck(nb.get(0), this))
-                    nb.get(0).updateSignal();
-                if(left && nb.get(1) != null && connectionCheck(nb.get(1), this))
-                    nb.get(1).updateSignal();
-                if(back && nb.get(2) != null && connectionCheck(nb.get(2), this))
-                    nb.get(2).updateSignal();
-                if(right && nb.get(3) != null && connectionCheck(nb.get(3), this))
-                    nb.get(3).updateSignal();
+                if(front && nb.get(0) != null && connectionCheck(this, nb.get(0)))
+                    nb.get(0).updateSignal(EsoUtil.relativeDirection(nb.get(0), this));
+                if(left && nb.get(1) != null && connectionCheck(this, nb.get(1)))
+                    nb.get(1).updateSignal(EsoUtil.relativeDirection(nb.get(1), this));
+                if(back && nb.get(2) != null && connectionCheck(this, nb.get(2)))
+                    nb.get(2).updateSignal(EsoUtil.relativeDirection(nb.get(2), this));
+                if(right && nb.get(3) != null && connectionCheck(this, nb.get(3)))
+                    nb.get(3).updateSignal(EsoUtil.relativeDirection(nb.get(3), this));
             } catch(StackOverflowError e){}
         }
 

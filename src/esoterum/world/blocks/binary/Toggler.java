@@ -19,8 +19,8 @@ public class Toggler extends BinaryBlock{
 
     public class TogglerBuild extends BinaryBuild {
         @Override
-        public void updateSignal() {
-            try{super.updateSignal();} catch(StackOverflowError e){}
+        public void updateSignal(int source) {
+            try{super.updateSignal(source);} catch(StackOverflowError e){}
             signal[4] = getSignal(nb.get(1), this) | getSignal(nb.get(2), this) | getSignal(nb.get(3), this);
             if(signal[0] != signal[4]){
                 signal[0] = signal[4];
