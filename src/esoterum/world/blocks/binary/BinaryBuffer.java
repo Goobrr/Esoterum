@@ -17,7 +17,6 @@ public class BinaryBuffer extends BinaryBlock{
     public BinaryBuffer(String name){
         super(name);
         emits = true;
-        transmits = false;
         rotate = true;
         rotatedBase = true;
         drawArrow = true;
@@ -35,14 +34,14 @@ public class BinaryBuffer extends BinaryBlock{
 
         public float delay = 5f;
         public float ticks = 1f;
-
+        public boolean bufferedSignal = false;
         /** Direction, Multiplier, Multiplier (but smol), Persistent */
         public IntSeq configs = IntSeq.with(2, 1, 0, 1);
 
         @Override
         public void updateTile(){
             super.updateTile();
-            if(signal()){
+            if(bufferedSignal){
                 delayTimer += Time.delta;
             } else {
                 if(configs.get(3) == 0){
@@ -55,27 +54,19 @@ public class BinaryBuffer extends BinaryBlock{
             if(delayTimer > trueDelay()){
                 signal[0]  = true;
                 delayTimer = trueDelay();
+                propagateSignal(true, false, false, false);
             }
             if(delayTimer < 0f){
                 signal[0] = false;
                 delayTimer = 0f;
+                propagateSignal(true, false, false, false);
             }
         }
 
         @Override
-        public void updateSignal(int depth) {
-            try {
-                super.updateSignal(depth);
-                if(depth < depthLimit){
-                    if(nb.get(1) != null && connectionCheck(nb.get(1), this))
-                        nb.get(1).updateSignal(depth + 1);
-                    if(nb.get(2) != null && connectionCheck(nb.get(2), this))
-                        nb.get(2).updateSignal(depth + 1);
-                    if(nb.get(3) != null && connectionCheck(nb.get(3), this))
-                        nb.get(3).updateSignal(depth + 1);
-                }
-            } catch(StackOverflowError e){}
-            signal[0] = getSignal(nb.get(configs.first()), this);
+        public void updateSignal() {
+            try{super.updateSignal();} catch(StackOverflowError e){}
+            bufferedSignal = getSignal(nb.get(configs.first()), this);
         }
 
         public float trueDelay(){

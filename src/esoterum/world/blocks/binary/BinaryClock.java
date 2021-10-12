@@ -23,7 +23,6 @@ public class BinaryClock extends BinaryBlock{
         outputs = new boolean[]{true, true, true, true};
         configurable = true;
         emits = true;
-        transmits = false;
         baseType = 1;
 
         config(IntSeq.class, (BinaryClockBuild b, IntSeq i) -> b.configs = IntSeq.with(i.items));
@@ -34,11 +33,11 @@ public class BinaryClock extends BinaryBlock{
         public IntSeq configs = IntSeq.with(60, 20, 0);
 
         @Override
-        public void updateSignal(int depth){
-            try {
-                super.updateSignal(depth);
-            } catch(StackOverflowError e){}
+        public void updateSignal(){
+            try {super.updateSignal();} catch(StackOverflowError e){}
+            signal[4] = signal();
             signal(Mathf.mod(Time.time - configs.get(2), configs.first()) <= configs.get(1));
+            if(signal[4] != signal()) propagateSignal(true, true, true, true);
         }
 
         @Override

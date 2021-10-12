@@ -60,7 +60,6 @@ public class NoteBlock extends BinaryBlock{
         baseType = 0;
         drawRot = false;
         group = BlockGroup.logic;
-        transmits = false;
         inputs = new boolean[]{false, true, true, true};
         outputs = new boolean[]{true, false, false, false};
 
@@ -90,15 +89,14 @@ public class NoteBlock extends BinaryBlock{
         public IntSeq configs = IntSeq.with(2, 0, 3, 100, 0);
 
         @Override
-        public void updateSignal(int depth){
-            boolean tmp = signal[0];
-            try {
-                super.updateSignal(depth);
-                if(depth < depthLimit && nb.get(configs.first()) != null && connectionCheck(nb.get(configs.first()), this))
-                    nb.get(configs.first()).updateSignal(depth + 1);
-            } catch(StackOverflowError e){}
-            signal[0] = getSignal(nb.get(configs.first()), this);
-            if(signal[0] && !tmp) playSound();
+        public void updateSignal(){
+            try{super.updateSignal();} catch(StackOverflowError e){}
+            signal[4] = getSignal(nb.get(configs.first()), this);
+            if(signal[0] != signal[4]){
+                if(signal[0] && !signal[4]) playSound();
+                signal[0] = signal[4];
+                propagateSignal(true, false, false, false);
+            }
         }
 
         public void drawConnections(){

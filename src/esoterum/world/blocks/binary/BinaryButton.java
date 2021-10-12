@@ -21,7 +21,6 @@ public class BinaryButton extends BinaryBlock{
         outputs = new boolean[]{true, true, true, true};
         configurable = true;
         continuous = cont;
-        transmits = false;
         emits = true;
         baseType = 1;
 
@@ -52,13 +51,12 @@ public class BinaryButton extends BinaryBlock{
         public float timer;
 
         @Override
-        public void updateSignal(int depth) {
-            try {
-                super.updateSignal(depth);
-            } catch(StackOverflowError e){}
+        public void updateSignal() {
+            try{super.updateSignal();} catch(StackOverflowError e){}
             if(!continuous){
                 if((timer -= delta()) <= 0){
                     signal(false);
+                    propagateSignal(true, true, true, true);
                 }
             }
         }
@@ -67,8 +65,10 @@ public class BinaryButton extends BinaryBlock{
         public boolean configTapped(){
             if(continuous){
                 configure(!signal());
-            }else{
+                propagateSignal(true, true, true, true);
+            } else {
                 configure(true);
+                propagateSignal(true, true, true, true);
             }
             return false;
         }

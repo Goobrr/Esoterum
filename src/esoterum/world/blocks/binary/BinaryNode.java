@@ -21,7 +21,6 @@ public class BinaryNode extends BinaryBlock{
         super(name);
         rotate = false;
         emits = true;
-        transmits = true;
         range = linkRange;
         configurable = true;
 
@@ -67,27 +66,38 @@ public class BinaryNode extends BinaryBlock{
         public int link = -1;
 
         @Override
-        public void updateSignal(int depth){
-            BinaryNodeBuild c = linkedNode();
+        public void propagateSignal(boolean front, boolean left, boolean back, boolean right){
             try {
-                super.updateSignal(depth);
-                if(depth < depthLimit){
-                    if(nb.get(0) != null && connectionCheck(nb.get(1), this))
-                        nb.get(0).updateSignal(depth + 1);
-                    if(nb.get(1) != null && connectionCheck(nb.get(1), this))
-                        nb.get(1).updateSignal(depth + 1);
-                    if(nb.get(2) != null && connectionCheck(nb.get(2), this))
-                        nb.get(2).updateSignal(depth + 1);
-                    if(nb.get(3) != null && connectionCheck(nb.get(3), this))
-                        nb.get(3).updateSignal(depth + 1);
-                    if(c != null)
-                        c.updateSignal(depthLimit + 1);
-                }
+                if(front && nb.get(0) != null && connectionCheck(nb.get(0), this))
+                    nb.get(0).updateSignal();
+                if(left && nb.get(1) != null && connectionCheck(nb.get(1), this))
+                    nb.get(1).updateSignal();
+                if(back && nb.get(2) != null && connectionCheck(nb.get(2), this))
+                    nb.get(2).updateSignal();
+                if(right && nb.get(3) != null && connectionCheck(nb.get(3), this))
+                    nb.get(3).updateSignal();
+                linkedNode().updateSignal();
             } catch(StackOverflowError e){}
-            signal(c != null && c.signal());
+        }
+
+        @Override
+        public void updateTile(){
+            super.updateTile();
+            BinaryNodeBuild c = linkedNode();
             if(c != null && c.link != pos()){
                 configure(null);
             }
+        }
+        @Override
+        public void updateSignal(){
+            BinaryNodeBuild c = linkedNode();
+            try{super.updateSignal();} catch(StackOverflowError e){}
+            signal[4] = c != null && c.signal();
+            if(signal() != signal[4]){
+                signal(signal[4]);
+                propagateSignal(true, true, true, true);
+            }
+            
         }
 
         @Override

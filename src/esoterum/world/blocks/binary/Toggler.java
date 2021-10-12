@@ -15,16 +15,17 @@ public class Toggler extends BinaryBlock{
         emits = true;
         outputs = new boolean[]{true, false, false, false};
         inputs = new boolean[]{false, true, true, true};
-        transmits = false;
-
     }
 
     public class TogglerBuild extends BinaryBuild {
         @Override
-        public void updateTile() {
-            super.updateTile();
-            signal[0] = getSignal(nb.get(1), this) | getSignal(nb.get(2), this) | getSignal(nb.get(3), this);
-
+        public void updateSignal() {
+            try{super.updateSignal();} catch(StackOverflowError e){}
+            signal[4] = getSignal(nb.get(1), this) | getSignal(nb.get(2), this) | getSignal(nb.get(3), this);
+            if(signal[0] != signal[4]){
+                signal[0] = signal[4];
+                propagateSignal(true, false, false, false);
+            }
             if(front() != null){
                 front().control(LAccess.enabled, signal() ? 1d : 0d, 0d, 0d, 0d);
             }

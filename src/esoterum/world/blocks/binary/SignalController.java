@@ -24,7 +24,6 @@ public class SignalController extends BinaryBlock{
         allOutputs = true;
         rotate = true;
         rotatedBase = false;
-        transmits = true;
         emits = true;
         inputs = new boolean[]{true, true, true, true};
         outputs = new boolean[]{true, true, true, true};
@@ -55,20 +54,8 @@ public class SignalController extends BinaryBlock{
         public IntSeq configs = IntSeq.with(0, 0, 0, 0);
 
         @Override
-        public void updateSignal(int depth){
-            try {
-                super.updateSignal(depth);
-                if(depth < depthLimit){
-                    if(nb.get(0) != null && configs.get(0) == 1 && connectionCheck(nb.get(0), this))
-                        nb.get(0).updateSignal(depth + 1);
-                    if(nb.get(1) != null && configs.get(1) == 1 && connectionCheck(nb.get(1), this))
-                        nb.get(1).updateSignal(depth + 1);
-                    if(nb.get(2) != null && configs.get(2) == 1 && connectionCheck(nb.get(2), this))
-                        nb.get(2).updateSignal(depth + 1);
-                    if(nb.get(3) != null && configs.get(3) == 1 && connectionCheck(nb.get(3), this))
-                        nb.get(3).updateSignal(depth + 1);
-                }
-            } catch(StackOverflowError e){}
+        public void updateSignal(){
+            try{super.updateSignal();} catch(StackOverflowError e){}
             if(!rotInit){
                 for(int i = 0; i < rotation; i++){
                     configs = IntSeq.with(
@@ -81,15 +68,18 @@ public class SignalController extends BinaryBlock{
                 rotInit = true;
                 rotation(0);
             }
-            boolean tmp =  (getSignal(nb.get(0), this) && configs.get(0) == 1)
-                        || (getSignal(nb.get(1), this) && configs.get(1) == 1)
-                        || (getSignal(nb.get(2), this) && configs.get(2) == 1)
-                        || (getSignal(nb.get(3), this) && configs.get(3) == 1);
-            signal(false);
-            signal[0] = tmp && configs.get(0) == 2;
-            signal[1] = tmp && configs.get(1) == 2;
-            signal[2] = tmp && configs.get(2) == 2;
-            signal[3] = tmp && configs.get(3) == 2;
+            signal[4] = (getSignal(nb.get(0), this) && configs.get(0) == 1)
+                    ||  (getSignal(nb.get(1), this) && configs.get(1) == 1)
+                    ||  (getSignal(nb.get(2), this) && configs.get(2) == 1)
+                    ||  (getSignal(nb.get(3), this) && configs.get(3) == 1);
+            if(signal() != signal[4]){
+                signal(false);
+                signal[0] = signal[4] && configs.get(0) == 2;
+                signal[1] = signal[4] && configs.get(1) == 2;
+                signal[2] = signal[4] && configs.get(2) == 2;
+                signal[3] = signal[4] && configs.get(3) == 2;
+                propagateSignal(configs.get(0) == 2, configs.get(1) == 2, configs.get(2) == 2, configs.get(3) == 2);
+            }
         }
 
         @Override
