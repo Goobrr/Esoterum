@@ -43,19 +43,29 @@ public class LatchBlock extends BinaryBlock{
     public class LatchBuild extends BinaryBuild {
         @Override
         public void updateSignal(int source) {
-            try {super.updateSignal(source);} catch(StackOverflowError e){}
-            if(getSignal(nb.get(2), this)){
-                signal[4] = getSignal(nb.get(1), this) | getSignal(nb.get(3), this);
-            }
-            if(signal[0] != signal[4]){
-                configure(signal[4]);
-                propagateSignal(true, false, false, false);
-            }
+            try {
+                super.updateSignal(source);
+                if(getSignal(nb.get(2), this)){
+                    signal[4] = getSignal(nb.get(1), this) | getSignal(nb.get(3), this);
+                }
+                if(signal[0] != signal[4]){
+                    configure(signal[4]);
+                    propagateSignal(true, false, false, false);
+                }
+            } catch(StackOverflowError e){}
         }
 
         @Override
         public void draw() {
-            super.draw();
+            if(!rotate || !rotatedBase){
+                Draw.rect(region, x, y);
+            } else {
+                Draw.rect(baseRegions[rotation], x, y);
+            }
+
+            drawConnections();
+            Draw.color(Color.white, Pal.accent, getSignal(nb.get(1), this) | getSignal(nb.get(2), this) | getSignal(nb.get(3), this) ? 1f : 0f);
+            Draw.rect(topRegion, x, y, (rotate && drawRot) ? rotdeg() : 0f);
 
             Draw.color(signal[0] ? Pal.accent : Color.white);
             Draw.rect(latchRegion, x, y);

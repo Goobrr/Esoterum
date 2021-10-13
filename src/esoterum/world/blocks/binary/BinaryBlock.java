@@ -72,13 +72,13 @@ public class BinaryBlock extends Block {
         public boolean[] connections = new boolean[]{false, false, false, false};
 
         public boolean[] signal = new boolean[]{false, false, false, false, false};
-        public boolean visited = false;
+        public int visited = 0;
 
         //front, left, back, right, node, none
         public void updateSignal(int source){
-            if(visited)
+            if(visited > 2)
                 throw new StackOverflowError();
-            else visited = true;
+            else visited += 1;
         }
 
         @Override
@@ -110,7 +110,7 @@ public class BinaryBlock extends Block {
         @Override
         public void updateTile(){
             super.updateTile();
-            visited = false;
+            visited = 0;
         }
 
         public boolean signal(){
@@ -158,8 +158,9 @@ public class BinaryBlock extends Block {
         }
 
         public void drawConnections(){
-            Draw.color(Color.white, Pal.accent, signal() ? 1f : 0f);
             for(int i = 0; i < 4; i++){
+                if(inputs(i)) Draw.color(Color.white, Pal.accent, getSignal(nb.get(i), this) ? 1f : 0f);
+                if(outputs(i)) Draw.color(Color.white, Pal.accent, signal() ? 1f : 0f);
                 if(connections[i]) Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
             }
         }
@@ -268,9 +269,9 @@ public class BinaryBlock extends Block {
 
             if(revision >= 2){
                 signal[0] = read.bool();
-                signal[0] = read.bool();
-                signal[0] = read.bool();
-                signal[0] = read.bool();
+                signal[1] = read.bool();
+                signal[2] = read.bool();
+                signal[3] = read.bool();
             } else if(revision >= 1){
                 signal[0] = signal[1] = signal[2] = signal[3] = read.bool();
             }

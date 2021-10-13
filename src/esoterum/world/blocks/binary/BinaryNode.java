@@ -75,24 +75,25 @@ public class BinaryNode extends BinaryBlock{
         }
         @Override
         public void updateSignal(int source){
-            try{super.updateSignal(source);} catch(StackOverflowError e){}
-            boolean tmp = signal[4];
-            signal[4] = false;
-            for(BinaryBuild b : nb){
-                signal[4] |= getSignal(b, this);
-            }
-            BinaryNodeBuild c = linkedNode();
-            if(tmp != signal[4]){
-                tmp = signal[4];
-                try {if(c != null && source != 4) c.updateSignal(4);} catch(StackOverflowError e){}
-            }
-            signal[4] = c != null && c.signal();
-            if(signal[0] != signal[4]){
-                signal(signal[4]);
-                propagateSignal(source != 0, source != 1, source != 2, source != 3);
-            }
-            signal[4] = tmp;
-            
+            try {
+                super.updateSignal(source);
+                boolean tmp = signal[4];
+                signal[4] = false;
+                for(BinaryBuild b : nb){
+                    signal[4] |= getSignal(b, this);
+                }
+                BinaryNodeBuild c = linkedNode();
+                if(tmp != signal[4]){
+                    tmp = signal[4];
+                    try {if(c != null && source != 4) c.updateSignal(4);} catch(StackOverflowError e){}
+                }
+                signal[4] = c != null && c.signal();
+                if(signal[0] != signal[4]){
+                    signal(signal[4]);
+                    propagateSignal(source != 0, source != 1, source != 2, source != 3);
+                }
+                signal[4] = tmp;
+            } catch(StackOverflowError e){}
         }
 
         @Override
@@ -108,7 +109,15 @@ public class BinaryNode extends BinaryBlock{
 
         @Override
         public void draw(){
-            super.draw();
+            if(!rotate || !rotatedBase){
+                Draw.rect(region, x, y);
+            } else {
+                Draw.rect(baseRegions[rotation], x, y);
+            }
+
+            drawConnections();
+            Draw.color(Color.white, Pal.accent, signal[0] ? 1f : 0f);
+            Draw.rect(topRegion, x, y, (rotate && drawRot) ? rotdeg() : 0f);
 
             BinaryNodeBuild c = linkedNode();
             if(c != null){

@@ -65,8 +65,10 @@ public class BinaryBuffer extends BinaryBlock{
 
         @Override
         public void updateSignal(int source) {
-            try{super.updateSignal(source);} catch(StackOverflowError e){}
-            bufferedSignal = getSignal(nb.get(configs.first()), this);
+            try {
+                super.updateSignal(source);
+                bufferedSignal = getSignal(nb.get(configs.first()), this);
+            } catch(StackOverflowError e){}
         }
 
         public float trueDelay(){

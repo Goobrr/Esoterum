@@ -20,15 +20,17 @@ public class Toggler extends BinaryBlock{
     public class TogglerBuild extends BinaryBuild {
         @Override
         public void updateSignal(int source) {
-            try{super.updateSignal(source);} catch(StackOverflowError e){}
-            signal[4] = getSignal(nb.get(1), this) | getSignal(nb.get(2), this) | getSignal(nb.get(3), this);
-            if(signal[0] != signal[4]){
-                signal[0] = signal[4];
-                propagateSignal(true, false, false, false);
-            }
-            if(front() != null){
-                front().control(LAccess.enabled, signal() ? 1d : 0d, 0d, 0d, 0d);
-            }
+            try {
+                super.updateSignal(source);
+                signal[4] = getSignal(nb.get(1), this) | getSignal(nb.get(2), this) | getSignal(nb.get(3), this);
+                if(signal[0] != signal[4]){
+                    signal[0] = signal[4];
+                    propagateSignal(true, false, false, false);
+                }
+                if(front() != null){
+                    front().control(LAccess.enabled, signal() ? 1d : 0d, 0d, 0d, 0d);
+                }
+            } catch(StackOverflowError e){}
         }
 
         @Override

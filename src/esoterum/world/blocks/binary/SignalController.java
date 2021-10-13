@@ -55,31 +55,33 @@ public class SignalController extends BinaryBlock{
 
         @Override
         public void updateSignal(int source){
-            try{super.updateSignal(source);} catch(StackOverflowError e){}
-            if(!rotInit){
-                for(int i = 0; i < rotation; i++){
-                    configs = IntSeq.with(
-                        configs.get(3),
-                        configs.get(0),
-                        configs.get(1),
-                        configs.get(2)
-                    );
+            try {
+                super.updateSignal(source);
+                if(!rotInit){
+                    for(int i = 0; i < rotation; i++){
+                        configs = IntSeq.with(
+                            configs.get(3),
+                            configs.get(0),
+                            configs.get(1),
+                            configs.get(2)
+                        );
+                    }
+                    rotInit = true;
+                    rotation(0);
                 }
-                rotInit = true;
-                rotation(0);
-            }
-            signal[4] = (getSignal(nb.get(0), this) && configs.get(0) == 1)
-                    ||  (getSignal(nb.get(1), this) && configs.get(1) == 1)
-                    ||  (getSignal(nb.get(2), this) && configs.get(2) == 1)
-                    ||  (getSignal(nb.get(3), this) && configs.get(3) == 1);
-            if(signal() != signal[4]){
-                signal(false);
-                signal[0] = signal[4] && configs.get(0) == 2;
-                signal[1] = signal[4] && configs.get(1) == 2;
-                signal[2] = signal[4] && configs.get(2) == 2;
-                signal[3] = signal[4] && configs.get(3) == 2;
-                propagateSignal(configs.get(0) == 2 && source != 0, configs.get(1) == 2 && source != 1, configs.get(2) == 2 && source != 2, configs.get(3) == 2 && source != 3);
-            }
+                signal[4] = (getSignal(nb.get(0), this) && configs.get(0) == 1)
+                        ||  (getSignal(nb.get(1), this) && configs.get(1) == 1)
+                        ||  (getSignal(nb.get(2), this) && configs.get(2) == 1)
+                        ||  (getSignal(nb.get(3), this) && configs.get(3) == 1);
+                if(signal() != signal[4]){
+                    signal(false);
+                    signal[0] = signal[4] && configs.get(0) == 2;
+                    signal[1] = signal[4] && configs.get(1) == 2;
+                    signal[2] = signal[4] && configs.get(2) == 2;
+                    signal[3] = signal[4] && configs.get(3) == 2;
+                    propagateSignal(configs.get(0) == 2 && source != 0, configs.get(1) == 2 && source != 1, configs.get(2) == 2 && source != 2, configs.get(3) == 2 && source != 3);
+                }
+            } catch(StackOverflowError e){}
         }
 
         @Override
