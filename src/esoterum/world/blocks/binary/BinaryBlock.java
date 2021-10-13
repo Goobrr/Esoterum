@@ -5,7 +5,6 @@ import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.scene.ui.layout.*;
 import arc.struct.*;
-import arc.util.Log;
 import arc.util.io.*;
 import esoterum.util.*;
 import mindustry.gen.*;
