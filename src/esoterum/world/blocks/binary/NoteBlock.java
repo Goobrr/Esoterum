@@ -35,7 +35,9 @@ public class NoteBlock extends BinaryBlock{
         new NoteSample(EsoSounds.bass, "Bass"),
         new NoteSample(EsoSounds.saw, "Saw"),
         new NoteSample(EsoSounds.organ, "Organ"),
-        new NoteSample(EsoSounds.BIGSHOT, "BIG SHOT")/*,
+        new NoteSample(EsoSounds.BIGSHOT, "BIG SHOT"),
+        new NoteSample(EsoSounds.badtime, "Bad Time"),
+        new NoteSample(EsoSounds.piano, "Piano")/*,
         new NoteSample(EsoSounds.drums, "Drum Kit"){{
             noteNames = new String[]{
                 "%s C", "%s C#", "%s D",
@@ -107,7 +109,9 @@ public class NoteBlock extends BinaryBlock{
         }
 
         public void playSound(){
-            if(!Vars.headless) samples[configs.get(4)].octaves[configs.get(2)].play((float)configs.get(3) / 100f, EsoUtil.notePitch(configs.get(1)), 0);
+            if(Vars.headless) return;
+            samples[configs.get(4)].octaves[configs.get(2)].play((float)configs.get(3) / 100f, EsoUtil.notePitch(configs.get(1)), 0);
+            EsoFx.notePlay.at(x, y);
         }
 
         @Override

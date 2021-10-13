@@ -1,9 +1,8 @@
 package esoterum.world.blocks.binary;
 
-import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.Lines;
-import mindustry.graphics.Pal;
+import arc.graphics.*;
+import arc.graphics.g2d.*;
+import mindustry.graphics.*;
 import mindustry.logic.LAccess;
 
 public class Toggler extends BinaryBlock{

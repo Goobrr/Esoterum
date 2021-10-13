@@ -4,6 +4,7 @@ import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.math.geom.*;
+import arc.util.Tmp;
 import mindustry.entities.*;
 import mindustry.graphics.*;
 
@@ -58,5 +59,30 @@ public class EsoFx{
         blend(Blending.additive);
         Fill.light(e.x + tr.x, e.y + tr.y, 20, 60, Pal.lancerLaser, Color.clear);
         blend();
+    }),
+
+    sentryShoot = new Effect(10, e -> {
+        Tmp.c1.set(Pal.accent);
+        e.scaled(e.lifetime / 2f, s -> {
+            tr.trns(e.rotation, 10f * e.fin());
+            Draw.color(Pal.accent);
+            Drawf.tri(e.x + tr.x, e.y + tr.y, 4f * s.fout(), 10f + 5f * s.fin(), e.rotation);
+            Drawf.tri(e.x + tr.x, e.y + tr.y, 4f * s.fout(), 5f * s.fin(), e.rotation + 180f);
+
+            Draw.z(Layer.effect + 1f);
+            Draw.blend(Blending.additive);
+            Tmp.c1.a = s.fout();
+            Fill.light(e.x + tr.x, e.y + tr.y, 10, 4f, Tmp.c1, Color.clear);
+        });
+
+        Tmp.c1.a = e.fout();
+        Fill.light(e.x, e.y, 10, 4, Tmp.c1, Color.clear);
+        Draw.blend();
+    }),
+
+    notePlay = new Effect(20, e -> {
+        Draw.color(Pal.accent);
+        Lines.stroke(3f * e.fout(Interp.pow5Out));
+        Lines.square(e.x, e.y, 4 * e.fin(Interp.pow5Out), 45f);
     });
 }

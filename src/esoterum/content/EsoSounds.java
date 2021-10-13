@@ -22,13 +22,13 @@ public class EsoSounds{
     public static Sound[] loadNotes(String soundName){
         Sound[] out = new Sound[7];
         for(int i = 0; i < 7; i++){
-            out[i] = loadSound(soundName + "/Eso" + soundName + "C" + (1 + i));
+            out[i] = loadSound("instruments/" + soundName + "/Eso" + soundName + "C" + (1 + i));
         }
         return out;
     }
 
     public static Sound[]
-        bells, bass, saw, organ, drums, BIGSHOT;
+        bells, bass, saw, organ, drums, BIGSHOT, piano, badtime;
 
     public static void load(){
         bells = loadNotes("bell");
@@ -36,6 +36,8 @@ public class EsoSounds{
         saw = loadNotes("saw");
         organ = loadNotes("organ");
         BIGSHOT = loadNotes("BIGSHOT");
+        piano = loadNotes("piano");
+        badtime = loadNotes("badtime");
         //drums = loadNotes("drums");
     }
 }

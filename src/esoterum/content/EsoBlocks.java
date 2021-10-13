@@ -3,6 +3,7 @@ package esoterum.content;
 import esoterum.world.blocks.binary.*;
 import esoterum.world.blocks.defense.*;
 import esoterum.world.blocks.environment.*;
+import mindustry.content.Fx;
 import mindustry.ctype.*;
 import mindustry.entities.bullet.*;
 import mindustry.world.*;
@@ -101,12 +102,17 @@ public class EsoBlocks implements ContentList{
             detectionCone = 20f;
             swayMag = 90f / 2;
             swayScl = 30f;
-
             inaccuracy = 8f;
 
+            shootSound = Sounds.pew;
+            smokeEffect = Fx.none;
+            shootEffect = EsoFx.sentryShoot;
             shootType = new BasicBulletType(16f, 20){{
                 width = 2f;
                 height = 10f;
+
+                smokeEffect = Fx.none;
+                shootEffect = Fx.none;
             }};
         }};
         // endregion defense
