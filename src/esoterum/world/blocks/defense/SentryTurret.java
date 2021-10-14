@@ -154,7 +154,8 @@ public class SentryTurret extends PowerTurret {
             obstacle = null;
 
             boolean found = Vars.world.raycast(tileX(), tileY(), World.toTile(x + Tmp.v2.x), World.toTile(y + Tmp.v2.y),
-                (x, y) -> (obstacle = Vars.world.tile(x, y)) != null && (obstacle.build != null) && obstacle.build != this && (obstacle.build.checkSolid() || obstacle.block().solid));
+            (x, y) -> (obstacle = Vars.world.tile(x, y)) != null && (obstacle.build != null) && obstacle.build != this && (obstacle.build.checkSolid() || obstacle.block().solid)
+            );
 
             return found && obstacle != null ? Mathf.dst(x, y, obstacle.worldx(), obstacle.worldy()) : range;
         }

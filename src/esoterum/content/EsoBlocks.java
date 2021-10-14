@@ -2,6 +2,7 @@ package esoterum.content;
 
 import esoterum.world.blocks.binary.*;
 import esoterum.world.blocks.defense.*;
+import esoterum.world.blocks.defense.beam.*;
 import esoterum.world.blocks.environment.*;
 import mindustry.content.Fx;
 import mindustry.ctype.*;
@@ -25,7 +26,7 @@ public class EsoBlocks implements ContentList{
         // Logic outputs
         noteBlock, togglerBlock,
         // Defense
-        smallSentry,
+        smallSentry, beamEmitter, beamReflector,
 
         esoManual;
 
@@ -115,6 +116,14 @@ public class EsoBlocks implements ContentList{
                 smokeEffect = Fx.none;
                 shootEffect = Fx.none;
             }};
+        }};
+
+        beamEmitter = new BeamEmitter("beam-emitter"){{
+            beamLength = 80f;
+        }};
+
+        beamReflector = new BeamReflector("beam-reflector"){{
+            beamLength = 80f;
         }};
         // endregion defense
 
