@@ -12,17 +12,18 @@ public class BeamEmitter extends BeamBlock{
         @Override
         public void updateTile() {
             super.updateTile();
-            lastSignal = false;
+            signal[4] = false;
             for(BinaryBuild b : nb){
-                lastSignal |= getSignal(b, this);
+                signal[4] |= getSignal(b, this);
             }
-            if(lastSignal) updateBeam();
+            signal(signal[4]);
+            if(signal()) updateBeam();
         }
 
         @Override
         public void draw() {
             super.draw();
-            if(lastSignal) drawBeam(beamRotation, beamDrawLength);
+            if(signal()) drawBeam(beamRotation, beamDrawLength);
         }
     }
 }

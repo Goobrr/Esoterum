@@ -13,9 +13,9 @@ public class BeamReflector extends BeamBlock{
         public void updateTile() {
             super.updateTile();
             drawBeam = false;
-            if(lastSignal){
+            if(signal()){
                 updateBeam();
-                lastSignal = false;
+                signal(false);
             }
         }
 

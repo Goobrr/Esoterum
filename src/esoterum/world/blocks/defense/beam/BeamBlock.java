@@ -106,7 +106,7 @@ public class BeamBlock extends BinaryBlock {
             float length = found ? Mathf.dst(x, y, hit.worldx(), hit.worldy()) : beamLength;
 
             if(found && hit.build != null && hit.build instanceof BeamBuild b && b.acceptsBeam()){
-                b.lastSignal = true;
+                b.signal(true);
             }
 
             if(damage){
