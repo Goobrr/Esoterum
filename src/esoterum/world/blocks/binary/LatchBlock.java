@@ -52,7 +52,7 @@ public class LatchBlock extends BinaryBlock{
                     configure(signal[4]);
                     propagateSignal(true, false, false, false);
                 }
-            } catch(StackOverflowError e){}
+            } catch(Exception e){}
         }
 
         @Override

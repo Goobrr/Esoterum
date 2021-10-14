@@ -85,7 +85,7 @@ public class BinaryNode extends BinaryBlock{
                 BinaryNodeBuild c = linkedNode();
                 if(tmp != signal[4]){
                     tmp = signal[4];
-                    try {if(c != null && source != 4) c.updateSignal(4);} catch(StackOverflowError e){}
+                    try {if(c != null && source != 4) c.updateSignal(4);} catch(Exception e){}
                 }
                 signal[4] = c != null && c.signal();
                 if(signal[0] != signal[4]){
@@ -93,7 +93,7 @@ public class BinaryNode extends BinaryBlock{
                     propagateSignal(source != 0, source != 1, source != 2, source != 3);
                 }
                 signal[4] = tmp;
-            } catch(StackOverflowError e){}
+            } catch(Exception e){}
         }
 
         @Override

@@ -81,7 +81,7 @@ public class SignalController extends BinaryBlock{
                     signal[3] = signal[4] && configs.get(3) == 2;
                     propagateSignal(configs.get(0) == 2 && source != 0, configs.get(1) == 2 && source != 1, configs.get(2) == 2 && source != 2, configs.get(3) == 2 && source != 3);
                 }
-            } catch(StackOverflowError e){}
+            } catch(Exception e){}
         }
 
         @Override

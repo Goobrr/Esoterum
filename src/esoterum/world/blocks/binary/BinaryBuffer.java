@@ -68,7 +68,7 @@ public class BinaryBuffer extends BinaryBlock{
             try {
                 super.updateSignal(source);
                 bufferedSignal = getSignal(nb.get(configs.first()), this);
-            } catch(StackOverflowError e){}
+            } catch(Exception e){}
         }
 
         public float trueDelay(){

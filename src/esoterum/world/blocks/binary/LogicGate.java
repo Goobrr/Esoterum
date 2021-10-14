@@ -63,7 +63,7 @@ public class LogicGate extends BinaryBlock{
                     signal[0] = signal[4];
                     propagateSignal(true, false, false, false);
                 }
-            } catch(StackOverflowError e){}
+            } catch(Exception e){}
         }
 
         @Override

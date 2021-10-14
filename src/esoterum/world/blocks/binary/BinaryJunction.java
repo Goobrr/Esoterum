@@ -45,7 +45,7 @@ public class BinaryJunction extends BinaryBlock{
                 signal[2] = getSignal(nb.get(0), this);
                 signal[3] = getSignal(nb.get(1), this);
                 propagateSignal(source == 2, source == 3, source == 0, source == 1);
-            } catch(StackOverflowError e){}
+            } catch(Exception e){}
         }
 
         @Override

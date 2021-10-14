@@ -65,7 +65,7 @@ public class BinaryWire extends BinaryBlock{
                 super.updateSignal(source);
                 signal[0] = getSignal(nb.get(1), this) | getSignal(nb.get(2), this) | getSignal(nb.get(3), this);
                 propagateSignal(true, false, false, false);
-            } catch(StackOverflowError e){}
+            } catch(Exception e){}
         }
 
         @Override

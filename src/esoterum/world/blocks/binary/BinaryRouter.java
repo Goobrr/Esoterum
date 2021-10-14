@@ -21,7 +21,7 @@ public class BinaryRouter extends BinaryBlock{
                     signal(signal[4]);
                     propagateSignal(source != 0, source != 1, source != 2, source != 3);
                 }
-            } catch(StackOverflowError e){}
+            } catch(Exception e){}
         }
     }
 }

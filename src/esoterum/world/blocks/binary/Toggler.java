@@ -29,7 +29,7 @@ public class Toggler extends BinaryBlock{
                 if(front() != null){
                     front().control(LAccess.enabled, signal() ? 1d : 0d, 0d, 0d, 0d);
                 }
-            } catch(StackOverflowError e){}
+            } catch(Exception e){}
         }
 
         @Override

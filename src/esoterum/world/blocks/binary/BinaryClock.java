@@ -41,7 +41,7 @@ public class BinaryClock extends BinaryBlock{
 
         @Override
         public void updateSignal(int source){
-            try {super.updateSignal(source);} catch(StackOverflowError e){}
+            try {super.updateSignal(source);} catch(Exception e){}
         }
 
         @Override

@@ -5,6 +5,7 @@ import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.scene.ui.layout.*;
 import arc.struct.*;
+import arc.util.Log;
 import arc.util.io.*;
 import esoterum.util.*;
 import mindustry.gen.*;
@@ -74,16 +75,16 @@ public class BinaryBlock extends Block {
         public int visited = 0;
 
         //front, left, back, right, node, none
-        public void updateSignal(int source){
+        public void updateSignal(int source) throws Exception {
             if(visited > 2)
-                throw new StackOverflowError();
+                throw new Exception();
             else visited += 1;
         }
 
         @Override
         public void placed(){
             super.placed();
-            updateSignal(5);
+            try {updateSignal(5);} catch (Exception e) {}
         }
 
         @Override
@@ -93,17 +94,45 @@ public class BinaryBlock extends Block {
             propagateSignal(outputs(0), outputs(1), outputs(2), outputs(3));
         }
 
+        public void bypassSignal(boolean front, boolean left, boolean back, boolean right){
+            Thread t = new Thread(null, null, "Bypass"){
+                @Override
+                public void run(){
+                    try {
+                        try {
+                            if(front && nb.get(0) != null && connectionCheck(BinaryBuild.this, nb.get(0)))
+                                nb.get(0).updateSignal(EsoUtil.relativeDirection(nb.get(0), BinaryBuild.this));
+                            if(left && nb.get(1) != null && connectionCheck(BinaryBuild.this, nb.get(1)))
+                                nb.get(1).updateSignal(EsoUtil.relativeDirection(nb.get(1), BinaryBuild.this));
+                            if(back && nb.get(2) != null && connectionCheck(BinaryBuild.this, nb.get(2)))
+                                nb.get(2).updateSignal(EsoUtil.relativeDirection(nb.get(2), BinaryBuild.this));
+                            if(right && nb.get(3) != null && connectionCheck(BinaryBuild.this, nb.get(3)))
+                                nb.get(3).updateSignal(EsoUtil.relativeDirection(nb.get(3), BinaryBuild.this));
+                        } catch (Exception e){}
+                    } catch(StackOverflowError e){}
+                }
+            };
+            t.start();
+            try {t.join();} catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+        }
+
         public void propagateSignal(boolean front, boolean left, boolean back, boolean right){
             try {
-                if(front && nb.get(0) != null && connectionCheck(this, nb.get(0)))
-                    nb.get(0).updateSignal(EsoUtil.relativeDirection(nb.get(0), this));
-                if(left && nb.get(1) != null && connectionCheck(this, nb.get(1)))
-                    nb.get(1).updateSignal(EsoUtil.relativeDirection(nb.get(1), this));
-                if(back && nb.get(2) != null && connectionCheck(this, nb.get(2)))
-                    nb.get(2).updateSignal(EsoUtil.relativeDirection(nb.get(2), this));
-                if(right && nb.get(3) != null && connectionCheck(this, nb.get(3)))
-                    nb.get(3).updateSignal(EsoUtil.relativeDirection(nb.get(3), this));
-            } catch(StackOverflowError e){}
+                try {
+                    if(front && nb.get(0) != null && connectionCheck(this, nb.get(0)))
+                        nb.get(0).updateSignal(EsoUtil.relativeDirection(nb.get(0), this));
+                    if(left && nb.get(1) != null && connectionCheck(this, nb.get(1)))
+                        nb.get(1).updateSignal(EsoUtil.relativeDirection(nb.get(1), this));
+                    if(back && nb.get(2) != null && connectionCheck(this, nb.get(2)))
+                        nb.get(2).updateSignal(EsoUtil.relativeDirection(nb.get(2), this));
+                    if(right && nb.get(3) != null && connectionCheck(this, nb.get(3)))
+                        nb.get(3).updateSignal(EsoUtil.relativeDirection(nb.get(3), this));
+                } catch(Exception e){}
+            } catch(StackOverflowError e){
+                bypassSignal(front, left, back, right);
+            }
         }
 
         @Override

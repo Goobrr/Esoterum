@@ -100,7 +100,7 @@ public class NoteBlock extends BinaryBlock{
                     signal[0] = signal[4];
                     propagateSignal(true, false, false, false);
                 }
-            } catch(StackOverflowError e){}
+            } catch(Exception e){}
         }
 
         public void drawConnections(){
