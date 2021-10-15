@@ -94,7 +94,9 @@ public class EsoBlocks implements ContentList{
         // region logic music
         musicBuffer = new MusicBuffer("rest-buffer");
 
-        noteBlock = new NoteBlock("note-block");
+        noteBlock = new NoteBlock("note-block"){{
+        hideDetails = false;
+        }};
         // endregion logic music
 
         // region logic interaction
@@ -135,6 +137,8 @@ public class EsoBlocks implements ContentList{
         }};
         // endregion defense
 
-        esoManual = new Manual("manual");
+        esoManual = new Manual("manual"){{
+        hideDetails = false;
+        }};
     }
 }
