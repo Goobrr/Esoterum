@@ -73,15 +73,22 @@ public class BinaryBlock extends Block {
         public boolean[] connections = new boolean[]{false, false, false, false};
 
         public boolean[] signal = new boolean[]{false, false, false, false, false};
-        public int[] visited = {0, 0, 0, 0};
+        public boolean[] visited = {0, 0, 0, 0};
+
+        public void updateSignal(int source) throws Exception {
+            updateSignal(source, () -> {});
+        }
 
         //front, left, back, right, node, none
-        public void updateSignal(int source) throws Exception {
+        public void updateSignal(int source, Updater updater){
             if(source < 4){
-                if(visited[source] > visitLimit)
+                if(visited[source])
                     throw new Exception();
-                else visited[source] += 1;
-            } else return;
+                else visited[source] = true;
+            }
+            boolean[] directions = updater.fun();
+            propagateSignal(directions[0], directions[1], directions[2], directions[3]);
+            visited[source] = false;
         }
 
         @Override
@@ -130,10 +137,10 @@ public class BinaryBlock extends Block {
         @Override
         public void updateTile(){
             super.updateTile();
-            visited[0] = 0;
-            visited[1] = 0;
-            visited[2] = 0;
-            visited[3] = 0;
+            visited[0] = false;
+            visited[1] = false;
+            visited[2] = false;
+            visited[3] = false;
         }
 
         public boolean signal(){
@@ -322,6 +329,10 @@ public class BinaryBlock extends Block {
         public double sense(LAccess sensor){
             if(sensor == LAccess.enabled) return Mathf.num(signal());
             return super.sense(sensor);
+        }
+
+        public static interface Updater {
+            public boolean[] fun();
         }
     }
 }

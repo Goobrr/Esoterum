@@ -95,13 +95,16 @@ public class NoteBlock extends BinaryBlock{
         @Override
         public void updateSignal(int source){
             try{
-                super.updateSignal(source);
-                signal[4] = getSignal(nb.get(configs.first()), this);
-                if(signal[0] != signal[4]){
-                    if(!signal[0] && signal[4]) playSound();
-                    signal[0] = signal[4];
-                    propagateSignal(true, false, false, false);
-                }
+                super.updateSignal(source, () -> {
+                    signal[4] = getSignal(nb.get(configs.first()), this);
+                    if(signal[0] != signal[4]){
+                        if(!signal[0] && signal[4]) playSound();
+                        signal[0] = signal[4];
+                        return new boolean[] {true, false, false, false};
+                    } else{
+                        return new boolean[4];
+                    }
+                });
             }catch(Exception ignored){}
         }
 

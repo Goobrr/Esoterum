@@ -60,12 +60,16 @@ public class BinaryWire extends BinaryBlock{
         @Override
         public void updateSignal(int source){
             try {
-                super.updateSignal(source);
-                signal[4] = getSignal(nb.get(1), this) | getSignal(nb.get(2), this) | getSignal(nb.get(3), this);
-                if(signal[0] != signal[4]){
-                    signal[0] = signal[4];
-                    propagateSignal(true, false, false, false);
-                }
+                super.updateSignal(source, () -> {
+                    signal[4] = getSignal(nb.get(1), this) | getSignal(nb.get(2), this) 
+                        | getSignal(nb.get(3), this);
+                    if(signal[0] != signal[4]){
+                        signal[0] = signal[4];
+                        return new boolean[]{true, false, false, false};
+                    } else{
+                        return new boolean[]{false, false, false, false};
+                    }
+                });
             } catch(Exception ignored){}
         }
 

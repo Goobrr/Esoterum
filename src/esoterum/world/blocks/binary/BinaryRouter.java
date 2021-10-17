@@ -12,15 +12,18 @@ public class BinaryRouter extends BinaryBlock{
         @Override
         public void updateSignal(int source) {
             try {
-                super.updateSignal(source);
-                signal[4] = false;
-                for(BinaryBuild b : nb){
-                    signal[4] |= getSignal(b, this);
-                };
-                if(signal() != signal[4]){
-                    signal(signal[4]);
-                    propagateSignal(true, true, true, true);
-                }
+                super.updateSignal(source, () -> {
+                    signal[4] = false;
+                    for(BinaryBuild b : nb){
+                        signal[4] |= getSignal(b, this);
+                    };
+                    if(signal() != signal[4]){
+                        signal(signal[4]);
+                        return new boolean[] {true, true, true, true};
+                    }else{
+                        return new boolean[4];
+                    }
+                });
             } catch(Exception e){}
         }
     }

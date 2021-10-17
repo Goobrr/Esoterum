@@ -32,15 +32,19 @@ public class Toggler extends BinaryBlock{
         @Override
         public void updateSignal(int source){
             try {
-                super.updateSignal(source);
-                signal[4] = getSignal(nb.get(1), this) | getSignal(nb.get(2), this) | getSignal(nb.get(3), this);
-                if(signal[0] != signal[4]){
-                    signal[0] = signal[4];
-                    propagateSignal(true, false, false, false);
-                }
-                if(front() != null){
-                    front().control(LAccess.enabled, Mathf.num(signal()), 0d, 0d, 0d);
-                }
+                super.updateSignal(source, () -> {
+                    signal[4] = getSignal(nb.get(1), this) | getSignal(nb.get(2), this) | getSignal(nb.get(3), this);
+                    boolean[] out = new boolean[4];
+                    if(signal[0] != signal[4]){
+                        signal[0] = signal[4];
+                        out {true, false, false, false};
+                    }
+                    if(front() != null){
+                        front().control(LAccess.enabled, Mathf.num(signal()), 0d, 0d, 0d);
+                    }
+                    return out;
+                });
+                
             } catch(Exception ignored){}
         }
 

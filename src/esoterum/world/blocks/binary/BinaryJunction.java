@@ -39,12 +39,13 @@ public class BinaryJunction extends BinaryBlock{
         @Override
         public void updateSignal(int source){
             try {
-                super.updateSignal(source);
-                signal[0] = getSignal(nb.get(2), this);
-                signal[1] = getSignal(nb.get(3), this);
-                signal[2] = getSignal(nb.get(0), this);
-                signal[3] = getSignal(nb.get(1), this);
-                propagateSignal(source == 2, source == 3, source == 0, source == 1);
+                super.updateSignal(source, () -> {
+                    signal[0] = getSignal(nb.get(2), this);
+                    signal[1] = getSignal(nb.get(3), this);
+                    signal[2] = getSignal(nb.get(0), this);
+                    signal[3] = getSignal(nb.get(1), this);
+                    return new boolean[]{source == 2, source == 3, source == 0, source == 1};
+                });
             } catch(Exception e){}
         }
 
