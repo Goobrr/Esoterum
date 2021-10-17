@@ -14,7 +14,7 @@ public class BeamAcceptor extends BeamBlock{
         public void updateTile() {
             super.updateTile();
             signal[0] = signal[1] = signal[2] = signal[3] = active;
-            if(active != signal[4]) propagateSignal(true, true, true, true);
+            if(active != signal[4])propagateSignal(true, true, true, true);
             signal[4] = active;
         }
 

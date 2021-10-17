@@ -27,10 +27,7 @@ public class BinaryBlock extends Block {
     public boolean drawRot = true;
     public int baseType = 0;
     public boolean rotatedBase = false;
-    //blocks that need to be updated at root because of StackOverflow
-    public Seq<BinaryBuild> needUpdates = new Seq<>();
-    //root of last update
-    public BinaryBuild root = null;
+    public int visitLimit = 5;
 
     public BinaryBlock(String name) {
         super(name);
@@ -121,9 +118,6 @@ public class BinaryBlock extends Block {
         }
 
         public void propagateSignal(boolean front, boolean left, boolean back, boolean right){
-            if (BinaryBlock.root == null){
-                BinaryBlock.root = this;
-            }
             try{
                 try{
                     if(front && nb.get(0) != null && connectionCheck(this, nb.get(0)))
@@ -136,14 +130,7 @@ public class BinaryBlock extends Block {
                         nb.get(3).updateSignal(EsoUtil.relativeDirection(nb.get(3), this));
                 }catch(Exception ignored){}
             }catch(StackOverflowError e){
-                BinaryBlock.needUpdates.add(this);
-            }
-            if (BinaryBlock.root == this){
-                BinaryBuild next;
-                while (!BinaryBlock.needUpdates.isEmpty()){
-                    next = BinaryBlock.needUpdates.pop();
-                    next.propagateSignal(true, true, true, true);
-                }
+                bypassSignal(front, left, back, right);
             }
         }
 
