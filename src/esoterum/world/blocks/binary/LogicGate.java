@@ -54,7 +54,7 @@ public class LogicGate extends BinaryBlock{
         @Override
         public void updateSignal(int source){
             try{
-                super.updateSignal(source () -> {
+                super.updateSignal(source, () -> {
                     signal[4] = operation.get(new boolean[]{
                         getSignal(nb.get(configs.first()), this),
                         getSignal(nb.get(configs.get(single ? 0 : 1)), this),

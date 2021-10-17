@@ -37,7 +37,7 @@ public class Toggler extends BinaryBlock{
                     boolean[] out = new boolean[4];
                     if(signal[0] != signal[4]){
                         signal[0] = signal[4];
-                        out {true, false, false, false};
+                        out  = new boolean[]{true, false, false, false};
                     }
                     if(front() != null){
                         front().control(LAccess.enabled, Mathf.num(signal()), 0d, 0d, 0d);

@@ -73,14 +73,14 @@ public class BinaryBlock extends Block {
         public boolean[] connections = new boolean[]{false, false, false, false};
 
         public boolean[] signal = new boolean[]{false, false, false, false, false};
-        public boolean[] visited = {0, 0, 0, 0};
+        public boolean[] visited = {false, false, false, false};
 
         public void updateSignal(int source) throws Exception {
-            updateSignal(source, () -> {});
+            updateSignal(source, () -> {return new boolean[4];});
         }
 
         //front, left, back, right, node, none
-        public void updateSignal(int source, Updater updater){
+        public void updateSignal(int source, Updater updater) throws Exception{
             if(source < 4){
                 if(visited[source])
                     throw new Exception();
