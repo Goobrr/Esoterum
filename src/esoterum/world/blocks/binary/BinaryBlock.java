@@ -8,6 +8,7 @@ import arc.scene.ui.layout.*;
 import arc.struct.*;
 import arc.util.io.*;
 import esoterum.util.*;
+import mindustry.Vars;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
@@ -28,9 +29,9 @@ public class BinaryBlock extends Block {
     public int baseType = 0;
     public boolean rotatedBase = false;
     //blocks that need to be updated at root because of StackOverflow
-    public Seq<BinaryBuild> needUpdates = new Seq<>();
+    static public Seq<BinaryBuild> needUpdates = new Seq<>();
     //root of last update
-    public BinaryBuild root = null;
+    static public BinaryBuild root = null;
 
     public BinaryBlock(String name) {
         super(name);
@@ -144,6 +145,8 @@ public class BinaryBlock extends Block {
                     next = BinaryBlock.needUpdates.pop();
                     next.propagateSignal(true, true, true, true);
                 }
+                Vars.mods.getScripts().log("Eso", "Stuff happened");
+                BinaryBlock.root = null;
             }
         }
 
