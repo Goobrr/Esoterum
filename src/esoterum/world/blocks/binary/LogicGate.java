@@ -66,7 +66,6 @@ public class LogicGate extends BinaryBlock{
                         return new boolean[4];
                     }
                 });
-                
             } catch(Exception e){}
         }
 
@@ -93,7 +92,7 @@ public class LogicGate extends BinaryBlock{
 
         @Override
         public boolean inputs(int dir){
-            return dir == configs.first() || single ? false : dir == configs.get(1);
+            return dir == configs.first() || dir == configs.get(single ? 0 : 1);
         }
 
         @Override
