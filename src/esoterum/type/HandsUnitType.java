@@ -4,7 +4,9 @@ import arc.*;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
+import arc.scene.ui.layout.*;
 import arc.util.*;
+import arc.util.pooling.*;
 import esoterum.content.*;
 import esoterum.entities.units.*;
 import esoterum.graphics.*;
@@ -13,12 +15,15 @@ import mindustry.entities.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
+import mindustry.ui.*;
 import mindustry.world.blocks.environment.*;
 
 public class HandsUnitType extends UnitType{
     public TextureRegion handsRegion, handsOutlineRegion;
     public float maxHandAngle = 45f;
     public float trailSpacing = 16f;
+    public float sapDuration = 60f;
+    public String[] reactions = {"oh yes", "more", "aaaaaaaaaahhhhh", "uuuuuuhh"};
     public Effect hoverEffect;
 
     public HandsUnitType(String name){
@@ -53,8 +58,34 @@ public class HandsUnitType extends UnitType{
     }
 
     @Override
-    public void draw(Unit unit) {
+    public void draw(Unit unit){
         super.draw(unit);
+
+        if(!Vars.renderer.pixelator.enabled() && unit instanceof HandsUnitEntity h && h.textAlpha > 0.01f){
+            Color color = Tmp.c1.set(h.team.color).a(h.textAlpha);
+            String text = reactions[h.reaction];
+            Font font = Fonts.outline;
+            GlyphLayout layout = Pools.obtain(GlyphLayout.class, GlyphLayout::new);
+            boolean ints = font.usesIntegerPositions();
+            font.setUseIntegerPositions(false);
+            font.getData().setScale(1f / 4f / Scl.scl(1f));
+            layout.setText(font, text);
+
+            font.setColor(color);
+            float dx = h.x, dy = h.y + hitSize / 2f + 3;
+            font.draw(text, dx, dy + layout.height + 1, Align.center);
+            dy -= 1f;
+            Lines.stroke(2f, Color.darkGray);
+            Lines.line(dx - layout.width / 2f - 2f, dy, dx + layout.width / 2f + 1.5f, dy);
+            Lines.stroke(1f, color);
+            Lines.line(dx - layout.width / 2f - 2f, dy, dx + layout.width / 2f + 1.5f, dy);
+
+            font.setUseIntegerPositions(ints);
+            font.setColor(Color.white);
+            font.getData().setScale(1f);
+            Draw.reset();
+            Pools.free(layout);
+        }
     }
 
     @Override
