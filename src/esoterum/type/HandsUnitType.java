@@ -23,7 +23,7 @@ public class HandsUnitType extends UnitType{
     public float maxHandAngle = 45f;
     public float trailSpacing = 16f;
     public float sapDuration = 60f;
-    public String[] reactions = {"oh yes", "more", "aaaaaaaaaahhhhh", "uuuuuuhh"};
+    public String[] reactions = {"oooh YES", "MORE", "aaaaaaaaaahhhhh", "uuuuhhhhh~", "ooh fuck...", "aaand I'm wet now"};
     public Effect hoverEffect;
 
     public HandsUnitType(String name){
@@ -42,7 +42,7 @@ public class HandsUnitType extends UnitType{
     }
 
     @Override
-    public void createIcons(MultiPacker packer) {
+    public void createIcons(MultiPacker packer){
         super.createIcons(packer);
         if(outlines){
             // why is makeOutline private :(
