@@ -4,7 +4,7 @@ import arc.*;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
-import esoterum.world.blocks.binary.*;
+import esoterum.world.blocks.binary.basis.*;
 import mindustry.logic.*;
 
 public class Toggler extends BinaryBlock{

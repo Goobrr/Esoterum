@@ -5,7 +5,7 @@ import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.util.io.*;
-import esoterum.world.blocks.binary.*;
+import esoterum.world.blocks.binary.basis.*;
 
 public class BinaryFlipflop extends BinaryBlock{
     public TextureRegion flipRegion, flopRegion;

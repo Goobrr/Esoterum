@@ -14,7 +14,7 @@ import arc.util.io.*;
 import esoterum.graphics.*;
 import esoterum.ui.*;
 import esoterum.util.*;
-import esoterum.world.blocks.binary.*;
+import esoterum.world.blocks.binary.basis.*;
 import mindustry.gen.*;
 import mindustry.logic.*;
 import mindustry.ui.*;

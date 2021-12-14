@@ -7,7 +7,7 @@ import arc.math.*;
 import arc.math.geom.*;
 import arc.util.*;
 import arc.util.io.*;
-import esoterum.world.blocks.binary.*;
+import esoterum.world.blocks.binary.basis.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.world.*;

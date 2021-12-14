@@ -8,7 +8,7 @@ import arc.math.*;
 import arc.scene.ui.layout.*;
 import arc.struct.*;
 import arc.util.io.*;
-import esoterum.world.blocks.binary.*;
+import esoterum.world.blocks.binary.basis.*;
 import mindustry.gen.*;
 
 public class LogicGate extends BinaryBlock{

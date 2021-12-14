@@ -11,14 +11,14 @@ import arc.util.*;
 import arc.util.io.*;
 import esoterum.content.*;
 import esoterum.util.*;
-import esoterum.world.blocks.binary.*;
+import esoterum.world.blocks.binary.basis.*;
 import mindustry.*;
 import mindustry.core.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.world.*;
 
-public class BeamBlock extends BinaryBlock {
+public class BeamBlock extends BinaryBlock{
     public float beamLength = 40f;
     public float beamDamage = 15f;
     public boolean acceptsBeam = false;

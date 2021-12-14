@@ -8,7 +8,7 @@ import arc.struct.*;
 import arc.util.*;
 import arc.util.io.*;
 import esoterum.graphics.*;
-import esoterum.world.blocks.binary.*;
+import esoterum.world.blocks.binary.basis.*;
 import mindustry.gen.*;
 import mindustry.logic.*;
 import mindustry.ui.*;
