@@ -11,22 +11,18 @@ import arc.util.io.*;
 import esoterum.world.blocks.binary.basis.*;
 import mindustry.gen.*;
 
-public class LogicGate extends BinaryBlock{
-    public Boolf<boolean[]> operation;
+public class LogicGate extends BinarySink{
+    protected static final boolean[] status = new boolean[2];
+    public Boolp operation = () -> false;
     public boolean single;
 
     public LogicGate(String name){
         super(name);
-        inputs = new boolean[]{false, true, true, true};
-        outputs = new boolean[]{true, false, false, false};
-        emits = true;
         rotate = true;
         rotatedBase = true;
         drawArrow = true;
         configurable = saveConfig = true;
         baseHighlight = "silver";
-
-        operation = e -> false;
 
         config(IntSeq.class, (LogicGateBuild b, IntSeq i) -> {
             b.configs = IntSeq.with(i.items);
@@ -51,18 +47,20 @@ public class LogicGate extends BinaryBlock{
         region = Core.atlas.find("esoterum-gate-base");
     }
 
-    public class LogicGateBuild extends BinaryBuild{
+    public class LogicGateBuild extends BinarySinkBuild{
         public IntSeq configs = single ? IntSeq.with(2) : IntSeq.with(3, 2);
         public int nextConfig = 1;
 
         @Override
-        public boolean updateSignal(){
-            signal[5] = signal[0];
-            signal[0] = operation.get(new boolean[]{
-                getSignal(relnb[configs.first()], this),
-                getSignal(relnb[configs.get(single ? 0 : 1)], this),
-            });
-            return signal[5] != signal[0];
+        public boolean isActive(WireGraph graph){
+            if(graph == connections.get(0)){{
+                for(int i = 0; i < 2; i++){{
+                    WireGraph g = connections.get(configs.get(i));
+                    status[i] = g != null && g.active;
+                }}
+                return active = operation.get();
+            }}
+            return false;
         }
 
         @Override
@@ -70,7 +68,6 @@ public class LogicGate extends BinaryBlock{
             table.button(Icon.rotate, () -> {
                 configure(nextConfig);
                 updateProximity();
-                updateSignal();
             }).size(40f).tooltip("Rotate Input" + (single ? "" : "s"));
         }
 
@@ -83,21 +80,11 @@ public class LogicGate extends BinaryBlock{
         public void drawConnections(){
             for(int i = 1; i < 4; i++){
                 if(!configs.contains(i)) continue;
-                Draw.color(Color.white, team.color, Mathf.num(getSignal(relnb[i], this)));
+                Draw.color(Color.white, team.color, Mathf.num(active));
                 Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
             }
-            Draw.color(Color.white, team.color, Mathf.num(signal()));
+            Draw.color(Color.white, team.color, Mathf.num(active));
             Draw.rect(connectionRegion, x, y, rotdeg());
-        }
-
-        @Override
-        public boolean inputs(int dir){
-            return dir == configs.first() || dir == configs.get(single ? 0 : 1);
-        }
-
-        @Override
-        public boolean propagates(){
-            return !single;
         }
 
         @Override
@@ -121,11 +108,6 @@ public class LogicGate extends BinaryBlock{
                     configs = IntSeq.with(read.i(), read.i());
                 }
             }
-        }
-
-        @Override
-        public byte version(){
-            return 1;
         }
     }
 }

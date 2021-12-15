@@ -27,7 +27,7 @@ public class EsoBlocks implements ContentList{
         // Signal sources
         esoSwitch, esoButton, esoClock,
         // Logic gates
-        esoAND, esoXOR, esoNOT,
+        esoOR, esoAND, esoXOR, esoNOT,
         // Logic music
         musicBuffer, noteBlock,
         // Logic interaction
@@ -87,16 +87,21 @@ public class EsoBlocks implements ContentList{
         // endregion sources
 
         // region logic gates
+        esoOR = new LogicGate("OR"){{
+            operation = () -> status[0];
+            single = true;
+        }};
+
         esoAND = new LogicGate("AND"){{
-            operation = i -> i[0] && i[1];
+            operation = () -> status[0] && status[1];
         }};
 
         esoXOR = new LogicGate("XOR"){{
-            operation = i -> i[0] ^ i[1];
+            operation = () -> status[0] ^ status[1];
         }};
 
         esoNOT = new LogicGate("NOT"){{
-            operation = i -> !i[0];
+            operation = () -> !status[0];
             single = true;
         }};
         // endregion logic gates
