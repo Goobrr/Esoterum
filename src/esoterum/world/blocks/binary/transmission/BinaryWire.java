@@ -49,7 +49,7 @@ public class BinaryWire extends BinaryBlock{
 
         public void drawConnections(){
             for(int i = 0; i < 4; i++){
-                Building build = proximity.get(i);
+                Building build = nearby(i);
                 if(build instanceof BinaryBuild b && signal.all.contains(b)) Draw.rect(connectionRegion, x, y, 90f * i);
             }
         }

@@ -1,9 +1,11 @@
 package esoterum.world.blocks.binary.basis;
 
 import arc.struct.*;
+import esoterum.util.*;
 import esoterum.world.blocks.binary.basis.BinaryBlock.*;
 import esoterum.world.blocks.binary.basis.BinarySink.*;
 import esoterum.world.blocks.binary.basis.BinarySource.*;
+import esoterum.world.blocks.binary.transmission.BinaryRouter.*;
 import esoterum.world.blocks.binary.transmission.BinaryWire.*;
 import mindustry.gen.*;
 
@@ -17,6 +19,7 @@ public class WireGraph{
 
     public void update(){
         active = sources.contains(s -> s.isActive(this));
+        sinks.each(Building::updateTile);
     }
 
     public void updateConnected(BinaryBuild build){
@@ -30,23 +33,32 @@ public class WireGraph{
             BinaryBuild next = wireQueue.removeLast();
 
             for(Building b : next.proximity){
-                if(b instanceof BinaryWireBuild w && w.signal.all != all){
-                    w.signal.all = all;
-                    w.signal.sources = sources;
-                    w.signal.sinks = sinks;
-                    all.add(w);
-                    wireQueue.addFirst(w);
-                }else if(b instanceof BinarySinkBuild s){
-                    all.add(s);
-                    sinks.add(s);
+                if(b instanceof BinaryRouterBuild r && r.signal.all != all){
+                    //always add router, regardless of rotation
+                    addWire(r);
+                }else if(b instanceof BinaryWireBuild w && w.signal.all != all){
+                    //only add wires that are directly facing at or away
+                    int dir = EsoUtil.relativeDirection(w, next);
+                    if(dir == 0 || dir == 2){
+                        addWire(w);
+                    }
                 }else if(b instanceof BinarySourceBuild s){
                     all.add(s);
                     sources.add(s);
+                    if(s instanceof BinarySinkBuild) sinks.add((BinarySinkBuild)s);
                 }
             }
         }
 
         update();
+    }
+
+    public void addWire(BinaryWireBuild wire){
+        wire.signal.all = all;
+        wire.signal.sources = sources;
+        wire.signal.sinks = sinks;
+        all.add(wire);
+        wireQueue.addFirst(wire);
     }
 
     public void removeConnected(BinaryBuild tile){
