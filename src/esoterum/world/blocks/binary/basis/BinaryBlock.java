@@ -88,6 +88,22 @@ public class BinaryBlock extends Block{
     }
 
     public class BinaryBuild extends Building{
+        public WireGraph signal;
+
+        @Override
+        public void onProximityAdded(){
+            super.onProximityAdded();
+
+            signal.updateConnected(this);
+        }
+
+        @Override
+        public void onProximityRemoved(){
+            super.onProximityRemoved();
+
+            signal.removeConnected(this);
+        }
+
         @Override
         public void draw(){
             drawBase();

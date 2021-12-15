@@ -18,22 +18,6 @@ public class BinaryRouter extends BinaryBlock{
     }
 
     public class BinaryRouterBuild extends BinaryBuild{
-        public WireGraph signal;
-
-        @Override
-        public void onProximityAdded(){
-            super.onProximityAdded();
-
-            signal.updateConnected(this);
-        }
-
-        @Override
-        public void onProximityRemoved(){
-            super.onProximityRemoved();
-
-            signal.removeConnected(this);
-        }
-
         @Override
         public double sense(LAccess sensor){
             if(sensor == LAccess.enabled) return signal.active ? 1 : 0;

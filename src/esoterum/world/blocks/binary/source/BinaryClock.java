@@ -12,30 +12,34 @@ import arc.util.io.*;
 import esoterum.graphics.*;
 import esoterum.util.*;
 import esoterum.world.blocks.binary.basis.*;
+import esoterum.world.blocks.binary.basis.BinarySource.*;
 import mindustry.gen.*;
 import mindustry.ui.*;
 
-public class BinaryClock extends BinaryBlock{
+public class BinaryClock extends BinarySource{
     public int maxInterval = 300;
 
     public BinaryClock(String name){
         super(name);
-        outputs = new boolean[]{true, true, true, true};
         configurable = true;
-        emits = true;
         baseHighlight = "gold";
-        propagates = false;
         config(IntSeq.class, (BinaryClockBuild b, IntSeq i) -> b.configs = IntSeq.with(i.items));
     }
 
-    public class BinaryClockBuild extends BinaryBuild{
+    public class BinaryClockBuild extends BinarySourceBuild{
+        public boolean active;
         /** Interval, Active Time, Offset */
         public IntSeq configs = IntSeq.with(60, 20, 0);
 
         @Override
         public void updateTile(){
             super.updateTile();
-            signal(Mathf.mod(Time.time - configs.get(2), configs.first()) <= configs.get(1));
+            active = Mathf.mod(Time.time - configs.get(2), configs.first()) <= configs.get(1);
+        }
+
+        @Override
+        public boolean isActive(WireGraph graph){
+            return active;
         }
 
         @Override
@@ -43,7 +47,7 @@ public class BinaryClock extends BinaryBlock{
             drawBase();
             drawConnections();
             Lines.stroke(0.5f);
-            Draw.color(Color.white, team.color, Mathf.num(signal()));
+            Draw.color(Color.white, team.color, Mathf.num(active));
             Lines.circle(x, y, 1.5f);
             Draw.color(team.color);
             EsoDrawf.arc(x, y, 1.85f, -configs.get(2) / (float)configs.first() * 360f + 90f, configs.get(1) / (float)configs.first() * 360f);

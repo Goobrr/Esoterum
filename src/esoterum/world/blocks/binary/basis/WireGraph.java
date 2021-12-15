@@ -1,6 +1,7 @@
 package esoterum.world.blocks.binary.basis;
 
 import arc.struct.*;
+import arc.struct.Queue;
 import esoterum.util.*;
 import esoterum.world.blocks.binary.basis.BinaryBlock.*;
 import esoterum.world.blocks.binary.transmission.BinaryRouter.*;
@@ -8,6 +9,8 @@ import esoterum.world.blocks.binary.basis.BinarySink.*;
 import esoterum.world.blocks.binary.basis.BinarySource.*;
 import esoterum.world.blocks.binary.transmission.BinaryWire.*;
 import mindustry.gen.*;
+
+import java.util.*;
 
 public class WireGraph{
     protected final static Queue<BinaryBuild> wireQueue = new Queue<>();
@@ -18,14 +21,24 @@ public class WireGraph{
     public Seq<BinarySinkBuild> sinks = new Seq<>();
 
     public void update(){
+        clearNull();
         active = sources.contains(s -> s.isActive(this));
         sinks.each(Building::updateTile);
     }
 
     public void updateConnected(BinaryBuild build){
+        if(build == null || build.signal == null) return;
+
         all = new Seq<>();
         sources = new Seq<>();
         sinks = new Seq<>();
+
+        if(build instanceof BinarySinkBuild s){
+            all.add(s);
+            sources.add(s);
+            return;
+        }
+
         wireQueue.clear();
         wireQueue.add(build);
 
@@ -71,5 +84,11 @@ public class WireGraph{
                 b.signal.updateConnected(b);
             }
         }
+    }
+
+    public void clearNull(){
+        all.removeAll(Objects::isNull);
+        sources.removeAll(Objects::isNull);
+        sinks.removeAll(Objects::isNull);
     }
 }

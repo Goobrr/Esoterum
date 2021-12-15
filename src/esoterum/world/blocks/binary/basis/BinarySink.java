@@ -30,7 +30,7 @@ public class BinarySink extends BinarySource{
             left();
             for(int i = 0; i < 4; i++){
                 Building build = nearby(Mathf.mod(i + rotation, 4));
-                if(build instanceof BinaryRouterBuild w){
+                if(build instanceof BinaryBuild w){
                     connections.set(i, w.signal);
                 }else{
                     connections.set(i, null);

@@ -1,6 +1,7 @@
 package esoterum.world.blocks.binary.basis;
 
 import arc.graphics.g2d.*;
+import esoterum.world.blocks.binary.transmission.BinaryWire.*;
 import mindustry.gen.*;
 
 public class BinarySource extends BinaryBlock{
@@ -17,7 +18,7 @@ public class BinarySource extends BinaryBlock{
         public void drawConnections(){
             for(int i = 0; i < 4; i++){
                 Building build = nearby(i);
-                if(build instanceof BinaryBuild b) Draw.rect(connectionRegion, x, y, 90f * i);
+                if(build instanceof BinaryWireBuild) Draw.rect(connectionRegion, x, y, 90f * i);
             }
         }
     }
