@@ -53,7 +53,7 @@ public class LogicGate extends BinarySink{
 
         @Override
         public boolean isActive(WireGraph graph){
-            if(graph == connections.get(0)){{
+            if(graph == connections.first()){{
                 for(int i = 0; i < 2; i++){{
                     WireGraph g = connections.get(configs.get(i));
                     status[i] = g != null && g.active;

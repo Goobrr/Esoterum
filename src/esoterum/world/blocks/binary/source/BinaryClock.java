@@ -150,6 +150,7 @@ public class BinaryClock extends BinarySource{
             write.i(configs.first());
             write.i(configs.get(1));
             write.i(configs.get(2));
+            write.bool(active);
         }
 
         @Override
@@ -158,12 +159,15 @@ public class BinaryClock extends BinarySource{
 
             if(revision >= 2){
                 configs = IntSeq.with(read.i(), read.i(), read.i());
+                if(revision >= 3){
+                    active = read.bool();
+                }
             }
         }
 
         @Override
         public byte version(){
-            return 2;
+            return 3;
         }
     }
 }

@@ -7,19 +7,15 @@ import arc.math.*;
 import arc.util.io.*;
 import esoterum.world.blocks.binary.basis.*;
 
-public class BinaryFlipflop extends BinaryBlock{
+public class BinaryFlipflop extends BinarySink{
     public TextureRegion flipRegion, flopRegion;
 
     public BinaryFlipflop(String name){
         super(name);
-        outputs = new boolean[]{true, false, false, false};
-        inputs = new boolean[]{false, true, true, true};
-        emits = true;
         rotate = true;
         rotatedBase = true;
         drawArrow = true;
         baseHighlight = "gold";
-        propagates = true;
     }
 
     @Override
@@ -38,14 +34,27 @@ public class BinaryFlipflop extends BinaryBlock{
         };
     }
 
-    public class FlipflopBuild extends BinaryBuild {
+    public class FlipflopBuild extends BinarySinkBuild{
+        public boolean canFlip, active;
+
         @Override
-        public boolean updateSignal() {
-            signal[5] = signal[0];
-            if(!signal[4] && (getSignal(relnb[1], this) || getSignal(relnb[2], this) || getSignal(relnb[3], this)))
-                signal[0] = !signal[0];
-            signal[4] = (getSignal(relnb[1], this) || getSignal(relnb[2], this) || getSignal(relnb[3], this));
-            return signal[5] != signal[0];
+        public void updateTile(){
+            boolean a = false;
+            for(int i = 1; i < 4; i++){
+                WireGraph g = connections.get(i);
+                if(g != null && g.active) a = true;
+            }
+            if(a && canFlip){
+                active = !active;
+                canFlip = false;
+            }else{
+                canFlip = !a;
+            }
+        }
+
+        @Override
+        public boolean isActive(WireGraph graph){
+            return graph == connections.first() && active;
         }
 
         @Override
@@ -60,27 +69,26 @@ public class BinaryFlipflop extends BinaryBlock{
         }
 
         @Override
-        public void read(Reads read, byte revision) {
-            super.read(read, (byte)(revision + 1));
-
-            if(revision >= 2){
-                signal[0] = read.bool();
-            }
-            if(revision >= 3){
-                signal[0] = read.bool();
-            }
-        }
-
-        @Override
         public void write(Writes write) {
             super.write(write);
 
-            write.bool(signal[0]);
+            write.bool(canFlip);
+            write.bool(active);
+        }
+
+        @Override
+        public void read(Reads read, byte revision) {
+            super.read(read, revision);
+
+            if(revision >= 3){
+                canFlip = read.bool();
+                active = read.bool();
+            }
         }
 
         @Override
         public byte version() {
-            return 2;
+            return 3;
         }
     }
 }

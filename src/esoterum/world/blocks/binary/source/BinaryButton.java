@@ -8,6 +8,8 @@ import arc.util.io.*;
 import esoterum.world.blocks.binary.basis.*;
 import mindustry.logic.*;
 
+import java.util.*;
+
 public class BinaryButton extends BinarySource{
     /** Whether the button emits continuously (like a switch). */
     public boolean continuous;
