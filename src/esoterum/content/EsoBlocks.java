@@ -1,6 +1,7 @@
 package esoterum.content;
 
 import esoterum.world.blocks.binary.*;
+import esoterum.world.blocks.binary.transmission.BinaryRouter;
 import esoterum.world.blocks.binary.interaction.*;
 import esoterum.world.blocks.binary.music.*;
 import esoterum.world.blocks.binary.source.*;
@@ -58,7 +59,7 @@ public class EsoBlocks implements ContentList{
         // endregion environment
         
         // region transmission
-        esoWire = new BinaryWire("wire");
+        esoWire = new BinaryRouter("wire");
 
         esoJunction = new BinaryJunction("junction");
 

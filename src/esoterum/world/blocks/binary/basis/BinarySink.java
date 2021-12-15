@@ -1,11 +1,9 @@
 package esoterum.world.blocks.binary.basis;
 
 import arc.math.*;
-import arc.math.geom.*;
 import arc.struct.*;
-import esoterum.world.blocks.binary.transmission.BinaryWire.*;
+import esoterum.world.blocks.binary.transmission.BinaryRouter.*;
 import mindustry.gen.*;
-import mindustry.world.*;
 
 public class BinarySink extends BinarySource{
     public BinarySink(String name){
@@ -30,7 +28,7 @@ public class BinarySink extends BinarySource{
             left();
             for(int i = 0; i < 4; i++){
                 Building build = nearby(Mathf.mod(i + rotation, 4));
-                if(build instanceof BinaryWireBuild w){
+                if(build instanceof BinaryRouterBuild w){
                     connections.set(i, w.signal);
                 }else{
                     connections.set(i, null);

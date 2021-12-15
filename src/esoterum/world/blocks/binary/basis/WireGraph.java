@@ -3,9 +3,9 @@ package esoterum.world.blocks.binary.basis;
 import arc.struct.*;
 import esoterum.util.*;
 import esoterum.world.blocks.binary.basis.BinaryBlock.*;
+import esoterum.world.blocks.binary.transmission.BinaryRouter.*;
 import esoterum.world.blocks.binary.basis.BinarySink.*;
 import esoterum.world.blocks.binary.basis.BinarySource.*;
-import esoterum.world.blocks.binary.transmission.BinaryRouter.*;
 import esoterum.world.blocks.binary.transmission.BinaryWire.*;
 import mindustry.gen.*;
 
@@ -33,15 +33,15 @@ public class WireGraph{
             BinaryBuild next = wireQueue.removeLast();
 
             for(Building b : next.proximity){
-                if(b instanceof BinaryRouterBuild r && r.signal.all != all){
-                    //always add router, regardless of rotation
-                    addWire(r);
-                }else if(b instanceof BinaryWireBuild w && w.signal.all != all){
+                if(b instanceof BinaryWireBuild w && w.signal.all != all){
                     //only add wires that are directly facing at or away
                     int dir = EsoUtil.relativeDirection(w, next);
                     if(dir == 0 || dir == 2){
                         addWire(w);
                     }
+                }else if(b instanceof BinaryRouterBuild r && r.signal.all != all){
+                    //always add router, regardless of rotation
+                    addWire(r);
                 }else if(b instanceof BinarySourceBuild s){
                     all.add(s);
                     sources.add(s);
@@ -53,7 +53,7 @@ public class WireGraph{
         update();
     }
 
-    public void addWire(BinaryWireBuild wire){
+    public void addWire(BinaryRouterBuild wire){
         wire.signal.all = all;
         wire.signal.sources = sources;
         wire.signal.sinks = sinks;
@@ -63,7 +63,7 @@ public class WireGraph{
 
     public void removeConnected(BinaryBuild tile){
         for(Building build : tile.proximity){
-            if(build instanceof BinaryWireBuild b){
+            if(build instanceof BinaryRouterBuild b){
                 b.signal.updateConnected(b);
             }
         }

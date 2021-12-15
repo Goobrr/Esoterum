@@ -48,14 +48,6 @@ public class Esoterum extends Mod{
                 }
             });
         }
-
-        t = new Thread(){
-            @Override
-            public void run(){
-                WireGraph.run();
-            }
-        };
-        t.start();
     }
 
     private void swapMusic(Seq<Music> target, Seq<Music> replacement, Seq<Music> save){

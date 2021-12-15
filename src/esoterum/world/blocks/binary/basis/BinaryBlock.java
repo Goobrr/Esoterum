@@ -1,6 +1,7 @@
 package esoterum.world.blocks.binary.basis;
 
 import arc.*;
+import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import esoterum.util.*;
@@ -31,6 +32,7 @@ public class BinaryBlock extends Block{
     };
 
     public boolean rotatedBase = false;
+    public boolean rotatedTop = false;
     public String baseType = "square";
     public String baseHighlight = "none";
 
@@ -89,6 +91,7 @@ public class BinaryBlock extends Block{
         @Override
         public void draw(){
             drawBase();
+            drawTop();
         }
 
         public void drawBase(){
@@ -99,5 +102,12 @@ public class BinaryBlock extends Block{
                 Draw.rect(highlightRegions[rotation], x, y);
             }
         }
+
+        public void drawTop(){
+            Draw.color(Color.white, team.color, Mathf.num(signal()));
+            Draw.rect(topRegion, x, y, rotate && rotatedTop ? rotdeg() : 0);
+        }
+
+
     }
 }
