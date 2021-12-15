@@ -34,18 +34,22 @@ public class WireGraph{
 
             for(Building b : next.proximity){
                 if(b instanceof BinaryWireBuild w && w.signal.all != all){
-                    //only add wires that are directly facing at or away
-                    int dir = EsoUtil.relativeDirection(w, next);
-                    if(dir == 0 || dir == 2){
+                    int dirTo = EsoUtil.relativeDirection(next, w);
+                    int dirFrom = EsoUtil.relativeDirection(w, next);
+                    if(dirTo == 0 || dirFrom == 0){
                         addWire(w);
                     }
                 }else if(b instanceof BinaryRouterBuild r && r.signal.all != all){
                     //always add router, regardless of rotation
                     addWire(r);
                 }else if(b instanceof BinarySourceBuild s){
+                    //don't add sources that aren't pointed at the wire
+                    boolean isSink = s instanceof BinarySinkBuild;
+                    int dirFrom = EsoUtil.relativeDirection(s, next);
+                    if(s.block.rotate && dirFrom != 0 && !isSink) continue;
                     all.add(s);
                     sources.add(s);
-                    if(s instanceof BinarySinkBuild) sinks.add((BinarySinkBuild)s);
+                    if(isSink) sinks.add((BinarySinkBuild)s);
                 }
             }
         }

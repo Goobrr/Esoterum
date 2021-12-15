@@ -6,16 +6,13 @@ import arc.graphics.g2d.*;
 import arc.math.*;
 import esoterum.world.blocks.binary.basis.*;
 
-// too similar to BinaryRouter?
-public class BinaryCJunction extends BinaryBlock{
+import java.util.*;
+
+public class BinaryCJunction extends BinarySink{
     public TextureRegion[][] directionRegions = new TextureRegion[2][2];
 
     public BinaryCJunction(String name){
         super(name);
-        emits = true;
-        inputs = new boolean[]{true, true, true, true};
-        outputs = new boolean[]{true, true, true, true};
-        propagates = true;
         rotate = true;
     }
 
@@ -39,7 +36,8 @@ public class BinaryCJunction extends BinaryBlock{
         };
     }
 
-    public class BinaryCJunctionBuild extends BinaryBuild {
+    public class BinaryCJunctionBuild extends BinarySinkBuild{
+        public boolean[] signal = new boolean[4];
         public int variant = 0;
 
         @Override
@@ -49,12 +47,24 @@ public class BinaryCJunction extends BinaryBlock{
         }
 
         @Override
-        public boolean updateSignal(){
-            signal[0] = getSignal(relnb[1], this);
-            signal[1] = getSignal(relnb[0], this);
-            signal[2] = getSignal(relnb[3], this);
-            signal[3] = getSignal(relnb[2], this);
-            return true;
+        public boolean isActive(WireGraph graph){
+            Arrays.fill(signal, false);
+            for(int i = 0; i < 4; i++){
+                WireGraph g = connections.get(i);
+                if(g != null) signal[i] = g.active;
+            }
+            for(int i = 0; i < 4; i++){
+                if(graph == connections.get(i)){
+                    return switch(i){
+                        case 0 -> signal[1];
+                        case 1 -> signal[0];
+                        case 2 -> signal[3];
+                        case 3 -> signal[2];
+                        default -> false;
+                    };
+                }
+            }
+            return false;
         }
 
         @Override

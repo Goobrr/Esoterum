@@ -6,16 +6,13 @@ import arc.graphics.g2d.*;
 import arc.math.*;
 import esoterum.world.blocks.binary.basis.*;
 
-// too similar to BinaryRouter?
-public class BinaryJunction extends BinaryBlock{
+import java.util.*;
+
+public class BinaryJunction extends BinarySink{
     public TextureRegion[][] directionRegions = new TextureRegion[2][4];
 
     public BinaryJunction(String name){
         super(name);
-        emits = true;
-        inputs = new boolean[]{true, true, true, true};
-        outputs = new boolean[]{true, true, true, true};
-        propagates = true;
     }
 
     @Override
@@ -38,7 +35,8 @@ public class BinaryJunction extends BinaryBlock{
         };
     }
 
-    public class BinaryJunctionBuild extends BinaryBuild{
+    public class BinaryJunctionBuild extends BinarySinkBuild{
+        public boolean[] signal = new boolean[4];
         public int variant = 0;
 
         @Override
@@ -48,12 +46,16 @@ public class BinaryJunction extends BinaryBlock{
         }
 
         @Override
-        public boolean updateSignal(){
-            signal[0] = getSignal(relnb[2], this);
-            signal[1] = getSignal(relnb[3], this);
-            signal[2] = getSignal(relnb[0], this);
-            signal[3] = getSignal(relnb[1], this);
-            return true;
+        public boolean isActive(WireGraph graph){
+            Arrays.fill(signal, false);
+            for(int i = 0; i < 4; i++){
+                WireGraph g = connections.get(i);
+                if(g != null) signal[i] = g.active;
+            }
+            for(int i = 0; i < 4; i++){
+                if(graph == connections.get(i)) return signal[Mathf.mod(i + 2, 4)];
+            }
+            return false;
         }
 
         @Override
