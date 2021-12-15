@@ -8,24 +8,21 @@ import arc.util.io.*;
 import esoterum.world.blocks.binary.basis.*;
 import mindustry.logic.*;
 
-public class BinaryButton extends BinaryBlock{
-    // whether the button emits continuously (like a switch).
+public class BinaryButton extends BinarySource{
+    /** Whether the button emits continuously (like a switch). */
     public boolean continuous;
-    // Buttons will have a pulse length of 60 ticks by default
+    /** Buttons will have a pulse length of 60 ticks by default. */
     public float duration = 60;
 
     public TextureRegion onRegion, offRegion;
 
     public BinaryButton(String name, boolean cont){
         super(name);
-        outputs = new boolean[]{true, true, true, true};
         configurable = true;
         continuous = cont;
-        emits = true;
         baseHighlight = "gold";
-        propagates = false;
         config(Boolean.class, (BinaryButtonBuild b, Boolean on) -> {
-            b.signal(on);
+            b.active = on;
             b.timer = duration;
         });
     }
@@ -47,20 +44,26 @@ public class BinaryButton extends BinaryBlock{
         };
     }
 
-    public class BinaryButtonBuild extends BinaryBuild {
+    public class BinaryButtonBuild extends BinarySourceBuild{
+        public boolean active;
         public float timer;
+
+        @Override
+        public void control(LAccess type, double p1, double p2, double p3, double p4){
+            if(type == LAccess.enabled) configure(!Mathf.zero((float)p1));
+        }
 
         @Override
         public void updateTile(){
             super.updateTile();
-            if(!continuous && (timer -= delta()) <= 0) signal(false);
+            if(!continuous && (timer -= delta()) <= 0) active = false;
         }
 
         @Override
         public boolean configTapped(){
-            if(continuous) configure(!signal());
-            else {
-                signal[4] = signal();
+            if(continuous){
+                configure(!active);
+            }else{
                 configure(true);
             }
             return false;
@@ -69,12 +72,23 @@ public class BinaryButton extends BinaryBlock{
         @Override
         public void draw() {
             drawBase();
-            Draw.color(Color.white, team.color, Mathf.num(signal()));
-            for(int i = 0; i < 4; i++){
-                if(connections[i]) Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
-            }
+            Draw.color(Color.white, team.color, Mathf.num(active));
+            drawConnections();
             Draw.color();
-            Draw.rect(signal() ? onRegion : offRegion, x, y);
+            Draw.rect(active ? onRegion : offRegion, x, y);
+        }
+
+        @Override
+        public boolean isActive(WireGraph graph){
+            return active;
+        }
+
+        @Override
+        public void write(Writes write) {
+            super.write(write);
+
+            write.f(timer);
+            write.bool(active);
         }
 
         @Override
@@ -83,24 +97,15 @@ public class BinaryButton extends BinaryBlock{
 
             if(revision >= 1){
                 timer = read.f();
+                if(revision >= 2){
+                    active = read.bool();
+                }
             }
         }
 
         @Override
-        public void write(Writes write) {
-            super.write(write);
-
-            write.f(timer);
-        }
-
-        @Override
         public byte version() {
-            return 1;
-        }
-
-        @Override
-        public void control(LAccess type, double p1, double p2, double p3, double p4){
-            if(type == LAccess.enabled) configure(!Mathf.zero((float)p1));
+            return 2;
         }
     }
 }

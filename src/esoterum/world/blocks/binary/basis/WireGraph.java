@@ -11,15 +11,16 @@ public class WireGraph{
     protected final static Queue<BinaryBuild> wireQueue = new Queue<>();
 
     public boolean active;
+    public Seq<BinaryBuild> all = new Seq<>();
     public Seq<BinarySourceBuild> sources = new Seq<>();
     public Seq<BinarySinkBuild> sinks = new Seq<>();
 
     public void update(){
         active = sources.contains(s -> s.isActive(this));
-        sinks.each(Building::updateTile);
     }
 
     public void updateConnected(BinaryBuild build){
+        all = new Seq<>();
         sources = new Seq<>();
         sinks = new Seq<>();
         wireQueue.clear();
@@ -29,17 +30,23 @@ public class WireGraph{
             BinaryBuild next = wireQueue.removeLast();
 
             for(Building b : next.proximity){
-                if(b instanceof BinaryWireBuild w && !wireQueue.contains(w)){
+                if(b instanceof BinaryWireBuild w && w.signal.all != all){
+                    w.signal.all = all;
                     w.signal.sources = sources;
                     w.signal.sinks = sinks;
+                    all.add(w);
                     wireQueue.addFirst(w);
                 }else if(b instanceof BinarySinkBuild s){
+                    all.add(s);
                     sinks.add(s);
                 }else if(b instanceof BinarySourceBuild s){
+                    all.add(s);
                     sources.add(s);
                 }
             }
         }
+
+        update();
     }
 
     public void removeConnected(BinaryBuild tile){
