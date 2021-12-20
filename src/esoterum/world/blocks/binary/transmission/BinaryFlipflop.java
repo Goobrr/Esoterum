@@ -41,7 +41,7 @@ public class BinaryFlipflop extends BinarySink{
         public void updateTile(){
             boolean a = false;
             for(int i = 1; i < 4; i++){
-                WireGraph g = connections.get(i);
+                SignalGraph g = connections.get(i);
                 if(g != null && g.active) a = true;
             }
             if(a && canFlip){
@@ -53,7 +53,7 @@ public class BinaryFlipflop extends BinarySink{
         }
 
         @Override
-        public boolean isActive(WireGraph graph){
+        public boolean isActive(SignalGraph graph){
             return graph == connections.first() && active;
         }
 

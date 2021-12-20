@@ -16,7 +16,7 @@ public class BinarySource extends BinaryBlock{
     public class BinarySourceBuild extends BinaryBuild{
         /** Connected wire graphs.
          * [Front, Left, Back, Right] */
-        public Seq<WireGraph> connections = new Seq<>(4);
+        public Seq<SignalGraph> connections = new Seq<>(4);
 
         @Override
         public void onProximityUpdate(){
@@ -39,11 +39,11 @@ public class BinarySource extends BinaryBlock{
 
         @Override
         public void updateTile(){
-            connections.each(Objects::nonNull, WireGraph::update);
+            connections.each(Objects::nonNull, SignalGraph::update);
         }
 
         /** Weather or not this source is seen as active to graphs. */
-        public boolean isActive(WireGraph graph){
+        public boolean isActive(SignalGraph graph){
             return false;
         }
 

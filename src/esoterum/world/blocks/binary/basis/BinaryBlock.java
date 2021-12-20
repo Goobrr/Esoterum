@@ -4,7 +4,6 @@ import arc.*;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
-import esoterum.util.*;
 import mindustry.gen.*;
 import mindustry.world.*;
 
@@ -88,7 +87,7 @@ public class BinaryBlock extends Block{
     }
 
     public class BinaryBuild extends Building{
-        public WireGraph signal;
+        public SignalGraph signal;
 
         @Override
         public void onProximityAdded(){

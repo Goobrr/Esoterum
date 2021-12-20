@@ -46,10 +46,10 @@ public class BinaryJunction extends BinarySink{
         }
 
         @Override
-        public boolean isActive(WireGraph graph){
+        public boolean isActive(SignalGraph graph){
             Arrays.fill(signal, false);
             for(int i = 0; i < 4; i++){
-                WireGraph g = connections.get(i);
+                SignalGraph g = connections.get(i);
                 if(g != null) signal[i] = g.active;
             }
             for(int i = 0; i < 4; i++){

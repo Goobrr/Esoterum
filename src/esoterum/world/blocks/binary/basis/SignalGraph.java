@@ -12,7 +12,7 @@ import mindustry.gen.*;
 
 import java.util.*;
 
-public class WireGraph{
+public class SignalGraph{
     protected final static Queue<BinaryBuild> wireQueue = new Queue<>();
 
     public boolean active;
@@ -23,7 +23,7 @@ public class WireGraph{
     public void update(){
         clearNull();
         active = sources.contains(s -> s.isActive(this));
-        sinks.each(Building::updateTile);
+        sinks.each(BinarySinkBuild::signalUpdate);
     }
 
     public void updateConnected(BinaryBuild build){

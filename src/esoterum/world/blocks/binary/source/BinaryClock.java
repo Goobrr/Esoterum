@@ -12,7 +12,6 @@ import arc.util.io.*;
 import esoterum.graphics.*;
 import esoterum.util.*;
 import esoterum.world.blocks.binary.basis.*;
-import esoterum.world.blocks.binary.basis.BinarySource.*;
 import mindustry.gen.*;
 import mindustry.ui.*;
 
@@ -38,7 +37,7 @@ public class BinaryClock extends BinarySource{
         }
 
         @Override
-        public boolean isActive(WireGraph graph){
+        public boolean isActive(SignalGraph graph){
             return active;
         }
 

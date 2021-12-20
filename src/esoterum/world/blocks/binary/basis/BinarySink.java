@@ -12,6 +12,10 @@ public class BinarySink extends BinarySource{
     public class BinarySinkBuild extends BinarySourceBuild{
         public boolean active;
 
+        public void signalUpdate(){
+
+        }
+
         @Override
         public void write(Writes write){
             super.write(write);
