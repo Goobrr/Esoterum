@@ -86,10 +86,15 @@ task deploy(type: Jar){
     }
 }
 
-publishing{
-    publications{
-        maven(MavenPublication){
-            from components.java
+if(System.getenv("JITPACK") == "true"){
+    publishing{
+        publications{
+            maven(MavenPublication){
+                from components.java
+                groupId = System.getenv("GROUP")
+                artifactId = System.getenv("ARTIFACT")
+                version = System.getenv("VERSION")
+            }
         }
     }
 }
