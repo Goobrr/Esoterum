@@ -1,4 +1,5 @@
 apply plugin: "java"
+apply plugin: "maven-publish"
 
 version '1.0'
 
@@ -81,6 +82,14 @@ task deploy(type: Jar){
         delete{
             delete "$buildDir/libs/${project.archivesBaseName}Desktop.jar"
             delete "$buildDir/libs/${project.archivesBaseName}Android.jar"
+        }
+    }
+}
+
+publishing{
+    publications{
+        maven(MavenPublication){
+            from components.java
         }
     }
 }
