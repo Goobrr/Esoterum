@@ -7,6 +7,7 @@ import arc.math.*;
 import arc.scene.ui.layout.*;
 import arc.util.io.*;
 import esoterum.util.*;
+import esoterum.util.graph.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.logic.*;
@@ -123,7 +124,7 @@ public class BinaryBlock extends Block {
         public boolean[] connections = new boolean[]{false, false, false, false};
 
         public boolean[] signal = new boolean[]{false, false, false, false, false, false};
-
+        public ConnVertex v;
         public int mask = 0; //bitmasked draw
 
         // Mindustry saves block placement rotation even for blocks that don't rotate.
@@ -152,12 +153,6 @@ public class BinaryBlock extends Block {
                     absnb[i*2+1].updateConnections();
                     absnb[i*2+1].updateMask();
                 };
-            SignalGraph.e.execute(() -> SignalGraph.dfs(this));
-            for(int i=0;i<relnb.length;i++) if(relnb[i] != null && !outputs(i)){
-                relnb[i].updateSignal();
-                int j = i;
-                SignalGraph.e.execute(() -> SignalGraph.dfs(relnb[j]));
-            }
         }
 
         public void updateConnections(){
@@ -207,6 +202,12 @@ public class BinaryBlock extends Block {
 
         public boolean updateSignal(){
             return true;
+        }
+
+        @Override
+        public void updateTile(){
+            updateSignal();
+            SignalGraph.graph.setVertexAugmentation(v, signal()?1:0);
         }
 
         public BinaryBuild[] getInputs(){

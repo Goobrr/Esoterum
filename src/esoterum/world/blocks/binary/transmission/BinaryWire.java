@@ -6,6 +6,7 @@ import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.math.geom.*;
+import arc.scene.ui.layout.Table;
 import arc.struct.*;
 import esoterum.content.*;
 import esoterum.world.blocks.binary.*;
@@ -17,10 +18,10 @@ public class BinaryWire extends BinaryBlock {
 
     public BinaryWire(String name){
         super(name);
-        outputs = new boolean[]{true, false, false, false};
-        inputs = new boolean[]{false, true, true, true};
+        outputs = new boolean[]{true, true, true, true};
+        inputs = new boolean[]{true, true, true, true};
         emits = true;
-        rotate = true;
+        rotate = false;
         drawArrow = true;
         propagates = true;
 
@@ -60,20 +61,33 @@ public class BinaryWire extends BinaryBlock {
 
     public class BinaryWireBuild extends BinaryBuild{
         @Override
-        public boolean updateSignal(){
-            signal[5] = signal[0];
-            signal[0] = getSignal(relnb[1], this) | getSignal(relnb[2], this) | getSignal(relnb[3], this);
-            return signal[5] != signal[0];
+        public boolean signal(){
+            return (int)SignalGraph.graph.getComponentAugmentation(v) > 0;
+        }
+
+        @Override
+        public void updateTile(){
+            return;
         }
 
         @Override
         public void drawConnections(){
-            for(int i = 1; i < 4; i++){
+            for(int i = 0; i < 4; i++){
                 if(connections[i]){
                     Draw.color(Color.white, team.color, Mathf.num(getSignal(relnb[i], this)));
                     Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
                 }
             }
+        }
+
+        @Override
+        public void displayBars(Table table) {
+            super.displayBars(table);
+            table.table(e -> {
+                e.row();
+                e.left();
+                e.label(() -> "State: " + (int)SignalGraph.graph.getComponentAugmentation(v)).color(Color.lightGray);
+            }).left();
         }
     }
 }
