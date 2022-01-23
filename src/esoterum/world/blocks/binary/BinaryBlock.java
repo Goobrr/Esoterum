@@ -18,7 +18,7 @@ import mindustry.world.meta.*;
 public class BinaryBlock extends Block {
     public TextureRegion topRegion, connectionRegion, baseRegion, highlightRegion, stubRegion;
     public TextureRegion[] baseRegions, highlightRegions = new TextureRegion[4];
-    public int[] tiles = new int[]{
+    public static int[] tiles = new int[]{
         39, 36, 39, 36, 27, 16, 27, 24, 39, 36, 39, 36, 27, 16, 27, 24,
         38, 37, 38, 37, 17, 41, 17, 43, 38, 37, 38, 37, 26, 21, 26, 25,
         39, 36, 39, 36, 27, 16, 27, 24, 39, 36, 39, 36, 27, 16, 27, 24,
@@ -48,7 +48,7 @@ public class BinaryBlock extends Block {
     public String baseHighlight = "none";
     public boolean rotatedBase = false;
     public int visitLimit = 5;
-    public boolean propagates = true;
+    public boolean undirected = false;
 
     public BinaryBlock(String name) {
         super(name);
@@ -124,8 +124,12 @@ public class BinaryBlock extends Block {
         public boolean[] connections = new boolean[]{false, false, false, false};
 
         public boolean[] signal = new boolean[]{false, false, false, false, false, false};
-        public ConnVertex v;
+        public ConnVertex[] v = new ConnVertex[4];
         public int mask = 0; //bitmasked draw
+
+        public int inV(int dir){
+            return 0;
+        }
 
         // Mindustry saves block placement rotation even for blocks that don't rotate.
         // Usually this doesn't cause any problems, but with the current implementation
@@ -134,10 +138,16 @@ public class BinaryBlock extends Block {
         public void created(){
             super.created();
             if(!rotate) rotation(0);
-            SignalGraph.addVertex(this);
+            createVertices();
             updateNeighbours();
             updateConnections();
             updateMask();
+        }
+
+        public void createVertices(){
+            for(int i = 0; i < 4; i++){
+                if(v[inV(i)] == null) v[inV(i)] = new ConnVertex();
+            }
         }
 
         @Override
@@ -156,12 +166,31 @@ public class BinaryBlock extends Block {
         }
 
         public void updateConnections(){
+            resetConnections();
+            updateInputs();
+            updateOutputs();
+        }
+
+        public void resetConnections(){
             for(int i = 0; i < 4; i++){
                 connections[i] = connectionCheck(relnb[i], this);
+                SignalGraph.clearEdges(this.v[i]);
             }
-            SignalGraph.clearEdges(this);
+        }
+
+        public void updateInputs(){
+            int i = 0;
+            for(BinaryBuild b : getInputs()){
+                if(b != null) SignalGraph.addEdge(this.v[inV(i)], b.v[b.inV(EsoUtil.relativeDirection(b, this))]);
+                i++;
+            }
+        }
+
+        public void updateOutputs(){
+            int i = 0;
             for(BinaryBuild b : getOutputs()){
-                if(b != null) SignalGraph.addEdge(this, b);
+                if(b != null) SignalGraph.addEdge(this.v[inV(i)], b.v[b.inV(EsoUtil.relativeDirection(b, this))]);
+                i++;
             }
         }
 
@@ -207,14 +236,15 @@ public class BinaryBlock extends Block {
         @Override
         public void updateTile(){
             updateSignal();
-            SignalGraph.graph.setVertexAugmentation(v, signal()?1:0);
         }
 
         public BinaryBuild[] getInputs(){
             BinaryBuild[] i = new BinaryBuild[relnb.length];
             int c = 0;
-            for(BinaryBuild b : relnb)
+            for(BinaryBuild b : relnb){
                 if (b != null && inputs(c) && connections[c]) i[c] = b;
+                c++;
+            }
             return i;
         }
 
@@ -353,8 +383,8 @@ public class BinaryBlock extends Block {
             return inputs[i];
         }
 
-        public boolean propagates(){
-            return propagates;
+        public boolean undirected(){
+            return undirected;
         }
 
         @Override

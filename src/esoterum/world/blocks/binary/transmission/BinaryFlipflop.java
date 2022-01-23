@@ -19,7 +19,7 @@ public class BinaryFlipflop extends BinaryBlock{
         rotatedBase = true;
         drawArrow = true;
         baseHighlight = "gold";
-        propagates = true;
+        undirected = false;
     }
 
     @Override
@@ -40,11 +40,17 @@ public class BinaryFlipflop extends BinaryBlock{
 
     public class FlipflopBuild extends BinaryBuild {
         @Override
+        public int inV(int dir){
+            return dir;
+        }
+        
+        @Override
         public boolean updateSignal() {
             signal[5] = signal[0];
             if(!signal[4] && (getSignal(relnb[1], this) || getSignal(relnb[2], this) || getSignal(relnb[3], this)))
                 signal[0] = !signal[0];
             signal[4] = (getSignal(relnb[1], this) || getSignal(relnb[2], this) || getSignal(relnb[3], this));
+            SignalGraph.graph.setVertexAugmentation(v[0], signal()?1:0);
             return signal[5] != signal[0];
         }
 

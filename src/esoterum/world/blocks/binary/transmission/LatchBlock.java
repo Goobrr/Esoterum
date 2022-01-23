@@ -19,7 +19,7 @@ public class LatchBlock extends BinaryBlock{
         rotatedBase = true;
         drawArrow = true;
         baseHighlight = "gold";
-        propagates = true;
+        undirected = false;
         config(Boolean.class, (LatchBuild l, Boolean b) -> l.signal[0] = b);
     }
 
@@ -40,9 +40,15 @@ public class LatchBlock extends BinaryBlock{
 
     public class LatchBuild extends BinaryBuild {
         @Override
+        public int inV(int dir){
+            return dir;
+        }
+
+        @Override
         public boolean updateSignal() {
             signal[5] = signal[0];
             if(getSignal(relnb[2], this)) signal[0] = getSignal(relnb[1], this) | getSignal(relnb[3], this);
+            SignalGraph.graph.setVertexAugmentation(v[0], signal()?1:0);
             return signal[5] != signal[0];
         }
 

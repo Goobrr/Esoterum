@@ -8,6 +8,7 @@ import arc.math.*;
 import arc.scene.ui.layout.*;
 import arc.struct.*;
 import arc.util.io.*;
+import esoterum.util.graph.ConnVertex;
 import esoterum.world.blocks.binary.*;
 import mindustry.gen.*;
 
@@ -25,7 +26,7 @@ public class LogicGate extends BinaryBlock{
         drawArrow = true;
         configurable = saveConfig = true;
         baseHighlight = "silver";
-
+        undirected = false;
         operation = e -> false;
 
         config(IntSeq.class, (LogicGateBuild b, IntSeq i) -> {
@@ -54,6 +55,15 @@ public class LogicGate extends BinaryBlock{
     public class LogicGateBuild extends BinaryBuild{
         public IntSeq configs = single ? IntSeq.with(2) : IntSeq.with(3, 2);
         public int nextConfig = 1;
+        public ConnVertex[] v = new ConnVertex[3];
+
+        @Override
+        public int inV(int dir){
+            if(dir == 0) return 0;
+            else if(single || dir == configs.first()) return 1;
+            else if(!single && dir == configs.get(1)) return 2;
+            else return 1;
+        }
 
         @Override
         public boolean updateSignal(){
@@ -62,6 +72,7 @@ public class LogicGate extends BinaryBlock{
                 getSignal(relnb[configs.first()], this),
                 getSignal(relnb[configs.get(single ? 0 : 1)], this),
             });
+            SignalGraph.graph.setVertexAugmentation(v[0], signal()?1:0);
             return signal[5] != signal[0];
         }
 
@@ -93,11 +104,6 @@ public class LogicGate extends BinaryBlock{
         @Override
         public boolean inputs(int dir){
             return dir == configs.first() || dir == configs.get(single ? 0 : 1);
-        }
-
-        @Override
-        public boolean propagates(){
-            return !single;
         }
 
         @Override

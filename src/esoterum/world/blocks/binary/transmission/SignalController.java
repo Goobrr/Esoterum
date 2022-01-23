@@ -28,7 +28,7 @@ public class SignalController extends BinaryBlock{
         emits = true;
         inputs = new boolean[]{true, true, true, true};
         outputs = new boolean[]{true, true, true, true};
-        propagates = true;
+        undirected = false;
         config(IntSeq.class, (ControllerBuild b, IntSeq i) -> {
             b.configs = IntSeq.with(i.items);
             b.updateProximity();
@@ -58,6 +58,11 @@ public class SignalController extends BinaryBlock{
          * 1 = input |
          * 2 = output */
         public IntSeq configs = IntSeq.with(0, 0, 0, 0);
+
+        @Override
+        public int inV(int dir){
+            return dir;
+        }
 
         @Override
         public void placed(){
@@ -93,6 +98,10 @@ public class SignalController extends BinaryBlock{
                 signal[3] = signal[4] && configs.get(3) == 2;
                 return true;
             }
+            if(configs.get(0) == 2) SignalGraph.graph.setVertexAugmentation(v[0], signal()?1:0);
+            if(configs.get(1) == 2) SignalGraph.graph.setVertexAugmentation(v[1], signal()?1:0);
+            if(configs.get(2) == 2) SignalGraph.graph.setVertexAugmentation(v[2], signal()?1:0);
+            if(configs.get(3) == 2) SignalGraph.graph.setVertexAugmentation(v[3], signal()?1:0);
             return false;
         }
 

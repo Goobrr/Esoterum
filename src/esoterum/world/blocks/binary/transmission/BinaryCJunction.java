@@ -15,7 +15,7 @@ public class BinaryCJunction extends BinaryBlock{
         emits = true;
         inputs = new boolean[]{true, true, true, true};
         outputs = new boolean[]{true, true, true, true};
-        propagates = true;
+        undirected = false;
         rotate = true;
     }
 
@@ -41,6 +41,11 @@ public class BinaryCJunction extends BinaryBlock{
 
     public class BinaryCJunctionBuild extends BinaryBuild {
         public int variant = 0;
+
+        @Override
+        public int inV(int dir){
+            return dir < 2 ? 0 : 1;
+        }
 
         @Override
         public void created(){

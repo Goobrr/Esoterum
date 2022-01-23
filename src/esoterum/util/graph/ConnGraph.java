@@ -934,6 +934,7 @@ public class ConnGraph {
      */
     public Object setVertexAugmentation(ConnVertex connVertex, Object vertexAugmentation) {
         assertIsAugmented();
+        if(connVertex == null) return null;
         EulerTourVertex vertex = ensureInfo(connVertex).vertex;
         Object oldAugmentation = vertex.augmentation;
         if (!vertex.hasAugmentation ||
@@ -1001,9 +1002,9 @@ public class ConnGraph {
         assertIsAugmented();
         VertexInfo info = vertexInfo.get(vertex);
         if (info != null) {
-            return info.vertex.arbitraryVisit.root().augmentation;
+            return info.vertex.arbitraryVisit.root().augmentation == null ? 0 : info.vertex.arbitraryVisit.root().augmentation;
         } else {
-            return null;
+            return 0;
         }
     }
 

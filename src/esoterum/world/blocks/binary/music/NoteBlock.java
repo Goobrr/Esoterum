@@ -64,7 +64,7 @@ public class NoteBlock extends BinaryBlock{
         group = BlockGroup.logic;
         inputs = new boolean[]{false, true, true, true};
         outputs = new boolean[]{true, false, false, false};
-        propagates = true;
+        undirected = false;
 
         config(IntSeq.class, (NoteBlockBuild b, IntSeq i) -> {
             b.configs = IntSeq.with(i.items);
@@ -98,11 +98,18 @@ public class NoteBlock extends BinaryBlock{
         public IntSeq configs = IntSeq.with(2, 0, 3, 100, 0);
 
         @Override
+        public int inV(int dir){
+            if(dir == 0) return 0;
+            else return 1;
+        }
+
+        @Override
         public boolean updateSignal(){
             signal[4] = getSignal(relnb[configs.first()], this);
             if(signal[0] != signal[4]){
                 if(!signal[0] && signal[4]) playSound();
                 signal[0] = signal[4];
+                SignalGraph.graph.setVertexAugmentation(v[0], signal()?1:0);
                 return false;
             }
             return true;

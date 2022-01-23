@@ -15,7 +15,7 @@ public class BinaryJunction extends BinaryBlock{
         emits = true;
         inputs = new boolean[]{true, true, true, true};
         outputs = new boolean[]{true, true, true, true};
-        propagates = true;
+        undirected = true;
     }
 
     @Override
@@ -42,6 +42,11 @@ public class BinaryJunction extends BinaryBlock{
         public int variant = 0;
 
         @Override
+        public int inV(int dir){
+            return dir % 2;
+        }
+
+        @Override
         public void created(){
             super.created();
             updateVariants();
@@ -57,10 +62,16 @@ public class BinaryJunction extends BinaryBlock{
         }
 
         @Override
+        public void updateTile(){
+            return;
+        }
+
+        @Override
         public void drawConnections(){
-            Draw.color(Color.white, team.color, Mathf.num(signal[0] || signal[2]));
+            updateSignal();
+            Draw.color(Color.white, team.color, Mathf.num((int)SignalGraph.graph.getComponentAugmentation(v[0]) > 0));
             Draw.rect(directionRegions[0][variant], x, y);
-            Draw.color(Color.white, team.color, Mathf.num(signal[1] || signal[3]));
+            Draw.color(Color.white, team.color, Mathf.num((int)SignalGraph.graph.getComponentAugmentation(v[1]) > 0));
             Draw.rect(directionRegions[1][variant], x, y);
         }
 

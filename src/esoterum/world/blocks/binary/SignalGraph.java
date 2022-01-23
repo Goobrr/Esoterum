@@ -1,7 +1,5 @@
 package esoterum.world.blocks.binary;
 
-import java.util.HashSet;
-
 import esoterum.util.graph.*;
 
 public class SignalGraph {
@@ -13,26 +11,24 @@ public class SignalGraph {
     };
 
     public static ConnGraph graph = new ConnGraph(AUGMENTATION);
-    public static HashSet<BinaryBlock.BinaryBuild> sources = new HashSet<>();
 
-    public static void addVertex(BinaryBlock.BinaryBuild b){
-        b.v = new ConnVertex();
-        graph.setVertexAugmentation(b.v, 0);
-        if(!b.propagates()) sources.add(b);
+    public static void addVertex(BinaryBlock.BinaryBuild b, int k){
+        b.v[k] = new ConnVertex();
+        graph.setVertexAugmentation(b.v[k], 0);
         //Log.info("add");
     }
 
-    public static void addEdge(BinaryBlock.BinaryBuild a, BinaryBlock.BinaryBuild b){
-        graph.addEdge(a.v, b.v);
+    public static void addEdge(ConnVertex u, ConnVertex v){
+        if(u != null && v != null) graph.addEdge(u, v);
     }
 
-    public static void removeVertex(BinaryBlock.BinaryBuild b){
-        graph.removeVertexAugmentation(b.v);
-        for(ConnVertex v : graph.vertexInfo.get(b.v).edges.keySet()){
-            graph.removeEdge(b.v, v);
+    public static void removeVertex(BinaryBlock.BinaryBuild b, int k){
+        if(b == null || b.v[k] == null) return;
+        for(ConnVertex v : graph.vertexInfo.get(b.v[k]).edges.keySet()){
+            graph.removeEdge(b.v[k], v);
         }
-        b.v = null;
-        if(!b.propagates()) sources.remove(b);
+        graph.removeVertexAugmentation(b.v[k]);
+        b.v[k] = null;
         //Log.info("rm");
     }
 
@@ -40,18 +36,18 @@ public class SignalGraph {
         graph = new ConnGraph(AUGMENTATION);
     }
 
-    public static void removeEdge(BinaryBlock.BinaryBuild a, BinaryBlock.BinaryBuild b){
-        graph.removeEdge(a.v, b.v);
+    public static void removeEdge(ConnVertex u, ConnVertex v){
+        if(u != null && v != null) graph.removeEdge(u, v);
     }
 
     public static void clear(){
         graph = new ConnGraph(AUGMENTATION);
-        sources.clear();
     }
 
-    public static void clearEdges(BinaryBlock.BinaryBuild b){
-        for(ConnVertex v : graph.vertexInfo.get(b.v).edges.keySet()){
-            graph.removeEdge(b.v, v);
+    public static void clearEdges(ConnVertex v){
+        if(v == null || graph.vertexInfo.get(v) == null) return;
+        for(ConnVertex u : graph.vertexInfo.get(v).edges.keySet()){
+            graph.removeEdge(v, u);
         }
     }
 }

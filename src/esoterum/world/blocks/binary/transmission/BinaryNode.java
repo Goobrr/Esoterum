@@ -28,7 +28,7 @@ public class BinaryNode extends BinaryBlock{
 
         outputs = new boolean[]{true, true, true, true};
         inputs = new boolean[]{true, true, true, true};
-        propagates = true;
+        undirected = true;
 
         //point2 config is relative
         config(Point2.class, (BinaryNodeBuild tile, Point2 i) -> {
@@ -122,16 +122,6 @@ public class BinaryNode extends BinaryBlock{
         }
 
         @Override
-        public boolean updateSignal(){
-            signal[5] = signal[4];
-            signal[4] = false;
-            for(BinaryBuild b : relnb) signal[4] |= getSignal(b, this);
-            BinaryNodeBuild c = linkedNode();
-            signal(c != null && c.signal());
-            return signal[5] != signal[4]; 
-        }
-
-        @Override
         public void placed(){
             super.placed();
 
@@ -165,7 +155,7 @@ public class BinaryNode extends BinaryBlock{
 
         @Override
         public boolean signal(){
-            return signal[4];
+            return signal[0] = signal[1] = signal[2] = signal[3] = (int)SignalGraph.graph.getComponentAugmentation(v[0]) > 0;
         }
 
         @Override

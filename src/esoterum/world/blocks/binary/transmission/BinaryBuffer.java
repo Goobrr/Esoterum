@@ -22,7 +22,7 @@ public class BinaryBuffer extends BinaryBlock{
         drawArrow = true;
         configurable = saveConfig = true;
         baseHighlight = "gold";
-        propagates = false;
+        undirected = false;
         inputs = new boolean[]{false, true, true, true};
         outputs = new boolean[]{true, false, false, false};
 
@@ -39,6 +39,12 @@ public class BinaryBuffer extends BinaryBlock{
         public float ticks = 1f;
         /** Direction, Multiplier, Multiplier (but smol), Persistent */
         public IntSeq configs = IntSeq.with(2, 1, 0, 1);
+
+        @Override
+        public int inV(int dir){
+            if(dir == 0) return 0;
+            else return 1;
+        }
 
         @Override
         public void updateTile(){
@@ -67,6 +73,7 @@ public class BinaryBuffer extends BinaryBlock{
         public boolean updateSignal(){
             signal[5] = signal[4];
             signal[4] = getSignal(relnb[configs.first()], this);
+            SignalGraph.graph.setVertexAugmentation(v[0], signal()?1:0);
             return signal[5] != signal[4];
         }
 

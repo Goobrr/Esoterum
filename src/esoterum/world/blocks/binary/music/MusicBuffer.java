@@ -33,7 +33,7 @@ public class MusicBuffer extends BinaryBlock{
         drawArrow = true;
         configurable = saveConfig = true;
         baseHighlight = "gold";
-        propagates = false;
+        undirected = false;
         inputs = new boolean[]{false, true, true, true};
         outputs = new boolean[]{true, false, false, false};
 
@@ -61,6 +61,12 @@ public class MusicBuffer extends BinaryBlock{
         public IntSeq configs = IntSeq.with(2, 120, 2);
 
         @Override
+        public int inV(int dir){
+            if(dir == 0) return 0;
+            else return 1;
+        }
+
+        @Override
         public void updateTile(){
             super.updateTile();
             if(signal[4]){
@@ -84,6 +90,7 @@ public class MusicBuffer extends BinaryBlock{
         public boolean updateSignal(){
             signal[5] = signal[4];
             signal[4] = getSignal(relnb[configs.first()], this);
+            SignalGraph.graph.setVertexAugmentation(v[0], signal()?1:0);
             return signal[5] != signal[4];
         }
 

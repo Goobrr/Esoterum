@@ -6,7 +6,6 @@ import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.math.geom.*;
-import arc.scene.ui.layout.Table;
 import arc.struct.*;
 import esoterum.content.*;
 import esoterum.world.blocks.binary.*;
@@ -23,7 +22,7 @@ public class BinaryWire extends BinaryBlock {
         emits = true;
         rotate = false;
         drawArrow = true;
-        propagates = true;
+        undirected = true;
 
         drawConnectionArrows = true;
     }
@@ -59,35 +58,20 @@ public class BinaryWire extends BinaryBlock {
             Mathf.mod(req.tile().build.rotation - req.rotation, 2) == 1 ? junctionReplacement : this;
     }
 
-    public class BinaryWireBuild extends BinaryBuild{
+    public class BinaryWireBuild extends BinaryBuild {
         @Override
         public boolean signal(){
-            return (int)SignalGraph.graph.getComponentAugmentation(v) > 0;
-        }
-
-        @Override
-        public void updateTile(){
-            return;
+            return signal[0] = signal[1] = signal[2] = signal[3] = (int)SignalGraph.graph.getComponentAugmentation(v[0]) > 0;
         }
 
         @Override
         public void drawConnections(){
             for(int i = 0; i < 4; i++){
-                if(connections[i]){
-                    Draw.color(Color.white, team.color, Mathf.num(getSignal(relnb[i], this)));
+                if(relnb[i] != null){
+                    Draw.color(Color.white, team.color, Mathf.num(getSignal(relnb[i], this) || getSignal(this, relnb[i])));
                     Draw.rect(connectionRegion, x, y, rotdeg() + 90 * i);
                 }
             }
-        }
-
-        @Override
-        public void displayBars(Table table) {
-            super.displayBars(table);
-            table.table(e -> {
-                e.row();
-                e.left();
-                e.label(() -> "State: " + (int)SignalGraph.graph.getComponentAugmentation(v)).color(Color.lightGray);
-            }).left();
         }
     }
 }

@@ -23,7 +23,7 @@ public class BinaryButton extends BinaryBlock{
         continuous = cont;
         emits = true;
         baseHighlight = "gold";
-        propagates = false;
+        undirected = false;
         config(Boolean.class, (BinaryButtonBuild b, Boolean on) -> {
             b.signal(on);
             b.timer = duration;
@@ -51,9 +51,18 @@ public class BinaryButton extends BinaryBlock{
         public float timer;
 
         @Override
+        public int inV(int dir){
+            return dir;
+        }
+
+        @Override
         public void updateTile(){
             super.updateTile();
             if(!continuous && (timer -= delta()) <= 0) signal(false);
+            SignalGraph.graph.setVertexAugmentation(v[0], signal()?1:0);
+            SignalGraph.graph.setVertexAugmentation(v[1], signal()?1:0);
+            SignalGraph.graph.setVertexAugmentation(v[2], signal()?1:0);
+            SignalGraph.graph.setVertexAugmentation(v[3], signal()?1:0);
         }
 
         @Override

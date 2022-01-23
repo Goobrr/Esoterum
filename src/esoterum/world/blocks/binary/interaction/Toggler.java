@@ -19,7 +19,7 @@ public class Toggler extends BinaryBlock{
         emits = true;
         outputs = new boolean[]{true, false, false, false};
         inputs = new boolean[]{false, true, true, true};
-        propagates = true;
+        undirected = false;
     }
 
     @Override
@@ -32,10 +32,16 @@ public class Toggler extends BinaryBlock{
 
     public class TogglerBuild extends BinaryBuild{
         @Override
+        public int inV(int dir){
+            return dir;
+        }
+        
+        @Override
         public boolean updateSignal(){
             signal[5] = signal[0];
             signal[0] = getSignal(relnb[1], this) | getSignal(relnb[2], this) | getSignal(relnb[3], this);
             if(front() != null) front().control(LAccess.enabled, Mathf.num(signal()), 0d, 0d, 0d);
+            SignalGraph.graph.setVertexAugmentation(v[0], signal()?1:0);
             return signal[5] != signal[0];
         }
 
