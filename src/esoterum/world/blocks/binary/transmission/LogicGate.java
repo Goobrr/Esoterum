@@ -8,7 +8,6 @@ import arc.math.*;
 import arc.scene.ui.layout.*;
 import arc.struct.*;
 import arc.util.io.*;
-import esoterum.util.graph.ConnVertex;
 import esoterum.world.blocks.binary.*;
 import mindustry.gen.*;
 
@@ -55,14 +54,10 @@ public class LogicGate extends BinaryBlock{
     public class LogicGateBuild extends BinaryBuild{
         public IntSeq configs = single ? IntSeq.with(2) : IntSeq.with(3, 2);
         public int nextConfig = 1;
-        public ConnVertex[] v = new ConnVertex[3];
 
         @Override
         public int inV(int dir){
-            if(dir == 0) return 0;
-            else if(single || dir == configs.first()) return 1;
-            else if(!single && dir == configs.get(1)) return 2;
-            else return 1;
+            return dir;
         }
 
         @Override

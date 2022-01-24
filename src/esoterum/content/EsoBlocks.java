@@ -22,11 +22,11 @@ public class EsoBlocks implements ContentList{
         esoPanel, esoPanel1, esoPanel2, esoPanel3, esoPanelFlat, esoSolidPanel,
         esoPanelOpen, esoPanelE, esoPanelS, esoPanelO,
         // Signal transmission
-        esoWire, esoJunction, esoCJunction, esoNode, esoLatch, esoController, esoBuffer, esoFlipflop,
+        esoWire, esoDiode, esoJunction, esoCJunction, esoNode, esoLatch, esoController, esoBuffer, esoFlipflop,
         // Signal sources
         esoSwitch, esoButton, esoClock,
         // Logic gates
-        esoAND, esoXOR, esoNOT,
+        esoAND, esoOR, esoXOR, esoNOT,
         // Logic music
         musicBuffer, noteBlock,
         // Logic interaction
@@ -58,7 +58,9 @@ public class EsoBlocks implements ContentList{
         // endregion environment
         
         // region transmission
-        esoWire = new BinaryWire("wire");
+        esoWire = new BinaryWire("omniwire");
+
+        esoDiode = new BinaryDiode("wire");
 
         esoJunction = new BinaryJunction("junction");
 
@@ -86,6 +88,10 @@ public class EsoBlocks implements ContentList{
         // region logic gates
         esoAND = new LogicGate("AND"){{
             operation = i -> i[0] && i[1];
+        }};
+
+        esoOR = new LogicGate("OR"){{
+            operation = i -> i[0] || i[1];
         }};
 
         esoXOR = new LogicGate("XOR"){{
