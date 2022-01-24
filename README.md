@@ -1,5 +1,3 @@
-*discontinued?*
-
 ![](https://github.com/Goobrr/Esoterum/blob/master/assets/banner.png)
 
 [![Discord](https://img.shields.io/discord/898088435145928744?color=7289da&label=ESOTERUM&logo=discord&logoColor=7289da&style=for-the-badge)](https://discord.gg/KH8wMMDdsg)
