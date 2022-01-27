@@ -103,8 +103,10 @@ public class BinaryNode extends BinaryBlock{
         public BinaryBuild[] getInputs(){
             BinaryBuild[] i = new BinaryBuild[relnb.length + 1];
             int c = 0;
-            for(BinaryBuild b : relnb)
+            for(BinaryBuild b : relnb){
                 if (b != null && inputs(c) && connections[c]) i[c] = b;
+                c++;
+            }
             i[relnb.length] = linkedNode();
             return i;
         }

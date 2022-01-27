@@ -22,7 +22,7 @@ public class EsoBlocks implements ContentList{
         esoPanel, esoPanel1, esoPanel2, esoPanel3, esoPanelFlat, esoSolidPanel,
         esoPanelOpen, esoPanelE, esoPanelS, esoPanelO,
         // Signal transmission
-        esoWire, esoDiode, esoJunction, esoCJunction, esoNode, esoLatch, esoController, esoBuffer, esoFlipflop,
+        esoWire, esoDiode, esoJunction, esoCJunction, esoNode, esoLatch, esoOmniController, esoController, esoBuffer, esoFlipflop,
         // Signal sources
         esoSwitch, esoButton, esoClock,
         // Logic gates
@@ -61,14 +61,16 @@ public class EsoBlocks implements ContentList{
         esoWire = new BinaryWire("omniwire");
 
         esoDiode = new BinaryDiode("wire");
-
+        
         esoJunction = new BinaryJunction("junction");
-
+        
         esoCJunction = new BinaryCJunction("cornerjunction");
-
+        
         esoNode = new BinaryNode("node", 6);
-
+        
         esoLatch = new LatchBlock("latch");
+        
+        esoOmniController = new OmniController("omnicontroller");
 
         esoController = new SignalController("controller");
 
